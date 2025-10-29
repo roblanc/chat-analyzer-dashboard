@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { marked } from 'marked'; // Import marked
 
-// Import chart components
+// Import chart components (these are still imported but not rendered in App.js directly)
 import MessageCountChart from './components/MessageCountChart';
 import HourlyActivityChart from './components/HourlyActivityChart';
 import DailyActivityChart from './components/DailyActivityChart';
@@ -21,9 +21,6 @@ The chat history is from **June 11, 2025** to **October 29, 2025**.
 *   **Baldo**: 1164 messages
 *   **Vasile**: 705 messages
 *   **R**: 294 messages
-*   **Meta AI**: 4 messages
-*   **ChatGPT**: 3 messages
-*   **You**: 1 message
 
 ## Average Messages Per Day
 
@@ -34,9 +31,6 @@ The chat spans **141 days** (from June 11, 2025, to October 29, 2025). Based on 
 *   **Baldo**: 8.3 messages/day
 *   **Vasile**: 5.0 messages/day
 *   **R**: 2.1 messages/day
-*   **Meta AI**: ~0.03 messages/day
-*   **ChatGPT**: ~0.02 messages/day
-*   **You**: ~0.01 messages/day
 
 ## General Conversation Topics
 
