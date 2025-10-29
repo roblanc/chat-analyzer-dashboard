@@ -14,7 +14,7 @@ body {
 
 .terminal-output {
   background-color: #000080; /* Dark Blue background for output area */
-  border: 2px solid #FFFFFF; /* White border */
+
   padding: 20px;
   border-radius: 8px;
   text-align: left;
