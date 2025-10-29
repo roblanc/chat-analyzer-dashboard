@@ -6,11 +6,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const MessageCountChart = () => {
   const data = {
-    labels: ['Unde', 'Marius Motoi', 'Baldo', 'Vasile', 'R', 'Meta AI', 'ChatGPT', 'You'],
+    labels: ['Unde', 'Marius Motoi', 'Baldo', 'Vasile', 'R'],
     datasets: [
       {
         label: 'Total Messages',
-        data: [2961, 2429, 1164, 705, 294, 4, 3, 1],
+        data: [2961, 2429, 1164, 705, 294],
         backgroundColor: '#ADD8E6', // Light Blue
         borderColor: '#FFFFFF', // White
         borderWidth: 1,
