@@ -6,7 +6,7 @@ body {
 .App {
   background-color: #000080; /* Dark Blue background */
   color: #FFFFFF; /* White text */
-  font-family: 'monospace', 'Courier New', Courier, monospace;
+  font-family: 'Press Start 2P', cursive, monospace; /* Added Press Start 2P */
   padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;
@@ -73,7 +73,6 @@ body {
   color: #FFFF00; /* Yellow for strong text */
 }
 
-/* Blinking cursor animation */
 .cursor {
   font-weight: bold;
   color: #FFFFFF; /* White cursor */
@@ -85,38 +84,6 @@ body {
   50% { visibility: visible; }
 }
 
-/* Charts container styling */
-.charts-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 30px;
-}
-
-.chart-item {
-  background-color: #000080; /* Same as terminal-output background */
-  border: 1px solid #FFFFFF; /* White border */
-  padding: 15px;
-  border-radius: 8px;
-  width: 100%; /* Full width on small screens */
-  max-width: 45%; /* Two charts per row on larger screens */
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle white glow */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .charts-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .chart-item {
-    max-width: 95%; /* Adjust for single column on small screens */
-  }
-}
-
-/* Remove default React app styling */
 .App-header, .App-link {
   display: none;
 }
