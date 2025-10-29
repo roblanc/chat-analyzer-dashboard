@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.App {
+  background-color: #000080; /* Dark Blue background */
+  color: #FFFFFF; /* White text */
+  font-family: 'monospace', 'Courier New', Courier, monospace;
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.terminal-output {
+  background-color: #000080; /* Dark Blue background for output area */
+  border: 2px solid #FFFFFF; /* White border */
+  padding: 20px;
+  border-radius: 8px;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.2;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* White glow */
+  position: relative;
+}
+
+/* Styling for markdown elements to fit terminal theme */
+.terminal-output h1 {
+  color: #ADD8E6; /* Light Blue for main titles */
+  text-decoration: underline;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 2em;
+}
+
+.terminal-output h2 {
+  color: #B0E0E6; /* Powder Blue for subtitles */
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.terminal-output h3 {
+  color: #E0FFFF; /* Light Cyan for sub-subtitles */
+  margin-top: 10px;
+  margin-bottom: 8px;
+  font-size: 1.2em;
+}
+
+.terminal-output p {
+  margin-bottom: 10px;
+}
+
+.terminal-output ul {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.terminal-output li {
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.terminal-output li::before {
+  content: '> ';
+  color: #FFFFFF; /* White bullet */
+  position: absolute;
+  left: 0;
+}
+
+.terminal-output strong {
+  color: #FFFF00; /* Yellow for strong text */
+}
+
+/* Blinking cursor animation */
+.cursor {
+  font-weight: bold;
+  color: #FFFFFF; /* White cursor */
+  animation: blink-caret 1s step-end infinite;
+}
+
+@keyframes blink-caret {
+  from, to { visibility: hidden; }
+  50% { visibility: visible; }
+}
+
+/* Charts container styling */
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.chart-item {
+  background-color: #000080; /* Same as terminal-output background */
+  border: 1px solid #FFFFFF; /* White border */
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%; /* Full width on small screens */
+  max-width: 45%; /* Two charts per row on larger screens */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle white glow */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .charts-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chart-item {
+    max-width: 95%; /* Adjust for single column on small screens */
+  }
+}
+
+/* Remove default React app styling */
+.App-header, .App-link {
+  display: none;
+}
