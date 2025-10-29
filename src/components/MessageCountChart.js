@@ -9,7 +9,7 @@ const MessageCountChart = () => {
     labels: ['Unde', 'Marius Motoi', 'Baldo', 'Vasile', 'R'],
     datasets: [
       {
-        label: 'Total Messages',
+        label: 'Total Mesaje',
         data: [2961, 2429, 1164, 705, 294],
         backgroundColor: '#ADD8E6', // Light Blue
         borderColor: '#FFFFFF', // White
@@ -29,7 +29,7 @@ const MessageCountChart = () => {
       },
       title: {
         display: true,
-        text: 'Total Messages per Person',
+        text: 'Total Mesaje per Persoană',
         color: '#ADD8E6', // Light Blue title
       },
     },

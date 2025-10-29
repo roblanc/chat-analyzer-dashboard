@@ -9,7 +9,7 @@ const HourlyActivityChart = () => {
     labels: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'],
     datasets: [
       {
-        label: 'Messages',
+        label: 'Mesaje',
         data: [221, 75, 26, 4, 0, 0, 14, 23, 93, 419, 569, 451, 369, 602, 651, 647, 747, 0, 487, 458, 795, 776, 541, 297],
         backgroundColor: '#B0E0E6', // Powder Blue
         borderColor: '#FFFFFF', // White
@@ -29,7 +29,7 @@ const HourlyActivityChart = () => {
       },
       title: {
         display: true,
-        text: 'Hourly Activity',
+        text: 'Activitate Orară',
         color: '#B0E0E6', // Powder Blue title
       },
     },

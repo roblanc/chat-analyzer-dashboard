@@ -16,46 +16,46 @@ const markdownContent = `
 ░██         ░██      ░██░██           ░██    ░██    ░██ ░██    ░██ ░██░██
 ░██         ░██      ░██ ░███████      ░████  ░███████  ░██    ░██ ░██░██
 
-## Chat Timespan
+## Perioada de Chat
 
-The chat history is from **June 11, 2025** to **October 29, 2025**.
+Istoricul chat-ului este din **11 iunie 2025** până în **29 octombrie 2025**.
 
-## Message Count per Person
+## Număr de Mesaje per Persoană
 
-*   **Unde**: 2961 messages
-*   **Marius Motoi**: 2429 messages
-*   **Baldo**: 1164 messages
-*   **Vasile**: 705 messages
-*   **R**: 294 messages
+*   **Unde**: 2961 mesaje
+*   **Marius Motoi**: 2429 mesaje
+*   **Baldo**: 1164 mesaje
+*   **Vasile**: 705 mesaje
+*   **R**: 294 mesaje
 
-## Average Messages Per Day
+## Medie Mesaje pe Zi
 
-The chat spans **141 days** (from June 11, 2025, to October 29, 2025). Based on this, here is the approximate average number of messages per day for each person:
+Chat-ul se întinde pe o perioadă de **141 de zile** (din 11 iunie 2025 până în 29 octombrie 2025). Pe baza acestui fapt, iată numărul mediu aproximativ de mesaje pe zi pentru fiecare persoană:
 
-*   **Unde**: 21.0 messages/day
-*   **Marius Motoi**: 17.2 messages/day
-*   **Baldo**: 8.3 messages/day
-*   **Vasile**: 5.0 messages/day
-*   **R**: 2.1 messages/day
+*   **Unde**: 21.0 mesaje/zi
+*   **Marius Motoi**: 17.2 mesaje/zi
+*   **Baldo**: 8.3 mesaje/zi
+*   **Vasile**: 5.0 mesaje/zi
+*   **R**: 2.1 mesaje/zi
 
-## Peak Activity
+## Activitate de Vârf
 
-### Most Active Hours of the Day
-The group is most active in the evening and late at night, with a significant peak between **20:00 - 21:00** (704 messages).
+### Cele Mai Active Ore ale Zilei
+Grupul este cel mai activ seara și târziu în noapte, cu un vârf semnificativ între orele **20:00 - 21:00** (704 mesaje).
 
-### Most Active Days of the Week
-The group is most active on the weekends, with **Sunday** being the most active day (1283 messages).
+### Cele Mai Active Zile ale Săptămânii
+Grupul este cel mai activ în weekend, **Duminica** fiind cea mai activă zi (1283 mesaje).
 
-**Activity by day of the week:**
-*   Monday: 1085 messages
-*   Tuesday: 1072 messages
-*   Wednesday: 909 messages
-*   Thursday: 1164 messages
-*   Friday: 910 messages
-*   Saturday: 1138 messages
-*   Sunday: 1283 messages
+**Activitate pe zilele săptămânii:**
+*   Luni: 1085 mesaje
+*   Marți: 1072 mesaje
+*   Miercuri: 909 mesaje
+*   Joi: 1164 mesaje
+*   Vineri: 910 mesaje
+*   Sâmbătă: 1138 mesaje
+*   Duminică: 1283 mesaje
 
-## Favorite Topics per Chatter
+## Subiecte Favorite per Conversator
 
 *   **Baldo**: 'asa' (28), 'daca' (28), 'aia' (25), 'bine' (25), 'marius' (22)
 *   **Marius Motoi**: 'mama' (77), 'asa' (70), 'bine' (47), 'dar' (46), 'hai' (45)
@@ -63,129 +63,129 @@ The group is most active on the weekends, with **Sunday** being the most active 
 *   **Unde**: 'dar' (96), 'https' (90), 'com' (70), 'asa' (69), 'pai' (62)
 *   **R**: 'https' (21), 'dar' (16), 'vasile' (14), 'aia' (13), 'com' (12)
 
-## Most Links Shared (Top 5)
+## Cele Mai Multe Link-uri Distribuite (Top 5)
 
-*   **Unde**: 89 links
-*   **Marius Motoi**: 27 links
-*   **Baldo**: 22 links
-*   **R**: 21 links
-*   **Vasile**: 5 links
+*   **Unde**: 89 link-uri
+*   **Marius Motoi**: 27 link-uri
+*   **Baldo**: 22 link-uri
+*   **R**: 21 link-uri
+*   **Vasile**: 5 link-uri
 
-## General Conversation Topics
+## Subiecte Generale de Conversație
 
-Based on the chat log, the conversation is very informal and covers a wide range of topics typical of a group of close friends. Here's a summary of what they generally talk about:
+Pe baza istoricului chat-ului, conversația este foarte informală și acoperă o gamă largă de subiecte tipice unui grup de prieteni apropiați. Iată un rezumat al ceea ce discută în general:
 
-*   **Socializing and Making Plans:** 
-A large part of the conversation revolves around planning get-togethers, deciding where to go out, and coordinating activities like playing poker or going to parties. They seem to use Discord frequently for these arrangements.
+*   **Socializare și Planuri:**
+O mare parte a conversației se învârte în jurul planificării întâlnirilor, deciziei unde să iasă și coordonării activităților precum jocul de poker sau mersul la petreceri. Se pare că folosesc frecvent Discord pentru aceste aranjamente.
 
-*   **Gambling, especially Poker:** 
-Poker is a recurring and central theme. They discuss their games, wins and losses, and share stories about their experiences at poker rooms and online.
+*   **Jocuri de Noroc, în special Poker:**
+Pokerul este o temă recurentă și centrală. Discută despre jocurile lor, câștiguri și pierderi, și împărtășesc povești despre experiențele lor la sălile de poker și online.
 
-*   **Jokes, Banter, and Memes:** 
-    The chat is filled with friendly banter, inside jokes, and the sharing of memes, funny videos, and links. The tone is very casual and humorous.
+*   **Glume, Tachinări și Meme-uri:**
+    Chat-ul este plin de tachinări amicale, glume interne și partajarea de meme-uri, videoclipuri amuzante și link-uri. Tonul este foarte casual și plin de umor.
 
-*   **Food and Drink:** 
-    There are frequent discussions about food, including preferences for pizza and shawarma, and talk about various alcoholic and non-alcoholic drinks.
+*   **Mâncare și Băutură:**
+    Există discuții frecvente despre mâncare, inclusiv preferințe pentru pizza și shaorma, și discuții despre diverse băuturi alcoolice și non-alcoolice.
 
-*   **Daily Life and Work:** 
-They share anecdotes from their daily lives, talk about work, and discuss personal projects, such as creating a video game.
+*   **Viața Cotidiană și Muncă:**
+Împărtășesc anecdote din viața lor de zi cu zi, vorbesc despre muncă și discută proiecte personale, cum ar fi crearea unui joc video.
 
-*   **Technology and Pop Culture:** 
-The group discusses various tech-related subjects, including software like CapCut and Canva, computer issues, and video games. They also share and comment on music and other pop culture content.
+*   **Tehnologie și Cultură Pop:**
+Grupul discută diverse subiecte legate de tehnologie, inclusiv software precum CapCut și Canva, probleme de calculator și jocuri video. De asemenea, împărtășesc și comentează muzică și alt conținut de cultură pop.
 
-*   **Relationships and Personal Matters:** 
-While often discussed in a joking manner, there are mentions of relationships, girlfriends, and other personal aspects of their lives.
+*   **Relații și Chestiuni Personale:**
+Deși adesea discutate într-o manieră glumeață, există mențiuni despre relații, prietene și alte aspecte personale ale vieții lor.
 
-The language is a mix of Romanian and English, with a heavy use of slang and colloquialisms, reflecting the close and informal nature of the group.
+Limbajul este un amestec de română și engleză, cu o utilizare intensă a argoului și a colocvialismelor, reflectând natura apropiată și informală a grupului.
 
-## Fun Deductions
+## Deductii Amuzante
 
-### Inside Jokes and Recurring Themes
+### Glume Interne și Teme Recurente
 
-Several inside jokes and recurring themes appear throughout the conversation, painting a picture of the group's unique shared humor:
+Mai multe glume interne și teme recurente apar pe parcursul conversației, conturând o imagine a umorului unic împărtășit al grupului:
 
-*   **Poker as a Metaphor for Life:** 
-The friends frequently use poker terminology and analogies to describe everyday situations, from personal relationships to work challenges. Winning or losing at poker is a common topic, and it seems to be a central bonding activity.
-*   **"Romanian Soul Bites":** 
-This phrase appears multiple times, often in a humorous or ironic context. It seems to be a catchphrase for a certain type of experience or feeling that the group understands.
-*   **Character Archetypes:** 
-The friends have created archetypes and running jokes about each other's personalities. For example, they joke about "R" being a tech guru who can fix anything and "Marius Motoi" being an expressive and sometimes dramatic storyteller.
-*   **Tech Support and Mishaps:** 
-There's a running theme of technology-related problems, especially with one member, "Robert," who is jokingly banned from using other people's devices due to the chaos that ensues.
+*   **Pokerul ca Metaforă pentru Viață:**
+Prietenii folosesc frecvent terminologia și analogiile din poker pentru a descrie situații cotidiene, de la relații personale la provocări profesionale. Câștigul sau pierderea la poker este un subiect comun și pare a fi o activitate centrală de legătură.
+*   **"Romanian Soul Bites":**
+Această expresie apare de mai multe ori, adesea într-un context umoristic sau ironic. Pare a fi o expresie cheie pentru un anumit tip de experiență sau sentiment pe care grupul îl înțelege.
+*   **Arhetipuri de Caractere:**
+Prietenii au creat arhetipuri și glume recurente despre personalitățile celorlalți. De exemplu, glumesc despre "R" ca fiind un guru al tehnologiei care poate repara orice și "Marius Motoi" ca fiind un povestitor expresiv și uneori dramatic.
+*   **Suport Tehnic și Neplăceri:**
+Există o temă recurentă a problemelor legate de tehnologie, în special cu un membru, "Robert", căruia i se interzice în glumă să folosească dispozitivele altor persoane din cauza haosului care urmează.
 
-### Group Dynamics and Roles
+### Dinamica și Rolurile Grupului
 
-*   **The Planner:** 
-**Unde** often takes the lead in organizing get-togethers and activities, especially poker nights. They are frequently the one to initiate plans and check in with the group.
-*   **The Entertainer:** 
-**Marius Motoi** seems to be the group's primary entertainer, frequently sharing funny stories, making self-deprecating jokes, and keeping the mood light.
-*   **The Voice of Reason (and Tech Support):**
-**R** often chimes in with practical advice, especially on technical matters. They are the go-to person for explaining complex topics, from software licensing to fixing computer problems.
+*   **Planificatorul:**
+**Unde** preia adesea inițiativa în organizarea întâlnirilor și activităților, în special a serilor de poker. El este frecvent cel care inițiază planuri și verifică disponibilitatea grupului.
+*   **Animatorul:**
+**Marius Motoi** pare a fi principalul animator al grupului, împărtășind frecvent povești amuzante, făcând glume autoironice și menținând o atmosferă veselă.
+*   **Vocea Rațiunii (și Suport Tehnic):**
+**R** intervine adesea cu sfaturi practice, în special în chestiuni tehnice. El este persoana de referință pentru explicarea subiectelor complexe, de la licențierea software la remedierea problemelor de calculator.
 
-### 3. Lifestyle and Habits
+### 3. Stil de Viață și Obiceiuri
 
-*   **Night Owls:** 
-The chat history shows a significant amount of activity late at night and even into the early hours of the morning, suggesting that the group members are often up late, especially when playing poker or socializing.
-*   **Spontaneous Get-Togethers:** 
-While they do plan some events, many of their social interactions seem to be spontaneous, with members frequently checking who is available to hang out on short notice.
-*   **A Mix of Digital and In-Person Interaction:** 
-The group seamlessly moves between online and offline worlds. They use the chat to plan in-person meetings, and then often report back to the group with stories and updates from those events.
+*   **Păsări de Noapte:**
+Istoricul chat-ului arată o cantitate semnificativă de activitate târziu în noapte și chiar în primele ore ale dimineții, sugerând că membrii grupului stau adesea treji până târziu, mai ales când joacă poker sau socializează.
+*   **Întâlniri Spontane:**
+Deși planifică unele evenimente, multe dintre interacțiunile lor sociale par a fi spontane, membrii verificând frecvent cine este disponibil pentru a ieși în scurt timp.
+*   **Un Amestec de Interacțiune Digitală și Față în Față:**
+Grupul se mișcă fără probleme între lumile online și offline. Ei folosesc chat-ul pentru a planifica întâlniri în persoană și apoi raportează adesea grupului povești și actualizări de la acele evenimente.
 
-## Comprehensive Analysis
+## Analiză Cuprinzătoare
 
-### Peak Activity Analysis
+### Analiza Activității de Vârf
 
-*   **Most Active Hours of the Day:** 
-The group is most active in the evening and late at night, with a significant peak between **20:00 - 21:00** (704 messages).
-*   **Most Active Days of the Week:** 
-The group is most active on the weekends, with **Sunday** being the most active day (1283 messages).
+*   **Cele Mai Active Ore ale Zilei:**
+Grupul este cel mai activ seara și târziu în noapte, cu un vârf semnificativ între orele **20:00 - 21:00** (704 mesaje).
+*   **Cele Mai Active Zile ale Săptămânii:**
+Grupul este cel mai activ în weekend, **Duminica** fiind cea mai activă zi (1283 mesaje).
 
-**Activity by day of the week:**
-*   Monday: 1085 messages
-*   Tuesday: 1072 messages
-*   Wednesday: 909 messages
-*   Thursday: 1164 messages
-*   Friday: 910 messages
-*   Saturday: 1138 messages
-*   Sunday: 1283 messages
+**Activitate pe zilele săptămânii:**
+*   Luni: 1085 mesaje
+*   Marți: 1072 mesaje
+*   Miercuri: 909 mesaje
+*   Joi: 1164 mesaje
+*   Vineri: 910 mesaje
+*   Sâmbătă: 1138 mesaje
+*   Duminică: 1283 mesaje
 
-### Inside Joke and Slang "Dictionary"
+### "Dicționar" de Glume Interne și Argou
 
-*   **"Disconcea?" / "Discsos" / "Doxxco":** 
-A playful and ever-changing set of slang for "Discord."
-*   **"Romanian Soul Bites":** 
-A catchphrase for anything stereotypically Romanian.
-*   **"The Robert Saga":** 
-A running joke about a friend named Robert who is comically bad with technology.
-*   **"French Context":** 
-An inside joke that is never explained to outsiders.
-*   **"Cucamonu":** 
-A slang term for "cu camionul" (with the truck).
-*   **"Jizzy Boy Lemuriano" / "Masilur":** 
-Affectionate and humorous nicknames for members of the group.
-*   **"Simeticoane":** 
-A made-up word used in a variety of nonsensical but humorous contexts.
+*   **"Disconcea?" / "Discsos" / "Doxxco":**
+Un set jucăuș și în continuă schimbare de argou pentru "Discord."
+*   **"Romanian Soul Bites":**
+O expresie cheie pentru orice este stereotipic românesc.
+*   **"Saga lui Robert":**
+O glumă recurentă despre un prieten pe nume Robert care este comic de slab la tehnologie.
+*   **"Context Francez":**
+O glumă internă care nu este niciodată explicată celor din afară.
+*   **"Cucamonu":**
+Un termen de argou pentru "cu camionul".
+*   **"Jizzy Boy Lemuriano" / "Masilur":**
+Porecle afectuoase și amuzante pentru membrii grupului.
+*   **"Simeticoane":**
+Un cuvânt inventat folosit într-o varietate de contexte absurde, dar amuzante.
 
-### Social Interaction Map
+### Harta Interacțiunii Sociale
 
-*   **Main Hubs:** **Unde** and **Marius Motoi** are the main hubs of the conversation.
-*   **Key Pairings:** The most frequent conversational pairings are between **Unde**, **Marius Motoi**, and **Baldo**.
-*   **Role of Others:** **Vasile** and **R** are active participants, with **R** often acting as a source of technical information.
+*   **Noduri Principale:** **Unde** și **Marius Motoi** sunt nodurile principale ale conversației.
+*   **Perechi Cheie:** Cele mai frecvente perechi conversaționale sunt între **Unde**, **Marius Motoi** și **Baldo**.
+*   **Rolul Celorlalți:** **Vasile** și **R** sunt participanți activi, **R** acționând adesea ca o sursă de informații tehnice.
 
-### Topic Frequency Analysis
+### Analiza Frecvenței Subiectelor
 
-1.  **Socializing and Banter:** The most dominant category.
-2.  **Poker and Gambling:** A central and recurring topic.
-3.  **Food and Drink:** Frequent discussions about meals and drinks.
-4.  **Work and Technology:** Common, but less frequent than social topics.
+1.  **Socializare și Tachinare:** Cea mai dominantă categorie.
+2.  **Poker și Jocuri de Noroc:** Un subiect central și recurent.
+3.  **Mâncare și Băutură:** Discuții frecvente despre mese și băuturi.
+4.  **Muncă și Tehnologie:** Comune, dar mai puțin frecvente decât subiectele sociale.
 
-### Linguistic Fingerprints
+### Amprente Lingvistice
 
-*   **Unde:** Concise, inventive slang, and dry humor.
-*   **Marius Motoi:** Expressive, emotional, and uses self-deprecating humor.
-*   **Baldo:** Witty, observational, and sarcastic.
-*   **R:** Formal, technical, and has a dry sense of humor.
-*   **Vasile:** Direct, to the point, and enthusiastic.
+*   **Unde:** Concis, argou inventiv și umor sec.
+*   **Marius Motoi:** Expresiv, emoțional și folosește umor autoironic.
+*   **Baldo:** Spiritual, observator și sarcastic.
+*   **R:** Formal, tehnic și are un simț al umorului sec.
+*   **Vasile:** Direct, la obiect și entuziast.
 `;
 
 function App() {

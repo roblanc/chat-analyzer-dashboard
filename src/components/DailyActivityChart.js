@@ -6,10 +6,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const DailyActivityChart = () => {
   const data = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    labels: ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă', 'Duminică'],
     datasets: [
       {
-        label: 'Messages',
+        label: 'Mesaje',
         data: [1215, 1258, 1051, 1377, 1107, 1331, 1467],
         backgroundColor: '#E0FFFF', // Light Cyan
         borderColor: '#FFFFFF', // White
@@ -29,7 +29,7 @@ const DailyActivityChart = () => {
       },
       title: {
         display: true,
-        text: 'Daily Activity',
+        text: 'Activitate Zilnică',
         color: '#E0FFFF', // Light Cyan title
       },
     },

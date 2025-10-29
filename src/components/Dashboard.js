@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Dashboard = () => {
-  const chatTimespan = "June 11, 2025 to October 29, 2025";
+  const chatTimespan = "11 iunie 2025 până în 29 octombrie 2025";
   const totalMessages = 2961 + 2429 + 1164 + 705 + 294 + 4 + 3 + 1; // Sum of all messages
 
   return (
@@ -15,11 +15,11 @@ const Dashboard = () => {
 ░██         ░██      ░██ ░███████      ░████  ░███████  ░██    ░██ ░██░██
       <div className="stats-summary">
         <div className="stat-box">
-          <h2>Chat Timespan</h2>
+          <h2>Perioada Chat</h2>
           <p>{chatTimespan}</p>
         </div>
         <div className="stat-box">
-          <h2>Total Messages</h2>
+          <h2>Total Mesaje</h2>
           <p>{totalMessages}</p>
         </div>
       </div>
