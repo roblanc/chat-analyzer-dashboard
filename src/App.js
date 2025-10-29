@@ -32,6 +32,39 @@ The chat spans **141 days** (from June 11, 2025, to October 29, 2025). Based on 
 *   **Vasile**: 5.0 messages/day
 *   **R**: 2.1 messages/day
 
+## Peak Activity
+
+### Most Active Hours of the Day
+The group is most active in the evening and late at night, with a significant peak between **20:00 - 21:00** (704 messages).
+
+### Most Active Days of the Week
+The group is most active on the weekends, with **Sunday** being the most active day (1283 messages).
+
+**Activity by day of the week:**
+*   Monday: 1085 messages
+*   Tuesday: 1072 messages
+*   Wednesday: 909 messages
+*   Thursday: 1164 messages
+*   Friday: 910 messages
+*   Saturday: 1138 messages
+*   Sunday: 1283 messages
+
+## Favorite Topics per Chatter
+
+*   **Baldo**: 'asa' (28), 'daca' (28), 'aia' (25), 'bine' (25), 'marius' (22)
+*   **Marius Motoi**: 'mama' (77), 'asa' (70), 'bine' (47), 'dar' (46), 'hai' (45)
+*   **Vasile**: 'bine' (23), 'dar' (21), 'asa' (18), 'poker' (16), 'pai' (16)
+*   **Unde**: 'dar' (96), 'https' (90), 'com' (70), 'asa' (69), 'pai' (62)
+*   **R**: 'https' (21), 'dar' (16), 'vasile' (14), 'aia' (13), 'com' (12)
+
+## Most Links Shared (Top 5)
+
+*   **Unde**: 89 links
+*   **Marius Motoi**: 27 links
+*   **Baldo**: 22 links
+*   **R**: 21 links
+*   **Vasile**: 5 links
+
 ## General Conversation Topics
 
 Based on the chat log, the conversation is very informal and covers a wide range of topics typical of a group of close friends. Here's a summary of what they generally talk about:
@@ -60,8 +93,6 @@ While often discussed in a joking manner, there are mentions of relationships, g
 The language is a mix of Romanian and English, with a heavy use of slang and colloquialisms, reflecting the close and informal nature of the group.
 
 ## Fun Deductions
-
-Based on the chat history, here are a few more fun deductions:
 
 ### Inside Jokes and Recurring Themes
 
@@ -99,9 +130,18 @@ The group seamlessly moves between online and offline worlds. They use the chat 
 ### Peak Activity Analysis
 
 *   **Most Active Hours of the Day:** 
-The group is most active in the evening and late at night, with a significant peak between **8 PM and 10 PM**.
+The group is most active in the evening and late at night, with a significant peak between **20:00 - 21:00** (704 messages).
 *   **Most Active Days of the Week:** 
-The group is most active on the weekends, with **Sunday** being the most active day.
+The group is most active on the weekends, with **Sunday** being the most active day (1283 messages).
+
+**Activity by day of the week:**
+*   Monday: 1085 messages
+*   Tuesday: 1072 messages
+*   Wednesday: 909 messages
+*   Thursday: 1164 messages
+*   Friday: 910 messages
+*   Saturday: 1138 messages
+*   Sunday: 1283 messages
 
 ### Inside Joke and Slang "Dictionary"
 
