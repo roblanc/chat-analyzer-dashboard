@@ -8,7 +8,13 @@ import HourlyActivityChart from './components/HourlyActivityChart';
 import DailyActivityChart from './components/DailyActivityChart';
 
 const markdownContent = `
-# WhatsApp Chat Analysis
+░█████████           ░██              ░██                          ░██░██
+░██     ░██                           ░██                                
+░██     ░██ ░██░████ ░██ ░███████  ░████████  ░███████  ░████████  ░██░██
+░█████████  ░███     ░██░██    ░██    ░██    ░██    ░██ ░██    ░██ ░██░██
+░██         ░██      ░██░█████████    ░██    ░█████████ ░██    ░██ ░██░██
+░██         ░██      ░██░██           ░██    ░██    ░██ ░██    ░██ ░██░██
+░██         ░██      ░██ ░███████      ░████  ░███████  ░██    ░██ ░██░██
 
 ## Chat Timespan
 

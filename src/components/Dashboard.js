@@ -6,7 +6,13 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h1>WhatsApp Chat Analysis Dashboard</h1>
+      ░█████████           ░██              ░██                          ░██░██
+░██     ░██                           ░██                                
+░██     ░██ ░██░████ ░██ ░███████  ░████████  ░███████  ░████████  ░██░██
+░█████████  ░███     ░██░██    ░██    ░██    ░██    ░██ ░██    ░██ ░██░██
+░██         ░██      ░██░█████████    ░██    ░█████████ ░██    ░██ ░██░██
+░██         ░██      ░██░██           ░██    ░██    ░██ ░██    ░██ ░██░██
+░██         ░██      ░██ ░███████      ░████  ░███████  ░██    ░██ ░██░██
       <div className="stats-summary">
         <div className="stat-box">
           <h2>Chat Timespan</h2>
