@@ -6,7 +6,7 @@ body {
 .App {
   background-color: #000080; /* Dark Blue background */
   color: #FFFFFF; /* White text */
-  font-family: 'Press Start 2P', cursive, monospace; /* Added Press Start 2P */
+  font-family: 'Google Sans Code', monospace; /* Changed font to Google Sans Code */
   padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;
