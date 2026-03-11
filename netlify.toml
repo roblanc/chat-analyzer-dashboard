@@ -8,7 +8,7 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-  included_files = ["public/knowledge.md", "netlify/data/chat.txt", "netlify/data/chat.index.json"]
+  included_files = ["public/knowledge.md", "public/dashboard-stats.json", "netlify/data/chat.txt", "netlify/data/chat.index.json"]
 
 [[redirects]]
   from = "/*"

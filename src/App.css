@@ -96,6 +96,17 @@ body {
   font-weight: 400;
 }
 
+.meta {
+  margin-top: 12px;
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.meta-error {
+  color: rgba(239, 68, 68, 0.9);
+}
+
 /* Stats */
 .status-strip {
   display: grid;
@@ -361,7 +372,14 @@ body {
   font-size: 1.1rem;
 }
 
-.ask-answer p {
+.ask-model {
+  margin: 0 0 12px;
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.9rem;
+}
+
+.ask-answer-text {
+  white-space: pre-wrap;
   color: var(--text);
   line-height: 1.6;
 }

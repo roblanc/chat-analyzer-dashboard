@@ -24,6 +24,9 @@ WhatsApp Chat - ChatGPT (1)/
 # generated index (derived from chat.txt)
 netlify/data/chat.index.json
 
+# generated dashboard stats (derived from chat.txt + knowledge baseline)
+public/dashboard-stats.json
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

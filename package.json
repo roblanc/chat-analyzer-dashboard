@@ -17,9 +17,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "prestart": "npm run build:chat-index && npm run build:dashboard-stats",
     "start": "react-scripts start",
     "build:chat-index": "node scripts/build-chat-index.js",
-    "build": "npm run build:chat-index && react-scripts build",
+    "build:dashboard-stats": "node scripts/build-dashboard-stats.js",
+    "build": "npm run build:chat-index && npm run build:dashboard-stats && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

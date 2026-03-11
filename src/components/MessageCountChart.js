@@ -4,13 +4,20 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const MessageCountChart = () => {
+const DEFAULT_LABELS = ['Unde', 'Marius Motoi', 'Baldo', 'Vasile', 'R'];
+const DEFAULT_DATA = [2961, 2429, 1164, 705, 294];
+
+const MessageCountChart = ({ stats }) => {
+  const labels = stats?.labels?.authors?.length ? stats.labels.authors : DEFAULT_LABELS;
+  const combinedAuthors = stats?.combined?.authors;
+  const values = combinedAuthors ? labels.map((label) => combinedAuthors[label] || 0) : DEFAULT_DATA;
+
   const data = {
-    labels: ['Unde', 'Marius Motoi', 'Baldo', 'Vasile', 'R'],
+    labels,
     datasets: [
       {
         label: 'Total Mesaje',
-        data: [2961, 2429, 1164, 705, 294],
+        data: values,
         backgroundColor: 'rgba(99, 102, 241, 0.85)', // Indigo
         borderColor: '#6366F1',
         borderWidth: 1,
@@ -32,7 +39,7 @@ const MessageCountChart = () => {
       },
       title: {
         display: true,
-        text: 'Total Mesaje per Persoană',
+        text: 'Total Mesaje per Persoană (Legacy + Noi)',
         color: '#F8FAFC',
         font: { family: 'Inter', size: 16, weight: '600' }
       },

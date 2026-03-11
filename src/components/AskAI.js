@@ -4,6 +4,7 @@ const AskAI = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [sources, setSources] = useState([]);
+  const [model, setModel] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,6 +24,7 @@ const AskAI = () => {
     setError('');
     setAnswer('');
     setSources([]);
+    setModel('');
 
     try {
       const response = await fetch(endpoint, {
@@ -42,6 +44,7 @@ const AskAI = () => {
       const payload = await response.json();
       setAnswer(payload.answer || '');
       setSources(Array.isArray(payload.sources) ? payload.sources : []);
+      setModel(payload.model || '');
     } catch (err) {
       setError(err.message || 'A apărut o eroare.');
     } finally {
@@ -97,7 +100,8 @@ const AskAI = () => {
       {answer && (
         <div className="ask-answer">
           <h3>Răspuns</h3>
-          <p>{answer}</p>
+          {model && <p className="ask-model">Model: {model}</p>}
+          <div className="ask-answer-text">{answer}</div>
           {sources.length > 0 && (
             <div className="ask-sources">
               <h4>Surse din conținut</h4>

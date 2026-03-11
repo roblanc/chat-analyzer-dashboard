@@ -4,13 +4,21 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const HourlyActivityChart = () => {
+const DEFAULT_LABELS = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+const DEFAULT_DATA = [221, 75, 26, 4, 0, 0, 14, 23, 93, 419, 569, 451, 369, 602, 651, 647, 747, 0, 487, 458, 795, 776, 541, 297];
+
+const HourlyActivityChart = ({ stats }) => {
+  const labels = stats?.labels?.hours?.length ? stats.labels.hours : DEFAULT_LABELS;
+  const hourCounts = stats?.incremental?.hourCounts;
+  const values = Array.isArray(hourCounts) && hourCounts.length === 24 ? hourCounts : DEFAULT_DATA;
+  const titleText = stats?.incremental ? 'Activitate Orară (Mesaje Noi)' : 'Activitate Orară';
+
   const data = {
-    labels: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'],
+    labels,
     datasets: [
       {
         label: 'Mesaje',
-        data: [221, 75, 26, 4, 0, 0, 14, 23, 93, 419, 569, 451, 369, 602, 651, 647, 747, 0, 487, 458, 795, 776, 541, 297],
+        data: values,
         backgroundColor: 'rgba(236, 72, 153, 0.85)', // Pink
         borderColor: '#EC4899',
         borderWidth: 1,
@@ -32,7 +40,7 @@ const HourlyActivityChart = () => {
       },
       title: {
         display: true,
-        text: 'Activitate Orară',
+        text: titleText,
         color: '#F8FAFC',
         font: { family: 'Inter', size: 16, weight: '600' }
       },

@@ -8,13 +8,22 @@ import DailyActivityChart from './components/DailyActivityChart';
 import AskAI from './components/AskAI';
 
 const KNOWLEDGE_PATH = `${process.env.PUBLIC_URL || ''}/knowledge.md`;
-const TOTAL_MESSAGES = 2961 + 2429 + 1164 + 705 + 294;
-const STATS = [
-  { label: 'Total mesaje', value: TOTAL_MESSAGES.toLocaleString('ro-RO') },
-  { label: 'Zile analizate', value: '141' },
-  { label: 'Vârf orar', value: '20:00 - 21:00' },
-  { label: 'Zi de vârf', value: 'Duminică' },
-];
+const DASHBOARD_STATS_PATH = `${process.env.PUBLIC_URL || ''}/dashboard-stats.json`;
+
+const FALLBACK_TOTAL_MESSAGES = 2961 + 2429 + 1164 + 705 + 294;
+const FALLBACK_DAYS_ANALYZED = 141;
+const FALLBACK_PEAK_HOUR = '20:00 - 21:00';
+const FALLBACK_PEAK_DAY = 'Duminică';
+
+const RO_MONTHS_SHORT = ['ian', 'feb', 'mar', 'apr', 'mai', 'iun', 'iul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const formatRoDate = (isoDate) => {
+  const [yyyy, mm, dd] = String(isoDate || '').split('-').map((value) => Number(value));
+  if (!yyyy || !mm || !dd) {
+    return String(isoDate || '').trim();
+  }
+  return `${dd} ${RO_MONTHS_SHORT[mm - 1]} ${yyyy}`;
+};
+
 const FILTERS = [
   'Unde',
   'Marius Motoi',
@@ -30,6 +39,8 @@ const FILTERS = [
 function App() {
   const [markdownContent, setMarkdownContent] = useState('');
   const [loadError, setLoadError] = useState('');
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [statsError, setStatsError] = useState('');
 
   useEffect(() => {
     let isMounted = true;
@@ -57,10 +68,67 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch(DASHBOARD_STATS_PATH)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to load stats (${response.status})`);
+        }
+        return response.json();
+      })
+      .then((payload) => {
+        if (isMounted) {
+          setDashboardStats(payload);
+        }
+      })
+      .catch((error) => {
+        if (isMounted) {
+          setStatsError(error.message);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const htmlContent = useMemo(
     () => marked.parse(markdownContent || ''), 
     [markdownContent]
   );
+
+  const statsCards = useMemo(() => {
+    const combined = dashboardStats?.combined;
+    const incremental = dashboardStats?.incremental;
+
+    const totalMessages = combined?.totalMessages ?? FALLBACK_TOTAL_MESSAGES;
+    const daysAnalyzed = combined?.daysAnalyzed ?? FALLBACK_DAYS_ANALYZED;
+    const newMessages = incremental?.totalMessages;
+    const peakHour = incremental?.peakHour?.label ?? FALLBACK_PEAK_HOUR;
+    const peakDay = combined?.peakWeekday?.label ?? FALLBACK_PEAK_DAY;
+
+    return [
+      { label: 'Total mesaje', value: Number(totalMessages).toLocaleString('ro-RO') },
+      { label: 'Mesaje noi', value: typeof newMessages === 'number' ? newMessages.toLocaleString('ro-RO') : '—' },
+      { label: 'Zile analizate', value: Number(daysAnalyzed).toLocaleString('ro-RO') },
+      { label: 'Vârf orar (noi)', value: peakHour },
+      { label: 'Zi de vârf', value: peakDay },
+    ];
+  }, [dashboardStats]);
+
+  const coverageLabel = useMemo(() => {
+    const legacy = dashboardStats?.legacy?.period;
+    const incremental = dashboardStats?.incremental?.period;
+    if (!legacy?.start || !legacy?.end || !incremental?.start || !incremental?.end) {
+      return '';
+    }
+
+    return `Legacy: ${formatRoDate(legacy.start)} – ${formatRoDate(legacy.end)} • Noi: ${formatRoDate(
+      incremental.start
+    )} – ${formatRoDate(incremental.end)}`;
+  }, [dashboardStats]);
 
   return (
     <div className="App">
@@ -69,10 +137,12 @@ function App() {
         <div className="header-section">
           <h1 className="title">Chat Analyzer Dashboard</h1>
           <p className="subtitle">Insights și analize avansate despre conversații</p>
+          {coverageLabel && <p className="meta">{coverageLabel}</p>}
+          {statsError && !coverageLabel && <p className="meta meta-error">Stats indisponibile: {statsError}</p>}
         </div>
 
         <div className="status-strip">
-          {STATS.map((item) => (
+          {statsCards.map((item) => (
             <div key={item.label} className="status-item glass">
               <div className="status-value">{item.value}</div>
               <div className="status-label">{item.label}</div>
@@ -90,13 +160,13 @@ function App() {
 
         <div className="charts-grid">
           <div className="chart-item glass">
-            <MessageCountChart />
+            <MessageCountChart stats={dashboardStats} />
           </div>
           <div className="chart-item glass">
-            <HourlyActivityChart />
+            <HourlyActivityChart stats={dashboardStats} />
           </div>
           <div className="chart-item glass">
-            <DailyActivityChart />
+            <DailyActivityChart stats={dashboardStats} />
           </div>
         </div>
 

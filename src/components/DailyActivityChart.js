@@ -4,13 +4,21 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const DailyActivityChart = () => {
+const DEFAULT_LABELS = ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă', 'Duminică'];
+const DEFAULT_DATA = [1085, 1072, 909, 1164, 910, 1138, 1283];
+
+const DailyActivityChart = ({ stats }) => {
+  const labels = stats?.labels?.weekdays?.length ? stats.labels.weekdays : DEFAULT_LABELS;
+  const weekdayCounts = stats?.combined?.weekdayCounts;
+  const values = Array.isArray(weekdayCounts) && weekdayCounts.length === 7 ? weekdayCounts : DEFAULT_DATA;
+  const titleText = stats?.combined ? 'Activitate Zilnică (Legacy + Noi)' : 'Activitate Zilnică';
+
   const data = {
-    labels: ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă', 'Duminică'],
+    labels,
     datasets: [
       {
         label: 'Mesaje',
-        data: [1215, 1258, 1051, 1377, 1107, 1331, 1467],
+        data: values,
         backgroundColor: 'rgba(139, 92, 246, 0.85)', // Violet
         borderColor: '#8B5CF6',
         borderWidth: 1,
@@ -32,7 +40,7 @@ const DailyActivityChart = () => {
       },
       title: {
         display: true,
-        text: 'Activitate Zilnică',
+        text: titleText,
         color: '#F8FAFC',
         font: { family: 'Inter', size: 16, weight: '600' }
       },

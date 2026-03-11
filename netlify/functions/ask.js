@@ -20,6 +20,7 @@ const STOPWORDS = new Set([
 ]);
 
 let cachedKnowledge = null;
+let cachedDashboardStats = undefined;
 let cachedChatChunks = null;
 let cachedChatDf = null;
 let cachedChatDocCount = 0;
@@ -36,6 +37,59 @@ const tokenize = (text) => {
     .split(/[^a-z0-9]+/)
     .filter(Boolean)
     .filter((token) => !STOPWORDS.has(token));
+};
+
+const uniq = (items) => Array.from(new Set(items.filter(Boolean)));
+
+const QUESTION_INTENT = {
+  analysis: /(\bcel\s+mai\b|\bcea\s+mai\b|\btop\b|\branking\b|\bcompar|\bpare\b|\bwho\b|\bwhich\b|\bbest\b|\bmost\b)/i,
+  smartness: /(destept|inteligent|smart|geniu|creier|brain)/i,
+};
+
+const HINT_TOKENS_SMARTNESS = [
+  'cod',
+  'api',
+  'server',
+  'github',
+  'netlify',
+  'xml',
+  'json',
+  'script',
+  'node',
+  'react',
+  'debug',
+  'bug',
+  'error',
+  'licenta',
+  'windows',
+  'driver',
+  'calculator',
+  'pc',
+  'it',
+  'tehnic',
+  'tehnologie',
+];
+
+const detectIntent = (question) => {
+  const normalized = normalizeText(question || '');
+  return {
+    isAnalysis: QUESTION_INTENT.analysis.test(normalized),
+    isSmartness: QUESTION_INTENT.smartness.test(normalized),
+  };
+};
+
+const expandTokens = (question, tokens, intent) => {
+  const extra = [];
+
+  if (intent?.isSmartness) {
+    extra.push(...HINT_TOKENS_SMARTNESS);
+  }
+
+  if (/\bR\b/.test(String(question || ''))) {
+    extra.push('robert');
+  }
+
+  return uniq([...tokens, ...extra]).filter((token) => !STOPWORDS.has(token));
 };
 
 const stripLeadingMarks = (value) =>
@@ -265,6 +319,67 @@ const loadKnowledge = () => {
   return cachedKnowledge;
 };
 
+const loadDashboardStats = () => {
+  if (cachedDashboardStats !== undefined) {
+    return cachedDashboardStats;
+  }
+
+  const statsPath = resolveExistingPath([
+    path.resolve(process.cwd(), 'public', 'dashboard-stats.json'),
+    path.resolve(__dirname, 'public', 'dashboard-stats.json'),
+    path.resolve(__dirname, '..', '..', 'public', 'dashboard-stats.json'),
+  ]);
+
+  if (!statsPath) {
+    cachedDashboardStats = null;
+    return cachedDashboardStats;
+  }
+
+  try {
+    cachedDashboardStats = JSON.parse(fs.readFileSync(statsPath, 'utf8'));
+  } catch (error) {
+    cachedDashboardStats = null;
+  }
+
+  return cachedDashboardStats;
+};
+
+const renderStatsContext = (stats) => {
+  if (!stats || typeof stats !== 'object') {
+    return '';
+  }
+
+  const combined = stats.combined || {};
+  const incremental = stats.incremental || {};
+
+  const authors = combined.authors && typeof combined.authors === 'object' ? combined.authors : null;
+  const authorLines = authors
+    ? Object.entries(authors)
+        .sort((a, b) => (b[1] || 0) - (a[1] || 0))
+        .map(([name, count]) => `- ${name}: ${Number(count || 0).toLocaleString('ro-RO')} mesaje`)
+        .join('\n')
+    : '';
+
+  const lines = [
+    'STATISTICI (Dashboard)',
+    combined.totalMessages != null ? `- Total mesaje (legacy + noi): ${Number(combined.totalMessages).toLocaleString('ro-RO')}` : null,
+    incremental.totalMessages != null
+      ? `- Mesaje noi (${incremental?.period?.start || 'n/a'} – ${incremental?.period?.end || 'n/a'}): ${Number(
+          incremental.totalMessages
+        ).toLocaleString('ro-RO')}`
+      : null,
+    combined.daysAnalyzed != null ? `- Zile analizate (legacy + noi): ${Number(combined.daysAnalyzed).toLocaleString('ro-RO')}` : null,
+    combined.peakWeekday?.label ? `- Zi de vârf (total): ${combined.peakWeekday.label}` : null,
+    incremental.peakHour?.label ? `- Vârf orar (noi): ${incremental.peakHour.label}` : null,
+    authorLines ? 'MESAJE PER PERSOANĂ (total):' : null,
+    authorLines || null,
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  return lines.trim();
+};
+
 const loadChatIndex = () => {
   const indexPath = resolveExistingPath([
     path.resolve(process.cwd(), 'netlify', 'data', 'chat.index.json'),
@@ -373,16 +488,26 @@ const loadChatChunks = () => {
   return cachedChatChunks;
 };
 
-const buildContext = (question, knowledge, chatChunks) => {
+const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) => {
   const knowledgeChunks = splitIntoChunks(knowledge || '').map((text, index) => ({
     kind: 'knowledge',
     id: index,
     text,
   }));
 
-  const tokens = tokenize(question);
+  const rawTokens = tokenize(question);
+  const tokens = expandTokens(question, rawTokens, intent);
   const importantTokens = tokens.filter((token) => token.length >= 4);
-  const documents = [...knowledgeChunks, ...(chatChunks || [])];
+  const statsText = renderStatsContext(dashboardStats);
+  const statsDoc = statsText
+    ? {
+        kind: 'stats',
+        id: 0,
+        text: statsText,
+      }
+    : null;
+
+  const documents = [...knowledgeChunks, ...(statsDoc ? [statsDoc] : []), ...(chatChunks || [])];
   const scored = documents.map((doc) => ({
     doc,
     score:
@@ -395,21 +520,58 @@ const buildContext = (question, knowledge, chatChunks) => {
         : importantTokens.some((token) => normalizeText(doc.text).includes(token)),
   }));
 
+  const forcedKnowledge = [];
+  if (intent?.isAnalysis) {
+    const markers = ['vocea ratiunii', 'suport tehnic', 'rolurile grupului', 'interactiunii sociale'];
+    knowledgeChunks.forEach((chunk) => {
+      const normalized = normalizeText(chunk.text);
+      if (markers.some((marker) => normalized.includes(marker))) {
+        forcedKnowledge.push(chunk);
+      }
+    });
+  }
+
   const candidates = scored.filter((item) => item.score > 0);
   const gatedCandidates = importantTokens.length ? candidates.filter((item) => item.hitsImportant) : [];
   const pool = gatedCandidates.length ? gatedCandidates : candidates;
   const sorted = pool.sort((a, b) => b.score - a.score).slice(0, 6);
 
-  if (!sorted.length) {
-    const context = String(knowledge || '').slice(0, MAX_CONTEXT_CHARS);
-    return { context, sources: [] };
+  const selectedDocs = [];
+  const selectedKeys = new Set();
+  const pushDoc = (doc) => {
+    if (!doc) {
+      return;
+    }
+    const key = `${doc.kind}:${doc.id}`;
+    if (selectedKeys.has(key)) {
+      return;
+    }
+    selectedKeys.add(key);
+    selectedDocs.push(doc);
+  };
+
+  forcedKnowledge.slice(0, 2).forEach(pushDoc);
+  sorted.forEach(({ doc }) => pushDoc(doc));
+
+  if (statsDoc) {
+    pushDoc(statsDoc);
+  }
+
+  if (!selectedDocs.length) {
+    const fallback = [];
+    if (statsDoc) {
+      fallback.push(statsDoc.text);
+    }
+    fallback.push(String(knowledge || '').slice(0, MAX_CONTEXT_CHARS));
+    const context = fallback.join('\n\n---\n\n').slice(0, MAX_CONTEXT_CHARS);
+    return { context, sources: statsDoc ? [{ kind: 'stats', id: 0, snippet: 'STATISTICI (Dashboard)' }] : [] };
   }
 
   const parts = [];
   const sources = [];
   let usedChars = 0;
 
-  sorted.forEach(({ doc }) => {
+  selectedDocs.forEach((doc) => {
     if (usedChars >= MAX_CONTEXT_CHARS) {
       return;
     }
@@ -417,7 +579,9 @@ const buildContext = (question, knowledge, chatChunks) => {
     const header =
       doc.kind === 'chat'
         ? `SURSA: CHAT (${doc.start || 'n/a'}${doc.end && doc.end !== doc.start ? ` - ${doc.end}` : ''})`
-        : 'SURSA: REZUMAT';
+        : doc.kind === 'stats'
+          ? 'SURSA: STATISTICI'
+          : 'SURSA: REZUMAT';
 
     const block = `${header}\n${doc.text}`.trim();
     const remaining = MAX_CONTEXT_CHARS - usedChars;
@@ -557,14 +721,25 @@ exports.handler = async (event) => {
     };
   }
 
+  const intent = detectIntent(question);
   const knowledge = loadKnowledge();
+  const dashboardStats = loadDashboardStats();
   const chatChunks = loadChatChunks();
-  const { context, sources } = buildContext(question, knowledge, chatChunks);
+  const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats);
 
-  const prompt = `Ești un asistent care răspunde doar din CONTEXT (fragmente din arhiva conversațiilor + un rezumat).
-Dacă răspunsul nu apare în CONTEXT, răspunde exact: "Nu știu din conținutul disponibil.".
-Răspunde în aceeași limbă ca întrebarea.
-Oferă un răspuns concis și o justificare scurtă bazată pe context, fără să inventezi detalii.
+  const prompt = `Ești un asistent care răspunde folosind DOAR CONTEXT (fragmente din arhiva conversațiilor + rezumat + statistici).
+Nu inventa nume, citate sau fapte care nu apar în CONTEXT.
+
+Tip întrebare (detectat): ${intent.isAnalysis ? 'ANALIZĂ/OPINIE' : 'FAPT'}
+
+Reguli:
+1) Pentru întrebări factuale (date/numere/citate): dacă răspunsul nu e în CONTEXT, răspunde exact: "Nu știu din conținutul disponibil.".
+2) Pentru întrebări de analiză/comparație/opinie (ex: "cel mai X", "cine pare"): poți trage o concluzie bazată pe indicii din CONTEXT, dar:
+   - spune clar că e o interpretare ("Din fragmente, pare că..."),
+   - dă 2-4 dovezi scurte din CONTEXT (autor + timestamp sau secțiune din rezumat/statistici),
+   - evită etichete jignitoare; dacă e prea subiectiv, oferă 2-3 opțiuni și explică criteriul.
+3) Răspunde în aceeași limbă ca întrebarea.
+4) Nu folosi markdown (fără **bold**, fără titluri). Folosește text simplu cu linii noi.
 
 CONTEXT:
 ${context}
