@@ -9,6 +9,24 @@ import DailyActivityChart from './components/DailyActivityChart';
 import AskAI from './components/AskAI';
 
 const KNOWLEDGE_PATH = `${process.env.PUBLIC_URL || ''}/knowledge.md`;
+const TOTAL_MESSAGES = 2961 + 2429 + 1164 + 705 + 294;
+const STATS = [
+  { label: 'Total mesaje', value: TOTAL_MESSAGES },
+  { label: 'Zile analizate', value: '141' },
+  { label: 'Vârf orar', value: '20:00 - 21:00' },
+  { label: 'Zi de vârf', value: 'Duminică' },
+];
+const FILTERS = [
+  'Unde',
+  'Marius Motoi',
+  'Baldo',
+  'Vasile',
+  'R',
+  'Poker',
+  'Glume interne',
+  'Planuri',
+  'Tehnologie',
+];
 
 function App() {
   const [markdownContent, setMarkdownContent] = useState('');
@@ -49,6 +67,21 @@ function App() {
     <div className="App">
       <div className="terminal-output">
         <AskAI />
+        <div className="status-strip">
+          {STATS.map((item) => (
+            <div key={item.label} className="status-item">
+              <div className="status-value">{item.value}</div>
+              <div className="status-label">{item.label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="filter-strip">
+          {FILTERS.map((filter) => (
+            <span key={filter} className="filter-pill">
+              {filter}
+            </span>
+          ))}
+        </div>
         {loadError ? (
           <p className="load-error">
             Nu am putut încărca conținutul: {loadError}
