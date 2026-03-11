@@ -97,7 +97,6 @@ const AskAI = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [sources, setSources] = useState([]);
-  const [model, setModel] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -151,7 +150,6 @@ const AskAI = () => {
       const payload = await response.json();
       setAnswer(payload.answer || '');
       setSources(Array.isArray(payload.sources) ? payload.sources : []);
-      setModel(payload.model || '');
     } catch (err) {
       setError(err.message || 'A apărut o eroare.');
     } finally {
