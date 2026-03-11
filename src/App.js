@@ -38,7 +38,7 @@ function App() {
     return () => {
       isMounted = false;
     };
-  }, [KNOWLEDGE_PATH]);
+  }, []);
 
   const htmlContent = useMemo(
     () => marked.parse(markdownContent || ''), 
