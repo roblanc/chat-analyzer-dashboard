@@ -8,6 +8,7 @@ const DEFAULT_MODELS = [
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const MAX_CONTEXT_CHARS = 10000;
+const MAX_CONTEXT_CHARS_PROFILE = 18000;
 const CHAT_CHUNK_TARGET_CHARS = 1600;
 const REQUEST_TIMEOUT_MS = 8000;
 const RETRIABLE_STATUS = new Set([429, 500, 503, 504]);
@@ -25,6 +26,7 @@ let cachedDashboardStats = undefined;
 let cachedChatChunks = null;
 let cachedChatDf = null;
 let cachedChatDocCount = 0;
+let cachedAuthorProfiles = null;
 
 const normalizeText = (text) =>
   text
@@ -45,7 +47,7 @@ const uniq = (items) => Array.from(new Set(items.filter(Boolean)));
 const QUESTION_INTENT = {
   analysis: /(\bcel\s+mai\b|\bcea\s+mai\b|\btop\b|\branking\b|\bcompar|\bpare\b|\bwho\b|\bwhich\b|\bbest\b|\bmost\b)/i,
   profile:
-    /(\bce\s+stii\s+despre\b|\bce\s+stie\s+despre\b|\bspune-mi\s+despre\b|\bspune\s+despre\b|\bce\s+poti\s+spune\s+despre\b|\bdescrie\b|\bprofil\b|\bcaracterizeaza\b|\bcine\s+e\b)/i,
+    /(\bce\s+stii\s+despre\b|\bce\s+stie\s+despre\b|\bspune-mi\s+despre\b|\bspune\s+despre\b|\bce\s+poti\s+spune\s+despre\b|\bdescrie\b|\bprofil\b|\bcaracterizeaza\b|\bcine\s+e\b|\bdeduce\b|\bdeducii\b|\bimpresie\b|\bce\s+poti\s+deduce\b|\bce\s+poti\s+trage\b|\bce\s+crezi\s+despre\b|\banalizeaza\b|\bpersonalitate\b|\bcaracter\b|\bfel\s+de\s+om\b)/i,
   smartness: /(destept|inteligent|smart|geniu|creier|brain)/i,
 };
 
@@ -383,6 +385,18 @@ const getKnownAuthors = (stats) => {
   return ['Unde', 'Marius Motoi', 'Baldo', 'Vasile', 'R'];
 };
 
+// Partial name → canonical author mapping. Keys must be lowercased + diacritics stripped.
+const AUTHOR_PARTIAL_MAP = {
+  'marius': 'Marius Motoi',
+  'motoi': 'Marius Motoi',
+  'marius motoi': 'Marius Motoi',
+  'baldo': 'Baldo',
+  'vasile': 'Vasile',
+  'unde': 'Unde',
+  'robert': 'R',
+  'robi': 'R',
+};
+
 const extractFocusAuthor = (question, stats) => {
   const normalizedQuestion = normalizeText(question || '');
   const candidates = getKnownAuthors(stats);
@@ -391,6 +405,7 @@ const extractFocusAuthor = (question, stats) => {
     return 'R';
   }
 
+  // Full name match first (e.g. "Marius Motoi")
   for (let index = 0; index < candidates.length; index += 1) {
     const candidate = candidates[index];
     if (!candidate) {
@@ -401,6 +416,19 @@ const extractFocusAuthor = (question, stats) => {
     }
     if (normalizedQuestion.includes(normalizeText(candidate))) {
       return candidate;
+    }
+  }
+
+  // Partial name match via AUTHOR_PARTIAL_MAP
+  const partialKeys = Object.keys(AUTHOR_PARTIAL_MAP).sort((a, b) => b.length - a.length);
+  for (let index = 0; index < partialKeys.length; index += 1) {
+    const key = partialKeys[index];
+    const regex = new RegExp(`\\b${key}\\b`);
+    if (regex.test(normalizedQuestion)) {
+      const mapped = AUTHOR_PARTIAL_MAP[key];
+      if (candidates.includes(mapped) || mapped === 'R') {
+        return mapped;
+      }
     }
   }
 
@@ -418,6 +446,10 @@ const getChatAuthorAliases = (focusAuthor) => {
 
   if (focusAuthor === 'R') {
     return ['Robert', 'R'];
+  }
+
+  if (focusAuthor === 'Marius Motoi') {
+    return ['Marius Motoi', 'Marius', 'Motoi'];
   }
 
   return [focusAuthor];
@@ -603,12 +635,76 @@ const loadChatChunks = () => {
       cachedChatDf.set(token, (cachedChatDf.get(token) || 0) + 1);
     });
   });
+  // Cache author profiles if available in prebuilt index
+  if (cachedAuthorProfiles === null) {
+    const idx = loadChatIndex();
+    cachedAuthorProfiles = (idx && idx.authorProfiles && typeof idx.authorProfiles === 'object')
+      ? idx.authorProfiles
+      : {};
+  }
+
   return cachedChatChunks;
 };
 
-const AUTHOR_EXAMPLE_MAX_LINES = 24;
-const AUTHOR_EXAMPLE_MAX_CHARS = 3400;
+const loadAuthorProfiles = () => {
+  if (cachedAuthorProfiles !== null) {
+    return cachedAuthorProfiles;
+  }
+  const idx = loadChatIndex();
+  cachedAuthorProfiles = (idx && idx.authorProfiles && typeof idx.authorProfiles === 'object')
+    ? idx.authorProfiles
+    : {};
+  return cachedAuthorProfiles;
+};
+
+const buildAuthorProfileDoc = (focusAuthor, authorProfiles) => {
+  if (!focusAuthor || !authorProfiles) return null;
+
+  // Try exact match, then alias match
+  const aliases = getChatAuthorAliases(focusAuthor);
+  let profile = authorProfiles[focusAuthor];
+  if (!profile) {
+    for (const alias of aliases) {
+      if (authorProfiles[alias]) {
+        profile = authorProfiles[alias];
+        break;
+      }
+    }
+  }
+  if (!profile) return null;
+
+  const lines = [`PROFIL INDUCTIV: ${focusAuthor}`];
+  if (profile.totalMessages) lines.push(`- Total mesaje analizate: ${profile.totalMessages}`);
+  if (profile.avgMessageLength) lines.push(`- Lungime medie mesaj: ${profile.avgMessageLength} caractere`);
+  if (profile.shortMessagePct != null) lines.push(`- Mesaje scurte (<20 chars): ${profile.shortMessagePct}%`);
+  if (profile.longMessagePct != null) lines.push(`- Mesaje lungi (>150 chars): ${profile.longMessagePct}%`);
+  if (profile.peakHour != null) lines.push(`- Oră de vârf: ${profile.peakHour}:00`);
+  if (profile.peakDayLabel) lines.push(`- Zi de vârf: ${profile.peakDayLabel}`);
+  if (profile.questionPct != null) lines.push(`- Întrebări din total mesaje: ${profile.questionPct}%`);
+  if (profile.linkCount != null) lines.push(`- Link-uri distribuite: ${profile.linkCount}`);
+  if (profile.topWords && profile.topWords.length) {
+    lines.push(`- Cuvinte frecvente: ${profile.topWords.slice(0, 10).map(w => `"${w.term}"(${w.count})`).join(', ')}`);
+  }
+  if (profile.topPhrases && profile.topPhrases.length) {
+    lines.push(`- Fraze caracteristice: ${profile.topPhrases.slice(0, 5).map(p => `"${p.term}"(${p.count})`).join(', ')}`);
+  }
+  if (profile.exampleMessages && profile.exampleMessages.length) {
+    lines.push('- Exemple de mesaje reprezentative:');
+    profile.exampleMessages.forEach((ex) => lines.push(`  * ${ex}`));
+  }
+
+  return {
+    kind: 'authorProfile',
+    id: focusAuthor,
+    text: lines.join('\n'),
+  };
+};
+
+const AUTHOR_EXAMPLE_MAX_LINES = 42;
+const AUTHOR_EXAMPLE_MAX_CHARS = 6000;
 const AUTHOR_EXAMPLE_MIN_BODY_CHARS = 12;
+// Lines per temporal third (early / mid / recent)
+const AUTHOR_EXAMPLE_LINES_PER_THIRD = 14;
 
 const truncateSnippet = (value, limit) => {
   const text = String(value || '').trim();
@@ -629,86 +725,70 @@ const buildAuthorExamplesDoc = (chatChunks, focusAuthor) => {
     return null;
   }
 
-  const lines = [];
   const seen = new Set();
-  let usedChars = 0;
 
-  const considerLine = (rawLine) => {
-    if (!rawLine) {
-      return;
-    }
-    const line = stripLeadingMarks(rawLine).trim();
-    const marker = markers.find((candidate) => line.includes(candidate));
-    if (!marker) {
-      return;
-    }
-    const bodyIndex = line.indexOf(marker);
-    const body = line.slice(bodyIndex + marker.length).trim();
-    if (body.length < AUTHOR_EXAMPLE_MIN_BODY_CHARS) {
-      return;
-    }
-    if (/^[^a-z0-9]+$/i.test(body)) {
-      return;
-    }
-
-    const trimmed = truncateSnippet(line, 240);
-    if (seen.has(trimmed)) {
-      return;
-    }
-
-    if (lines.length >= AUTHOR_EXAMPLE_MAX_LINES) {
-      return;
-    }
-
-    if (usedChars + trimmed.length + 1 > AUTHOR_EXAMPLE_MAX_CHARS) {
-      return;
-    }
-
-    seen.add(trimmed);
-    lines.push(trimmed);
-    usedChars += trimmed.length + 1;
-  };
-
-  // Prefer recent examples first.
-  for (let chunkIndex = chatChunks.length - 1; chunkIndex >= 0; chunkIndex -= 1) {
-    const chunk = chatChunks[chunkIndex];
-    if (!chunk || typeof chunk.text !== 'string') {
-      continue;
-    }
-    const chunkLines = chunk.text.split('\n');
-    chunkLines.forEach(considerLine);
-    if (lines.length >= AUTHOR_EXAMPLE_MAX_LINES) {
-      break;
-    }
-  }
-
-  // If still missing, scan forward for older examples.
-  if (lines.length < Math.max(8, Math.floor(AUTHOR_EXAMPLE_MAX_LINES / 2))) {
-    for (let chunkIndex = 0; chunkIndex < chatChunks.length; chunkIndex += 1) {
+  const extractLinesFromRange = (startIndex, endIndex, maxLines) => {
+    const result = [];
+    let usedChars = 0;
+    for (let chunkIndex = endIndex - 1; chunkIndex >= startIndex; chunkIndex -= 1) {
       const chunk = chatChunks[chunkIndex];
       if (!chunk || typeof chunk.text !== 'string') {
         continue;
       }
       const chunkLines = chunk.text.split('\n');
-      chunkLines.forEach(considerLine);
-      if (lines.length >= AUTHOR_EXAMPLE_MAX_LINES) {
-        break;
+      for (let lineIndex = chunkLines.length - 1; lineIndex >= 0; lineIndex -= 1) {
+        const rawLine = chunkLines[lineIndex];
+        if (!rawLine) continue;
+        const line = stripLeadingMarks(rawLine).trim();
+        const marker = markers.find((candidate) => line.includes(candidate));
+        if (!marker) continue;
+        const bodyIndex = line.indexOf(marker);
+        const body = line.slice(bodyIndex + marker.length).trim();
+        if (body.length < AUTHOR_EXAMPLE_MIN_BODY_CHARS) continue;
+        if (/^[^a-z0-9]+$/i.test(body)) continue;
+        const trimmed = truncateSnippet(line, 240);
+        if (seen.has(trimmed)) continue;
+        if (usedChars + trimmed.length + 1 > AUTHOR_EXAMPLE_MAX_CHARS / 3) break;
+        seen.add(trimmed);
+        result.push(trimmed);
+        usedChars += trimmed.length + 1;
+        if (result.length >= maxLines) break;
       }
+      if (result.length >= maxLines) break;
     }
-  }
+    return result;
+  };
+
+  // Temporal thirds: sample from early, mid, recent periods independently
+  const total = chatChunks.length;
+  const third = Math.ceil(total / 3);
+  const earlyLines = extractLinesFromRange(0, third, AUTHOR_EXAMPLE_LINES_PER_THIRD);
+  const midLines = extractLinesFromRange(third, third * 2, AUTHOR_EXAMPLE_LINES_PER_THIRD);
+  const recentLines = extractLinesFromRange(third * 2, total, AUTHOR_EXAMPLE_LINES_PER_THIRD);
+
+  // Interleave: recent first (most relevant), then mid, then early
+  const lines = [...recentLines, ...midLines, ...earlyLines].slice(0, AUTHOR_EXAMPLE_MAX_LINES);
 
   if (lines.length === 0) {
     return null;
   }
 
+  const periodLabel = [
+    recentLines.length ? `${recentLines.length} recente` : null,
+    midLines.length ? `${midLines.length} din mijloc` : null,
+    earlyLines.length ? `${earlyLines.length} vechi` : null,
+  ].filter(Boolean).join(', ');
+
   return {
     kind: 'examples',
     id: focusAuthor,
-    text: [`EXEMPLE: ${focusAuthor} (mesaje din chat)`, ...lines].join('\n'),
+    text: [`EXEMPLE: ${focusAuthor} (${periodLabel})`, ...lines].join('\n'),
   };
 };
 
 const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, focusAuthor) => {
+  const contextLimit = intent?.isProfile ? MAX_CONTEXT_CHARS_PROFILE : MAX_CONTEXT_CHARS;
+
   const knowledgeChunks = splitIntoChunks(knowledge || '').map((text, index) => ({
     kind: 'knowledge',
     id: index,
@@ -728,6 +808,12 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
     : null;
 
   const examplesDoc = intent?.isProfile && focusAuthor ? buildAuthorExamplesDoc(chatChunks, focusAuthor) : null;
+
+  // Inductive profile doc: pre-computed behavioral observations, highest priority for profile questions
+  const authorProfiles = loadAuthorProfiles();
+  const authorProfileDoc = intent?.isProfile && focusAuthor
+    ? buildAuthorProfileDoc(focusAuthor, authorProfiles)
+    : null;
 
   const documents = [
     ...knowledgeChunks,
@@ -802,7 +888,7 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
   const candidates = scored.filter((item) => item.score > 0);
   const gatedCandidates = importantTokens.length ? candidates.filter((item) => item.hitsImportant) : [];
   const pool = gatedCandidates.length ? gatedCandidates : candidates;
-  const maxDocs = intent?.isProfile ? 10 : intent?.isAnalysis ? 8 : 6;
+  const maxDocs = intent?.isProfile ? 16 : intent?.isAnalysis ? 8 : 6;
   const sorted = pool.sort((a, b) => b.score - a.score).slice(0, maxDocs);
 
   const selectedDocs = [];
@@ -835,6 +921,10 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
   });
 
   forcedUnique.slice(0, forcedLimit).forEach(pushDoc);
+  // Inductive profile doc gets highest priority — always first for profile questions
+  if (authorProfileDoc) {
+    pushDoc(authorProfileDoc);
+  }
   if (examplesDoc) {
     pushDoc(examplesDoc);
   }
@@ -848,8 +938,8 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
     if (statsDoc) {
       fallback.push(statsDoc.text);
     }
-    fallback.push(String(knowledge || '').slice(0, MAX_CONTEXT_CHARS));
-    const context = fallback.join('\n\n---\n\n').slice(0, MAX_CONTEXT_CHARS);
+    fallback.push(String(knowledge || '').slice(0, contextLimit));
+    const context = fallback.join('\n\n---\n\n').slice(0, contextLimit);
     return { context, sources: statsDoc ? [{ kind: 'stats', id: 0, snippet: 'STATISTICI (Dashboard)' }] : [] };
   }
 
@@ -858,7 +948,7 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
   let usedChars = 0;
 
   selectedDocs.forEach((doc) => {
-    if (usedChars >= MAX_CONTEXT_CHARS) {
+    if (usedChars >= contextLimit) {
       return;
     }
 
@@ -869,10 +959,12 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
           ? 'SURSA: STATISTICI'
           : doc.kind === 'examples'
             ? 'SURSA: EXEMPLE'
-          : 'SURSA: REZUMAT';
+            : doc.kind === 'authorProfile'
+              ? 'SURSA: PROFIL INDUCTIV'
+              : 'SURSA: REZUMAT';
 
     const block = `${header}\n${doc.text}`.trim();
-    const remaining = MAX_CONTEXT_CHARS - usedChars;
+    const remaining = contextLimit - usedChars;
     const trimmed = block.length > remaining ? `${block.slice(0, remaining - 1)}…` : block;
     parts.push(trimmed);
     usedChars += trimmed.length + 6;
@@ -887,7 +979,7 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
     });
   });
 
-  const context = parts.join('\n\n---\n\n').slice(0, MAX_CONTEXT_CHARS);
+  const context = parts.join('\n\n---\n\n').slice(0, contextLimit);
   return { context, sources };
 };
 
@@ -916,9 +1008,10 @@ const isRetriableMessage = (message = '') =>
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const callGemini = async (model, prompt) => {
+const callGemini = async (model, prompt, options = {}) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const maxOutputTokens = options.maxOutputTokens || 512;
 
   try {
     const response = await fetch(`${GEMINI_BASE_URL}/${model}:generateContent`, {
@@ -935,7 +1028,7 @@ const callGemini = async (model, prompt) => {
         ],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 512,
+          maxOutputTokens,
         },
       }),
       signal: controller.signal,
@@ -1054,7 +1147,7 @@ RĂSPUNS:`;
     for (let index = 0; index < models.length; index += 1) {
       const model = models[index];
       try {
-        result = await callGemini(model, prompt);
+        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 1024 : 512 });
         break;
       } catch (error) {
         lastError = error;
