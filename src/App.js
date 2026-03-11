@@ -15,15 +15,6 @@ const FALLBACK_DAYS_ANALYZED = 141;
 const FALLBACK_PEAK_HOUR = '20:00 - 21:00';
 const FALLBACK_PEAK_DAY = 'Duminică';
 
-const RO_MONTHS_SHORT = ['ian', 'feb', 'mar', 'apr', 'mai', 'iun', 'iul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-const formatRoDate = (isoDate) => {
-  const [yyyy, mm, dd] = String(isoDate || '').split('-').map((value) => Number(value));
-  if (!yyyy || !mm || !dd) {
-    return String(isoDate || '').trim();
-  }
-  return `${dd} ${RO_MONTHS_SHORT[mm - 1]} ${yyyy}`;
-};
-
 
 function App() {
   const [markdownContent, setMarkdownContent] = useState('');
