@@ -438,62 +438,177 @@ body {
 }
 
 .ask-answer {
-  background: rgba(15, 23, 42, 0.4);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-left: 4px solid var(--accent-1);
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
   animation: fade-in 0.4s ease-out;
 }
 
-.ask-answer h3 {
+.ask-answer-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ask-answer-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--accent-1);
-  margin-bottom: 12px;
-  font-size: 1.1rem;
 }
 
-.ask-model {
-  margin: 0 0 12px;
-  color: rgba(148, 163, 184, 0.9);
-  font-size: 0.9rem;
+.ask-model-badge {
+  font-size: 0.7rem;
+  color: rgba(148, 163, 184, 0.6);
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
 }
 
+/* Markdown answer rendering */
 .ask-answer-text {
-  white-space: pre-wrap;
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 0.97rem;
 }
 
+.ask-answer-text p {
+  margin-bottom: 12px;
+}
+
+.ask-answer-text p:last-child {
+  margin-bottom: 0;
+}
+
+.ask-answer-text ul,
+.ask-answer-text ol {
+  padding-left: 1.4em;
+  margin-bottom: 12px;
+}
+
+.ask-answer-text li {
+  margin-bottom: 6px;
+  line-height: 1.65;
+}
+
+.ask-answer-text strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.ask-answer-text em {
+  color: var(--text-muted);
+}
+
+.ask-answer-text a {
+  color: rgba(129, 140, 248, 0.95);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ask-answer-text a:hover {
+  color: rgba(167, 139, 250, 0.95);
+}
+
+.ask-answer-text code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  background: rgba(2, 6, 23, 0.55);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  padding: 0.1em 0.35em;
+  border-radius: 8px;
+}
+
+.ask-answer-text pre {
+  background: rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  padding: 14px;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+.ask-answer-text pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.ask-answer-text blockquote {
+  border-left: 3px solid rgba(99, 102, 241, 0.35);
+  padding-left: 12px;
+  margin-bottom: 12px;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+/* Sources — pill row */
 .ask-sources {
-  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.ask-sources h4 {
-  color: var(--text-muted);
-  font-size: 0.85rem;
+.ask-sources-label {
+  font-size: 0.7rem;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  letter-spacing: 0.07em;
+  color: rgba(148, 163, 184, 0.4);
+  margin-right: 4px;
+  flex-shrink: 0;
 }
 
-.ask-sources ul {
-  list-style: none;
+.ask-sources-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.ask-sources li {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  padding: 6px 0 6px 16px;
-  position: relative;
+.ask-source-pill {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: rgba(148, 163, 184, 0.8);
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  transition: transform 0.15s ease, color 0.15s ease;
 }
 
-.ask-sources li::before {
-  content: '•';
-  color: var(--accent-2);
-  position: absolute;
-  left: 0;
+.ask-source-pill:hover {
+  transform: translateY(-1px);
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.ask-source-pill--stats {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.ask-source-pill--profile {
+  background: rgba(236, 72, 153, 0.08);
+  border-color: rgba(236, 72, 153, 0.2);
+}
+
+.ask-source-pill--examples {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.ask-source-pill--chat {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.2);
 }
 
 .cursor {

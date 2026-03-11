@@ -1,4 +1,55 @@
 import React, { useMemo, useState } from 'react';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+
+marked.setOptions({
+  breaks: true,
+  headerIds: false,
+  mangle: false,
+});
+
+const SOURCE_META = {
+  knowledge: { label: 'Rezumat', className: 'ask-source-pill--knowledge' },
+  stats: { label: 'Statistici', className: 'ask-source-pill--stats' },
+  authorProfile: { label: 'Profil inductiv', className: 'ask-source-pill--profile' },
+  examples: { label: 'Exemple', className: 'ask-source-pill--examples' },
+};
+
+const normalizeSources = (rawSources) => {
+  if (!Array.isArray(rawSources)) {
+    return [];
+  }
+
+  return rawSources
+    .map((source, index) => {
+      if (!source) {
+        return null;
+      }
+
+      if (typeof source === 'string') {
+        return {
+          kind: 'chat',
+          id: `legacy-${index}`,
+          snippet: source,
+        };
+      }
+
+      return source;
+    })
+    .filter(Boolean);
+};
+
+const getSourceLabel = (source) => {
+  const meta = SOURCE_META[source.kind] || null;
+  const snippet = String(source.snippet || '').trim();
+
+  if (source.kind === 'knowledge') {
+    const cleaned = snippet.replace(/^##\s*/, '').trim();
+    return cleaned || meta?.label || 'Rezumat';
+  }
+
+  return meta?.label || snippet || source.kind || 'Sursa';
+};
 
 const PROMPT_SUGGESTIONS = [
   {
@@ -57,6 +108,20 @@ const AskAI = () => {
   const [model, setModel] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const normalizedSources = useMemo(() => normalizeSources(sources), [sources]);
+
+  const answerHtml = useMemo(() => {
+    if (!answer) {
+      return '';
+    }
+
+    const rawHtml = marked.parse(answer);
+    return DOMPurify.sanitize(rawHtml, {
+      FORBID_TAGS: ['style', 'script', 'iframe', 'object', 'embed', 'img', 'svg', 'math'],
+      FORBID_ATTR: ['style'],
+    });
+  }, [answer]);
 
   const endpoint = useMemo(
     () => process.env.REACT_APP_ASK_ENDPOINT || '/.netlify/functions/ask',
@@ -181,19 +246,38 @@ const AskAI = () => {
 
       {answer && (
         <div className="ask-answer">
-          <h3>Răspuns</h3>
-          {model && <p className="ask-model">Model: {model}</p>}
-          <div className="ask-answer-text">{answer}</div>
-          {sources.length > 0 && (
+          <div className="ask-answer-header">
+            <span className="ask-answer-label">Răspuns</span>
+            {model && <span className="ask-model-badge">{model.replace('gemini-', 'Gemini ')}</span>}
+          </div>
+          <div
+            className="ask-answer-text"
+            dangerouslySetInnerHTML={{ __html: answerHtml }}
+          />
+          {normalizedSources.length > 0 && (
             <div className="ask-sources">
-              <h4>Surse din conținut</h4>
-              <ul>
-                {sources.map((source, index) => (
-                  <li key={`${source.id || index}`}>
-                    {source.snippet || source}
-                  </li>
-                ))}
-              </ul>
+              <span className="ask-sources-label">Surse</span>
+              <div className="ask-sources-pills">
+                {normalizedSources
+                  .filter((s) => s.kind !== 'chat')
+                  .map((source, index) => {
+                    const meta = SOURCE_META[source.kind] || null;
+                    const label = getSourceLabel(source);
+                    return (
+                      <span
+                        key={`${source.kind}-${source.id ?? index}`}
+                        className={['ask-source-pill', meta?.className].filter(Boolean).join(' ')}
+                      >
+                        {label}
+                      </span>
+                    );
+                  })}
+                {normalizedSources.filter((s) => s.kind === 'chat').length > 0 && (
+                  <span className="ask-source-pill ask-source-pill--chat">
+                    Chat: {normalizedSources.filter((s) => s.kind === 'chat').length} fragmente
+                  </span>
+                )}
+              </div>
             </div>
           )}
         </div>
