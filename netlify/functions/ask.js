@@ -2,14 +2,15 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const MODEL_NAME = 'gemini-3-flash-preview';
-const MAX_CONTEXT_CHARS = 12000;
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent`;
+const MAX_CONTEXT_CHARS = 10000;
+const REQUEST_TIMEOUT_MS = 20000;
 const STOPWORDS = new Set([
   'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'în', 'este', 'sunt', 'o', 'un', 'una',
   'the', 'a', 'an', 'and', 'or', 'but', 'to', 'of', 'for', 'on', 'in', 'is', 'are', 'was', 'were', 'it', 'this',
 ]);
 
 let cachedKnowledge = null;
-let cachedClient = null;
 
 const normalizeText = (text) =>
   text
@@ -112,16 +113,6 @@ const buildContext = (question, knowledge) => {
   return { context, sources };
 };
 
-const getClient = async () => {
-  if (cachedClient) {
-    return cachedClient;
-  }
-
-  const { GoogleGenAI } = await import('@google/genai');
-  cachedClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-  return cachedClient;
-};
-
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
@@ -183,14 +174,41 @@ ${question}
 RĂSPUNS:`;
 
   try {
-    const ai = await getClient();
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-    const response = await ai.models.generateContent({
-      model: MODEL_NAME,
-      contents: prompt,
+    const response = await fetch(GEMINI_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': process.env.GEMINI_API_KEY,
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 512,
+        },
+      }),
+      signal: controller.signal,
     });
 
-    const answer = (response.text || '').trim() || 'Nu știu din conținutul disponibil.';
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => ({}));
+      const details = errorPayload.error?.message || errorPayload.message || response.statusText;
+      throw new Error(details || 'Gemini API error');
+    }
+
+    const data = await response.json();
+    const textParts = data?.candidates?.[0]?.content?.parts || [];
+    const answerText = textParts.map((part) => part.text || '').join('').trim();
+    const answer = answerText || 'Nu știu din conținutul disponibil.';
 
     return {
       statusCode: 200,
@@ -200,6 +218,7 @@ RĂSPUNS:`;
       body: JSON.stringify({ answer, sources }),
     };
   } catch (error) {
+    const isAbort = error.name === 'AbortError';
     return {
       statusCode: 500,
       headers: {
@@ -207,7 +226,7 @@ RĂSPUNS:`;
       },
       body: JSON.stringify({
         error: 'AI request failed',
-        details: error.message,
+        details: isAbort ? 'Request timed out' : error.message,
       }),
     };
   }
