@@ -22,7 +22,7 @@ const DailyActivityChart = ({ stats }) => {
         backgroundColor: 'rgba(139, 92, 246, 0.85)', // Violet
         borderColor: '#8B5CF6',
         borderWidth: 1,
-        borderRadius: 4,
+        borderRadius: 2, // Subtler border radius for bento
       },
     ],
   };
@@ -34,25 +34,26 @@ const DailyActivityChart = ({ stats }) => {
       legend: {
         position: 'top',
         labels: {
-          color: '#F8FAFC',
-          font: { family: 'Inter', size: 13 }
+          color: '#a1a1aa', // Zinc 400
+          font: { family: 'Inter', size: 12, weight: '500' }
         },
       },
       title: {
         display: true,
         text: titleText,
-        color: '#F8FAFC',
-        font: { family: 'Inter', size: 16, weight: '600' }
+        color: '#f8fafc',
+        font: { family: 'Inter', size: 16, weight: '700' },
+        padding: { bottom: 20 }
       },
     },
     scales: {
       x: {
-        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: '#a1a1aa', font: { family: 'Inter', size: 11 } },
+        grid: { display: false }, // Cleaner look
       },
       y: {
-        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: '#a1a1aa', font: { family: 'Inter', size: 11 } },
+        grid: { color: 'rgba(255, 255, 255, 0.03)' },
       },
     },
   };

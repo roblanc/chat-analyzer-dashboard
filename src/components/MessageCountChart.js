@@ -21,7 +21,7 @@ const MessageCountChart = ({ stats }) => {
         backgroundColor: 'rgba(99, 102, 241, 0.85)', // Indigo
         borderColor: '#6366F1',
         borderWidth: 1,
-        borderRadius: 4,
+        borderRadius: 2,
       },
     ],
   };
@@ -33,25 +33,26 @@ const MessageCountChart = ({ stats }) => {
       legend: {
         position: 'top',
         labels: {
-          color: '#F8FAFC',
-          font: { family: 'Inter', size: 13 }
+          color: '#a1a1aa',
+          font: { family: 'Inter', size: 12, weight: '500' }
         },
       },
       title: {
         display: true,
         text: 'Total Mesaje per Persoană (Legacy + Noi)',
-        color: '#F8FAFC',
-        font: { family: 'Inter', size: 16, weight: '600' }
+        color: '#f8fafc',
+        font: { family: 'Inter', size: 16, weight: '700' },
+        padding: { bottom: 20 }
       },
     },
     scales: {
       x: {
-        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: '#a1a1aa', font: { family: 'Inter', size: 11 } },
+        grid: { display: false },
       },
       y: {
-        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: '#a1a1aa', font: { family: 'Inter', size: 11 } },
+        grid: { color: 'rgba(255, 255, 255, 0.03)' },
       },
     },
   };
