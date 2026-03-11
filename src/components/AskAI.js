@@ -54,14 +54,14 @@ const getSourceLabel = (source) => {
 const PROMPT_SUGGESTIONS = [
   {
     id: 'profile-unde',
-    label: 'Profil: Unde',
+    label: 'Unde',
     description: 'Rol, stil, interese',
     prompt: 'Descrie profilul lui Unde (rol în grup, stil de comunicare, subiecte recurente) și dă 3 exemple cu timestamp.',
     gradient: ['#6366F1', '#8B5CF6'],
   },
   {
     id: 'profile-marius',
-    label: 'Profil: Marius',
+    label: 'Marius',
     description: 'Umor, povești, energie',
     prompt:
       'Ce poți deduce despre Marius Motoi (rol în grup, tip de umor, teme recurente)? Dă 3 exemple cu timestamp și o observație din statistici.',
@@ -69,7 +69,7 @@ const PROMPT_SUGGESTIONS = [
   },
   {
     id: 'profile-baldo',
-    label: 'Profil: Baldo',
+    label: 'Baldo',
     description: 'Sarcasm, observații',
     prompt:
       'Ce poți spune despre Baldo (stil, replici memorabile, subiecte recurente)? Dă 3 exemple cu timestamp și explică ce nu se poate concluziona sigur.',
@@ -77,7 +77,7 @@ const PROMPT_SUGGESTIONS = [
   },
   {
     id: 'profile-vasile',
-    label: 'Profil: Vasile',
+    label: 'Vasile',
     description: 'Atitudine, preferințe',
     prompt:
       'Descrie profilul lui Vasile (rol, stil, ce îl preocupă/ce îl enervează în discuții) și dă 3 exemple cu timestamp. Include și o observație din statistici.',

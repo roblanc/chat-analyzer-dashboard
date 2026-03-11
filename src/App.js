@@ -161,6 +161,13 @@ function App() {
           ))}
         </div>
 
+        {/* Ask AI Section (Moved to the top) */}
+        <div className="bento-ask-ai bento-card">
+          <div className="bento-inner">
+            <AskAI />
+          </div>
+        </div>
+
         {/* Charts Section */}
         <div className="bento-chart-main bento-card">
           <div className="bento-inner chart-container">
@@ -177,13 +184,6 @@ function App() {
         <div className="bento-chart-tertiary bento-card">
           <div className="bento-inner chart-container">
             <HourlyActivityChart stats={dashboardStats} />
-          </div>
-        </div>
-
-        {/* Ask AI Section */}
-        <div className="bento-ask-ai bento-card">
-          <div className="bento-inner">
-            <AskAI />
           </div>
         </div>
 
