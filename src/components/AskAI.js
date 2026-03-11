@@ -1,5 +1,55 @@
 import React, { useMemo, useState } from 'react';
 
+const PROMPT_SUGGESTIONS = [
+  {
+    id: 'profile-unde',
+    label: 'Profil: Unde',
+    description: 'Rol, stil, interese',
+    prompt: 'Descrie profilul lui Unde (rol în grup, stil de comunicare, subiecte recurente) și dă 3 exemple cu timestamp.',
+    gradient: ['#6366F1', '#8B5CF6'],
+  },
+  {
+    id: 'profile-marius',
+    label: 'Profil: Marius',
+    description: 'Umor, povești, energie',
+    prompt:
+      'Ce poți deduce despre Marius Motoi (rol în grup, tip de umor, teme recurente)? Dă 3 exemple cu timestamp și o observație din statistici.',
+    gradient: ['#EC4899', '#6366F1'],
+  },
+  {
+    id: 'profile-baldo',
+    label: 'Profil: Baldo',
+    description: 'Sarcasm, observații',
+    prompt:
+      'Ce poți spune despre Baldo (stil, replici memorabile, subiecte recurente)? Dă 3 exemple cu timestamp și explică ce nu se poate concluziona sigur.',
+    gradient: ['#8B5CF6', '#EC4899'],
+  },
+  {
+    id: 'profile-vasile',
+    label: 'Profil: Vasile',
+    description: 'Atitudine, preferințe',
+    prompt:
+      'Descrie profilul lui Vasile (rol, stil, ce îl preocupă/ce îl enervează în discuții) și dă 3 exemple cu timestamp. Include și o observație din statistici.',
+    gradient: ['#6366F1', '#EC4899'],
+  },
+  {
+    id: 'profile-r',
+    label: 'Profil: R',
+    description: 'Tehnic, “vocea rațiunii”',
+    prompt:
+      'Ce poți deduce despre R/Robert (rol tehnic, tip de ajutor oferit, stil de comunicare)? Dă 3 exemple cu timestamp și menționează ce indică statisticile.',
+    gradient: ['#22C55E', '#8B5CF6'],
+  },
+  {
+    id: 'compare',
+    label: 'Comparație',
+    description: 'Cine domină discuția?',
+    prompt:
+      'Fă o comparație între Unde, Marius Motoi, Baldo, Vasile și R: cine pare să conducă discuțiile și de ce? Dă dovezi din statistici + 3 exemple cu timestamp.',
+    gradient: ['#EC4899', '#22C55E'],
+  },
+];
+
 const AskAI = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -94,6 +144,38 @@ const AskAI = () => {
           </button>
         </div>
       </form>
+
+      <div className="ask-suggestions">
+        <div className="ask-suggestions-title">Întrebări sugerate</div>
+        <div className="ask-suggestions-grid">
+          {PROMPT_SUGGESTIONS.map((suggestion) => (
+            <button
+              key={suggestion.id}
+              type="button"
+              className="ask-suggestion-card"
+              disabled={isLoading}
+              onClick={() => {
+                setQuestion(suggestion.prompt);
+                submitQuestion(suggestion.prompt);
+              }}
+            >
+              <span
+                className="ask-suggestion-icon"
+                style={{
+                  '--from': suggestion.gradient?.[0] || '#6366F1',
+                  '--to': suggestion.gradient?.[1] || '#EC4899',
+                }}
+              >
+                {suggestion.label.slice(0, 1)}
+              </span>
+              <span className="ask-suggestion-text">
+                <span className="ask-suggestion-label">{suggestion.label}</span>
+                <span className="ask-suggestion-desc">{suggestion.description}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {error && <p className="ask-error">{error}</p>}
 
