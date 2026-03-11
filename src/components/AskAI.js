@@ -191,40 +191,6 @@ const AskAI = () => {
         {error && <div className="ask-error-inline">{error}</div>}
       </form>
 
-      {/* Suggested Quick Prompts */}
-      <div className="ask-quick-prompts">
-        <button type="button" onClick={() => { setQuestion("Cine e cel mai haios din grup?"); submitQuestion("Cine e cel mai haios din grup?"); }} disabled={isLoading}>Cine e cel mai haios? 😂</button>
-        <button type="button" onClick={() => { setQuestion("Rezumatul general al discuțiilor"); submitQuestion("Rezumatul general al discuțiilor"); }} disabled={isLoading}>Rezumat discuții 📝</button>
-        <button type="button" onClick={() => { setQuestion("Cine întârzie de obicei la poker?"); submitQuestion("Cine întârzie de obicei la poker?"); }} disabled={isLoading}>Cine întârzie la poker? 🃏</button>
-      </div>
-
-      {/* Suggestions Grid */}
-      <div className="ask-hero-suggestions">
-        <div className="ask-suggestions-grid-centered">
-          {PROMPT_SUGGESTIONS.map((suggestion) => (
-            <button
-              key={suggestion.id}
-              type="button"
-              className="ask-suggestion-card-pill"
-              disabled={isLoading}
-              onClick={() => {
-                setQuestion(suggestion.prompt);
-                submitQuestion(suggestion.prompt);
-              }}
-            >
-              <img 
-                src={`${process.env.PUBLIC_URL || ''}${suggestion.avatar}`} 
-                alt={`${suggestion.label} avatar`} 
-                className="ask-suggestion-avatar" 
-              />
-              <span className="ask-suggestion-text-single">
-                {suggestion.label} {suggestion.description ? `- ${suggestion.description}` : ''}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
       {answer && (
         <div className="ask-answer-centered">
           <div className="ask-answer-header">
@@ -274,6 +240,44 @@ const AskAI = () => {
               Închide și curăță
           </button>
         </div>
+      )}
+
+      {!answer && (
+        <>
+          {/* Suggested Quick Prompts */}
+          <div className="ask-quick-prompts">
+            <button type="button" onClick={() => { setQuestion("Cine e cel mai haios din grup?"); submitQuestion("Cine e cel mai haios din grup?"); }} disabled={isLoading}>Cine e cel mai haios? 😂</button>
+            <button type="button" onClick={() => { setQuestion("Rezumatul general al discuțiilor"); submitQuestion("Rezumatul general al discuțiilor"); }} disabled={isLoading}>Rezumat discuții 📝</button>
+            <button type="button" onClick={() => { setQuestion("Cine întârzie de obicei la poker?"); submitQuestion("Cine întârzie de obicei la poker?"); }} disabled={isLoading}>Cine întârzie la poker? 🃏</button>
+          </div>
+
+          {/* Suggestions Grid */}
+          <div className="ask-hero-suggestions">
+            <div className="ask-suggestions-grid-centered">
+              {PROMPT_SUGGESTIONS.map((suggestion) => (
+                <button
+                  key={suggestion.id}
+                  type="button"
+                  className="ask-suggestion-card-pill"
+                  disabled={isLoading}
+                  onClick={() => {
+                    setQuestion(suggestion.prompt);
+                    submitQuestion(suggestion.prompt);
+                  }}
+                >
+                  <img
+                    src={`${process.env.PUBLIC_URL || ''}${suggestion.avatar}`}
+                    alt={`${suggestion.label} avatar`}
+                    className="ask-suggestion-avatar"
+                  />
+                  <span className="ask-suggestion-text-single">
+                    {suggestion.label} {suggestion.description ? `- ${suggestion.description}` : ''}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
