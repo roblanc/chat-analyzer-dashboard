@@ -1,10 +1,15 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const MODEL_NAME = 'gemini-3-flash-preview';
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent`;
+const DEFAULT_MODELS = [
+  'gemini-3-flash-preview',
+  'gemini-2.5-flash',
+  'gemini-2.5-flash-lite',
+];
+const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const MAX_CONTEXT_CHARS = 10000;
-const REQUEST_TIMEOUT_MS = 20000;
+const REQUEST_TIMEOUT_MS = 8000;
+const RETRIABLE_STATUS = new Set([429, 500, 503, 504]);
 const STOPWORDS = new Set([
   'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'în', 'este', 'sunt', 'o', 'un', 'una',
   'the', 'a', 'an', 'and', 'or', 'but', 'to', 'of', 'for', 'on', 'in', 'is', 'are', 'was', 'were', 'it', 'this',
@@ -113,6 +118,79 @@ const buildContext = (question, knowledge) => {
   return { context, sources };
 };
 
+const getModels = () => {
+  const envValue = (process.env.GEMINI_MODELS || '').trim();
+  if (!envValue) {
+    return DEFAULT_MODELS;
+  }
+
+  const models = envValue
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return models.length ? Array.from(new Set(models)) : DEFAULT_MODELS;
+};
+
+const createError = (message, options = {}) => {
+  const error = new Error(message);
+  Object.assign(error, options);
+  return error;
+};
+
+const isRetriableMessage = (message = '') =>
+  /high demand|resource_exhausted|quota|rate|temporar|overload|busy/i.test(message);
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const callGemini = async (model, prompt) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(`${GEMINI_BASE_URL}/${model}:generateContent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': process.env.GEMINI_API_KEY,
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 512,
+        },
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => ({}));
+      const details = errorPayload.error?.message || errorPayload.message || response.statusText;
+      const retriable = RETRIABLE_STATUS.has(response.status) || isRetriableMessage(details);
+      throw createError(details || 'Gemini API error', { status: response.status, retriable });
+    }
+
+    const data = await response.json();
+    const textParts = data?.candidates?.[0]?.content?.parts || [];
+    const answerText = textParts.map((part) => part.text || '').join('').trim();
+    return { answerText, model };
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw createError('Request timed out', { retriable: true });
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
@@ -174,59 +252,51 @@ ${question}
 RĂSPUNS:`;
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    const models = getModels();
+    let result = null;
+    let lastError = null;
 
-    const response = await fetch(GEMINI_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': process.env.GEMINI_API_KEY,
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: prompt }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 512,
-        },
-      }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      const errorPayload = await response.json().catch(() => ({}));
-      const details = errorPayload.error?.message || errorPayload.message || response.statusText;
-      throw new Error(details || 'Gemini API error');
+    for (let index = 0; index < models.length; index += 1) {
+      const model = models[index];
+      try {
+        result = await callGemini(model, prompt);
+        break;
+      } catch (error) {
+        lastError = error;
+        if (error.retriable && index < models.length - 1) {
+          await delay(250);
+          continue;
+        }
+        throw error;
+      }
     }
 
-    const data = await response.json();
-    const textParts = data?.candidates?.[0]?.content?.parts || [];
-    const answerText = textParts.map((part) => part.text || '').join('').trim();
-    const answer = answerText || 'Nu știu din conținutul disponibil.';
+    if (!result) {
+      throw lastError || new Error('Gemini API error');
+    }
+
+    const answer = result.answerText || 'Nu știu din conținutul disponibil.';
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ answer, sources }),
+      body: JSON.stringify({ answer, sources, model: result.model }),
     };
   } catch (error) {
-    const isAbort = error.name === 'AbortError';
+    const retriable = Boolean(error.retriable) || isRetriableMessage(error.message);
+    const errorMessage = retriable
+      ? 'Modelul este ocupat. Încearcă din nou în câteva momente.'
+      : 'AI request failed';
     return {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        error: 'AI request failed',
-        details: isAbort ? 'Request timed out' : error.message,
+        error: errorMessage,
+        details: error.message,
       }),
     };
   }
