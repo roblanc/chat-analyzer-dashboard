@@ -39,7 +39,7 @@ const MessageCountChart = ({ stats }) => {
       },
       title: {
         display: true,
-        text: 'Total Mesaje per Persoană (Legacy + Noi)',
+        text: 'Total Mesaje per Persoană',
         color: '#f8fafc',
         font: { family: 'Inter', size: 16, weight: '700' },
         padding: { bottom: 20 }

@@ -24,17 +24,6 @@ const formatRoDate = (isoDate) => {
   return `${dd} ${RO_MONTHS_SHORT[mm - 1]} ${yyyy}`;
 };
 
-const FILTERS = [
-  'Unde',
-  'Marius Motoi',
-  'Baldo',
-  'Vasile',
-  'R',
-  'Poker',
-  'Glume interne',
-  'Planuri',
-  'Tehnologie',
-];
 
 function App() {
   const [markdownContent, setMarkdownContent] = useState('');
@@ -118,87 +107,59 @@ function App() {
     ];
   }, [dashboardStats]);
 
-  const coverageLabel = useMemo(() => {
-    const legacy = dashboardStats?.legacy?.period;
-    const incremental = dashboardStats?.incremental?.period;
-    if (!legacy?.start || !legacy?.end || !incremental?.start || !incremental?.end) {
-      return '';
-    }
 
-    return `Legacy: ${formatRoDate(legacy.start)} – ${formatRoDate(legacy.end)} • Noi: ${formatRoDate(
-      incremental.start
-    )} – ${formatRoDate(incremental.end)}`;
-  }, [dashboardStats]);
 
   return (
     <div className="App">
-      <div className="bento-grid">
+      <div className="ai-chat-layout">
         
         {/* Header Section */}
         <div className="bento-header header-section">
-          <h1 className="title">Chat Analyzer Dashboard</h1>
-          <p className="subtitle">Insights și analize avansate despre conversații</p>
-          {coverageLabel && <p className="meta">{coverageLabel}</p>}
-          {statsError && !coverageLabel && <p className="meta meta-error">Stats indisponibile: {statsError}</p>}
+          <h1 className="title">Prietenii <span className="title-highlight">GPT</span></h1>
+          <p className="subtitle">Asistentul inteligent pentru grupul tău de prieteni</p>
+          {statsError && <p className="meta meta-error">Stats indisponibile: {statsError}</p>}
         </div>
 
-        {/* Filters Strip */}
-        <div className="bento-filters filter-strip">
-          {FILTERS.map((filter) => (
-            <span key={filter} className="filter-pill">
-              {filter}
+        {/* Filters Strip (Removed as decided in plan to rely on suggestions directly) */}
+
+        {/* Ask AI Hero Section (Primary Focus) */}
+        <div className="ai-chat-hero">
+          <AskAI />
+        </div>
+
+        {/* Seamless Stats (Inline under AI) */}
+        <div className="stats-inline-strip">
+          {statsCards.map((item) => (
+            <span key={item.label} className="stats-inline-item">
+              <span className="stats-inline-value">{item.value}</span>
+              <span className="stats-inline-label">{item.label}</span>
             </span>
           ))}
         </div>
 
-        {/* Stats Section */}
-        <div className="bento-stats status-grid">
-          {statsCards.map((item) => (
-            <div key={item.label} className="status-item bento-card">
-              <div className="status-label">{item.label}</div>
-              <div className="status-value">{item.value}</div>
-            </div>
-          ))}
+        {/* Charts Section (Fluid, no cards) */}
+        <div className="fluid-chart-main">
+          <MessageCountChart stats={dashboardStats} />
         </div>
 
-        {/* Ask AI Section (Moved to the top) */}
-        <div className="bento-ask-ai bento-card">
-          <div className="bento-inner">
-            <AskAI />
-          </div>
+        <div className="fluid-chart-secondary">
+          <DailyActivityChart stats={dashboardStats} />
         </div>
 
-        {/* Charts Section */}
-        <div className="bento-chart-main bento-card">
-          <div className="bento-inner chart-container">
-            <MessageCountChart stats={dashboardStats} />
-          </div>
-        </div>
-
-        <div className="bento-chart-secondary bento-card">
-          <div className="bento-inner chart-container">
-            <DailyActivityChart stats={dashboardStats} />
-          </div>
-        </div>
-
-        <div className="bento-chart-tertiary bento-card">
-          <div className="bento-inner chart-container">
-            <HourlyActivityChart stats={dashboardStats} />
-          </div>
+        <div className="fluid-chart-tertiary">
+          <HourlyActivityChart stats={dashboardStats} />
         </div>
 
         {/* Knowledge Base Section */}
-        <div className="bento-knowledge bento-card knowledge-section">
-          <div className="bento-inner knowledge-content">
-            <h2 style={{marginTop: 0, marginBottom: '24px', color: 'var(--text)'}}>Bază de Cunoștințe</h2>
-            {loadError ? (
-              <p className="load-error">
-                Nu am putut încărca conținutul: {loadError}
-              </p>
-            ) : (
-              <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-            )}
-          </div>
+        <div className="fluid-knowledge-section">
+          <h2 style={{marginTop: 0, marginBottom: '24px', color: 'var(--text)'}}>Bază de Cunoștințe</h2>
+          {loadError ? (
+            <p className="load-error">
+              Nu am putut încărca conținutul: {loadError}
+            </p>
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+          )}
         </div>
 
       </div>

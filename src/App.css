@@ -142,6 +142,12 @@ body {
   color: transparent;
 }
 
+.title-highlight {
+  background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .header-section .subtitle {
   color: var(--text-muted);
   font-size: clamp(1rem, 2vw, 1.25rem);
@@ -206,6 +212,20 @@ body {
   color: var(--text);
   letter-spacing: -0.02em;
   line-height: 1;
+}
+
+.ask-answer-text {
+  white-space: normal;
+}
+
+.ask-answer-text h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: normal;
+  overflow: visible;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -837,4 +857,78 @@ body {
   font-size: 0.85rem;
   margin-top: 12px;
   text-align: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* AI CHAT-FIRST FLUID LAYOUT                                                 */
+/* -------------------------------------------------------------------------- */
+.ai-chat-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+  gap: 40px;
+}
+
+.ai-chat-hero {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.stats-inline-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px;
+  margin: -16px auto 32px auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
+  max-width: 800px;
+}
+
+.stats-inline-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.stats-inline-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.stats-inline-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fluid-chart-main,
+.fluid-chart-secondary,
+.fluid-chart-tertiary,
+.fluid-knowledge-section {
+  width: 100%;
+  padding: 24px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.fluid-knowledge-section {
+  border-bottom: none;
+  padding-bottom: 64px;
+}
+
+@media (max-width: 768px) {
+  .stats-inline-strip {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
 }

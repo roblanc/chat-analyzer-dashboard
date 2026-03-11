@@ -85,20 +85,12 @@ const PROMPT_SUGGESTIONS = [
   },
   {
     id: 'profile-r',
-    label: 'Profil: R',
+    label: 'R',
     description: 'Tehnic, “vocea rațiunii”',
     prompt:
       'Ce poți deduce despre R/Robert (rol tehnic, tip de ajutor oferit, stil de comunicare)? Dă 3 exemple cu timestamp și menționează ce indică statisticile.',
     gradient: ['#22C55E', '#8B5CF6'],
-  },
-  {
-    id: 'compare',
-    label: 'Comparație',
-    description: 'Cine domină discuția?',
-    prompt:
-      'Fă o comparație între Unde, Marius Motoi, Baldo, Vasile și R: cine pare să conducă discuțiile și de ce? Dă dovezi din statistici + 3 exemple cu timestamp.',
-    gradient: ['#EC4899', '#22C55E'],
-  },
+  }
 ];
 
 const AskAI = () => {

@@ -11,7 +11,7 @@ const DailyActivityChart = ({ stats }) => {
   const labels = stats?.labels?.weekdays?.length ? stats.labels.weekdays : DEFAULT_LABELS;
   const weekdayCounts = stats?.combined?.weekdayCounts;
   const values = Array.isArray(weekdayCounts) && weekdayCounts.length === 7 ? weekdayCounts : DEFAULT_DATA;
-  const titleText = stats?.combined ? 'Activitate Zilnică (Legacy + Noi)' : 'Activitate Zilnică';
+  const titleText = 'Activitate Zilnică';
 
   const data = {
     labels,
@@ -40,7 +40,7 @@ const DailyActivityChart = ({ stats }) => {
       },
       title: {
         display: true,
-        text: titleText,
+        text: 'Activitate Zilnică',
         color: '#f8fafc',
         font: { family: 'Inter', size: 16, weight: '700' },
         padding: { bottom: 20 }
