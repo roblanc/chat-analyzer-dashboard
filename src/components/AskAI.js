@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -93,14 +93,37 @@ const PROMPT_SUGGESTIONS = [
   }
 ];
 
+const FUNNY_LOADING_MESSAGES = [
+  { emoji: '🐹', text: 'Consultăm hamsterii de serviciu...' },
+  { emoji: '🔮', text: 'Căutăm răspunsul în cristale magice...' },
+  { emoji: '☕', text: 'AI-ul nostru bea cafea, stați puțin...' },
+  { emoji: '🤔', text: 'Analizăm cu pixuri colorate pe hârtie...' },
+  { emoji: '📡', text: 'Trimitem semnale în cosmos...' },
+  { emoji: '🧙', text: 'Vrăjitorul calculează răspunsul...' },
+  { emoji: '🦆', text: 'Explicăm problema la o rățuscă de cauciuc...' },
+  { emoji: '📚', text: 'Citim toate mesajele de la cap la coadă...' },
+  { emoji: '🎲', text: 'Aruncăm zarurile pentru inspirație...' },
+  { emoji: '🐌', text: 'Răspunsul vine... încet dar sigur...' },
+];
+
 const AskAI = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [sources, setSources] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
 
   const normalizedSources = useMemo(() => normalizeSources(sources), [sources]);
+
+  useEffect(() => {
+    if (!isLoading) return;
+    setLoadingMsgIdx(0);
+    const interval = setInterval(() => {
+      setLoadingMsgIdx((prev) => (prev + 1) % FUNNY_LOADING_MESSAGES.length);
+    }, 1800);
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   const answerHtml = useMemo(() => {
     if (!answer) {
@@ -190,6 +213,23 @@ const AskAI = () => {
         </div>
         {error && <div className="ask-error-inline">{error}</div>}
       </form>
+
+      {/* Funny Loading Animation */}
+      {isLoading && (
+        <div className="ask-funny-loading">
+          <div className="ask-funny-emoji" key={`emoji-${loadingMsgIdx}`}>
+            {FUNNY_LOADING_MESSAGES[loadingMsgIdx].emoji}
+          </div>
+          <div className="ask-funny-text" key={`text-${loadingMsgIdx}`}>
+            {FUNNY_LOADING_MESSAGES[loadingMsgIdx].text}
+          </div>
+          <div className="ask-funny-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      )}
 
       {/* Suggested Quick Prompts */}
       <div className="ask-quick-prompts">
