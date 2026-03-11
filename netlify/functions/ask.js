@@ -10,7 +10,7 @@ const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models
 const MAX_CONTEXT_CHARS = 10000;
 const MAX_CONTEXT_CHARS_PROFILE = 18000;
 const CHAT_CHUNK_TARGET_CHARS = 1600;
-const REQUEST_TIMEOUT_MS = 8000;
+const REQUEST_TIMEOUT_MS = 20000;
 const RETRIABLE_STATUS = new Set([429, 500, 503, 504]);
 const STOPWORDS = new Set([
   'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'este', 'sunt', 'o', 'un', 'una',
@@ -1011,7 +1011,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const callGemini = async (model, prompt, options = {}) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-  const maxOutputTokens = options.maxOutputTokens || 512;
+  const maxOutputTokens = options.maxOutputTokens || 1024;
 
   try {
     const response = await fetch(`${GEMINI_BASE_URL}/${model}:generateContent`, {
@@ -1027,7 +1027,7 @@ const callGemini = async (model, prompt, options = {}) => {
           },
         ],
         generationConfig: {
-          temperature: 0.2,
+          temperature: 0.75,
           maxOutputTokens,
         },
       }),
@@ -1141,7 +1141,7 @@ RĂSPUNS:`;
     for (let index = 0; index < models.length; index += 1) {
       const model = models[index];
       try {
-        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 1024 : 512 });
+        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 2048 : 1024 });
         break;
       } catch (error) {
         lastError = error;
