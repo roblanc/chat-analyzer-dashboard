@@ -48,6 +48,7 @@ function App() {
   return (
     <div className="App">
       <div className="terminal-output">
+        <AskAI />
         {loadError ? (
           <p className="load-error">
             Nu am putut încărca conținutul: {loadError}
@@ -66,7 +67,6 @@ function App() {
             <DailyActivityChart />
           </div>
         </div>
-        <AskAI />
         <span className="cursor">_</span> {/* Blinking cursor */}
       </div>
     </div>
