@@ -616,10 +616,22 @@ body {
   .status-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .ask-ai-actions {
+
+  .ask-ai-centered {
+    padding: 24px 12px;
+  }
+
+  .ask-hero-title {
+    font-size: 1.75rem;
+  }
+
+  .ask-suggestion-card-pill {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .ask-suggestions-grid-centered {
     flex-direction: column;
-    align-items: stretch;
   }
 }
 
@@ -627,4 +639,202 @@ body {
   .status-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* ASK AI COMPONENT (Hero Centered Design)                                    */
+/* -------------------------------------------------------------------------- */
+.ask-ai-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 32px;
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ask-hero-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.ask-hero-icon {
+  color: var(--accent-2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(139, 92, 246, 0.1);
+  padding: 12px;
+  border-radius: 50%;
+}
+
+.ask-hero-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.ask-hero-subtitle {
+  color: var(--text-muted);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  max-width: 600px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.ask-hero-form {
+  width: 100%;
+  max-width: 640px;
+  position: relative;
+}
+
+.ask-input-pill {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 8px 8px 8px 24px;
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ask-input-pill:focus-within {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+.ask-input-pill input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+}
+
+.ask-input-pill input::placeholder {
+  color: rgba(161, 161, 170, 0.6);
+}
+
+.ask-submit-btn {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--accent-2);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ask-submit-btn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.3);
+  transform: scale(1.05);
+}
+
+.ask-submit-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.ask-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ask-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-top-color: var(--accent-2);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.ask-hero-suggestions {
+  width: 100%;
+}
+
+.ask-suggestions-grid-centered {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.ask-suggestion-card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 8px 24px 8px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ask-suggestion-card-pill:hover:not(:disabled) {
+  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(255, 255, 255, 0.02);
+  transform: translateY(-2px);
+}
+
+.ask-suggestion-card-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ask-suggestion-icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.ask-suggestion-text-single {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ask-answer-centered {
+  background: var(--bg);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 24px;
+  padding: 32px;
+  width: 100%;
+  text-align: left;
+  animation: fade-in 0.4s ease-out;
+  position: relative;
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.5);
+}
+
+.ask-error-inline {
+  color: #fca5a5;
+  font-size: 0.85rem;
+  margin-top: 12px;
+  text-align: center;
 }

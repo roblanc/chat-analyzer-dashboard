@@ -174,50 +174,53 @@ const AskAI = () => {
 
 
   return (
-    <div className="ask-ai">
-      <div className="ask-header">
-        <div className="ask-ai-icon" title="AI Assistant">
-          <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ padding: '4px' }}>
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    <div className="ask-ai-centered">
+      
+      {/* Centered Hero Header */}
+      <div className="ask-hero-header">
+        <div className="ask-hero-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
           </svg>
         </div>
-        <h2 style={{ margin: 0 }}>Asistent AI</h2>
+        <h2 className="ask-hero-title">Insight-uri din Chat</h2>
+        <p className="ask-hero-subtitle">
+          Pe baza istoricului de conversații, AI-ul nostru extrage statistici, momente amuzante și creează profile detaliate.
+        </p>
       </div>
-      <form className="ask-ai-form" onSubmit={handleSubmit}>
-        <textarea
-          value={question}
-          onChange={(event) => setQuestion(event.target.value)}
-          placeholder="Pune o întrebare despre aceste conversații..."
-          rows={4}
-        />
-        <div className="ask-ai-actions">
-          <button type="submit" className="btn-primary" disabled={isLoading}>
-            {isLoading ? 'Analizează...' : 'Întreabă'}
-          </button>
-          <button
-            type="button"
-            className="btn-secondary ask-ai-clear"
-            onClick={() => {
-              setQuestion('');
-              setAnswer('');
-              setSources([]);
-              setError('');
-            }}
+
+      {/* Pill Input */}
+      <form className="ask-hero-form" onSubmit={handleSubmit}>
+        <div className="ask-input-pill">
+          <input
+            type="text"
+            value={question}
+            onChange={(event) => setQuestion(event.target.value)}
+            placeholder="Întreabă despre un membru, cine domină discuția sau trenduri..."
             disabled={isLoading}
-          >
-            Curăță
+          />
+          <button type="submit" className="ask-submit-btn" disabled={isLoading}>
+            {isLoading ? (
+              <span className="ask-spinner"></span>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            )}
           </button>
         </div>
+        {error && <div className="ask-error-inline">{error}</div>}
       </form>
 
-      <div className="ask-suggestions">
-        <div className="ask-suggestions-title">Întrebări sugerate</div>
-        <div className="ask-suggestions-grid">
+      {/* Suggestions Grid */}
+      <div className="ask-hero-suggestions">
+        <div className="ask-suggestions-grid-centered">
           {PROMPT_SUGGESTIONS.map((suggestion) => (
             <button
               key={suggestion.id}
               type="button"
-              className="ask-suggestion-card"
+              className="ask-suggestion-card-pill"
               disabled={isLoading}
               onClick={() => {
                 setQuestion(suggestion.prompt);
@@ -225,27 +228,24 @@ const AskAI = () => {
               }}
             >
               <span
-                className="ask-suggestion-icon"
+                className="ask-suggestion-icon-circle"
                 style={{
-                  '--from': suggestion.gradient?.[0] || '#6366F1',
-                  '--to': suggestion.gradient?.[1] || '#EC4899',
+                  color: suggestion.gradient?.[0] || '#6366F1',
+                  background: `rgba(${parseInt(suggestion.gradient?.[0].slice(1,3), 16) || 99}, ${parseInt(suggestion.gradient?.[0].slice(3,5), 16) || 102}, ${parseInt(suggestion.gradient?.[0].slice(5,7), 16) || 241}, 0.15)`
                 }}
               >
                 {suggestion.label.slice(0, 1)}
               </span>
-              <span className="ask-suggestion-text">
-                <span className="ask-suggestion-label">{suggestion.label}</span>
-                <span className="ask-suggestion-desc">{suggestion.description}</span>
+              <span className="ask-suggestion-text-single">
+                {suggestion.label} {suggestion.description ? `- ${suggestion.description}` : ''}
               </span>
             </button>
           ))}
         </div>
       </div>
 
-      {error && <p className="ask-error">{error}</p>}
-
       {answer && (
-        <div className="ask-answer">
+        <div className="ask-answer-centered">
           <div className="ask-answer-header">
             <span className="ask-answer-label">Răspuns</span>
             {model && <span className="ask-model-badge">{model.replace('gemini-', 'Gemini ')}</span>}
@@ -280,6 +280,19 @@ const AskAI = () => {
               </div>
             </div>
           )}
+          <button
+              type="button"
+              className="btn-secondary"
+              style={{ marginTop: '20px', display: 'block', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}
+              onClick={() => {
+                setQuestion('');
+                setAnswer('');
+                setSources([]);
+                setError('');
+              }}
+            >
+              Închide și curăță
+          </button>
         </div>
       )}
     </div>
