@@ -87,3 +87,89 @@ body {
 .App-header, .App-link {
   display: none;
 }
+
+.load-error {
+  color: #FFB6C1;
+  margin-bottom: 20px;
+}
+
+.ask-ai {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ask-ai-form {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ask-ai textarea {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: 'Google Sans Code', monospace;
+  resize: vertical;
+}
+
+.ask-ai-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.ask-ai button {
+  background-color: #ADD8E6;
+  color: #001133;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ask-ai button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ask-ai-clear {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.ask-error {
+  color: #FFB6C1;
+  margin-top: 10px;
+}
+
+.ask-answer {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ask-answer h3,
+.ask-answer h4 {
+  margin-top: 0;
+  color: #B0E0E6;
+}
+
+.ask-sources ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 8px 0 0;
+}
+
+.ask-sources li::before {
+  content: '> ';
+  color: #FFFFFF;
+  position: relative;
+  left: 0;
+}

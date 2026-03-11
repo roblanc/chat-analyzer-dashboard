@@ -1,0 +1,214 @@
+const fs = require('node:fs');
+const path = require('node:path');
+
+const MODEL_NAME = 'gemini-3-flash-preview';
+const MAX_CONTEXT_CHARS = 12000;
+const STOPWORDS = new Set([
+  'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'în', 'este', 'sunt', 'o', 'un', 'una',
+  'the', 'a', 'an', 'and', 'or', 'but', 'to', 'of', 'for', 'on', 'in', 'is', 'are', 'was', 'were', 'it', 'this',
+]);
+
+let cachedKnowledge = null;
+let cachedClient = null;
+
+const normalizeText = (text) =>
+  text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+const tokenize = (text) => {
+  const normalized = normalizeText(text);
+  return normalized
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .filter((token) => !STOPWORDS.has(token));
+};
+
+const splitIntoChunks = (text) => {
+  const sections = text.split(/\n(?=##\s)/g).map((chunk) => chunk.trim());
+  const filtered = sections.filter(Boolean);
+
+  if (filtered.length > 1) {
+    return filtered;
+  }
+
+  return text.split(/\n{2,}/g).map((chunk) => chunk.trim()).filter(Boolean);
+};
+
+const scoreChunk = (chunk, tokens) => {
+  if (!tokens.length) {
+    return 0;
+  }
+
+  const normalized = normalizeText(chunk);
+  let score = 0;
+
+  tokens.forEach((token) => {
+    if (token.length < 2) {
+      return;
+    }
+
+    let index = normalized.indexOf(token);
+    while (index !== -1) {
+      score += 1;
+      index = normalized.indexOf(token, index + token.length);
+    }
+  });
+
+  return score;
+};
+
+const summarizeChunk = (chunk) => {
+  const lines = chunk.split('\n').map((line) => line.trim()).filter(Boolean);
+  const heading = lines.find((line) => line.startsWith('##'));
+  const snippet = heading || lines[0] || '';
+  if (snippet.length > 180) {
+    return `${snippet.slice(0, 180)}…`;
+  }
+  return snippet;
+};
+
+const loadKnowledge = () => {
+  if (cachedKnowledge) {
+    return cachedKnowledge;
+  }
+
+  const knowledgePath = path.resolve(__dirname, '..', '..', 'public', 'knowledge.md');
+  const knowledge = fs.readFileSync(knowledgePath, 'utf8');
+  cachedKnowledge = knowledge;
+  return knowledge;
+};
+
+const buildContext = (question, knowledge) => {
+  const chunks = splitIntoChunks(knowledge);
+  const tokens = tokenize(question);
+  const scored = chunks.map((chunk, index) => ({
+    chunk,
+    index,
+    score: scoreChunk(chunk, tokens),
+  }));
+
+  const sorted = scored
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4);
+
+  if (!sorted.length) {
+    const context = knowledge.slice(0, MAX_CONTEXT_CHARS);
+    return { context, sources: [] };
+  }
+
+  const context = sorted
+    .map((item) => item.chunk)
+    .join('\n\n---\n\n')
+    .slice(0, MAX_CONTEXT_CHARS);
+
+  const sources = sorted.map((item) => ({
+    id: item.index,
+    snippet: summarizeChunk(item.chunk),
+  }));
+
+  return { context, sources };
+};
+
+const getClient = async () => {
+  if (cachedClient) {
+    return cachedClient;
+  }
+
+  const { GoogleGenAI } = await import('@google/genai');
+  cachedClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  return cachedClient;
+};
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ error: 'Method not allowed' }),
+    };
+  }
+
+  if (!process.env.GEMINI_API_KEY) {
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ error: 'Missing GEMINI_API_KEY' }),
+    };
+  }
+
+  let payload = {};
+  try {
+    payload = JSON.parse(event.body || '{}');
+  } catch (error) {
+    return {
+      statusCode: 400,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ error: 'Invalid JSON payload' }),
+    };
+  }
+
+  const question = (payload.question || '').trim();
+  if (!question) {
+    return {
+      statusCode: 400,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ error: 'Missing question' }),
+    };
+  }
+
+  const knowledge = loadKnowledge();
+  const { context, sources } = buildContext(question, knowledge);
+
+  const prompt = `Ești un asistent care răspunde doar din CONTEXT.
+Dacă răspunsul nu apare în CONTEXT, răspunde exact: "Nu știu din conținutul disponibil.".
+Răspunde în aceeași limbă ca întrebarea.
+
+CONTEXT:
+${context}
+
+ÎNTREBARE:
+${question}
+
+RĂSPUNS:`;
+
+  try {
+    const ai = await getClient();
+
+    const response = await ai.models.generateContent({
+      model: MODEL_NAME,
+      contents: prompt,
+    });
+
+    const answer = (response.text || '').trim() || 'Nu știu din conținutul disponibil.';
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ answer, sources }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        error: 'AI request failed',
+        details: error.message,
+      }),
+    };
+  }
+};
