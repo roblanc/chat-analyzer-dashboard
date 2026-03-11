@@ -126,6 +126,7 @@ const AskAI = () => {
       return;
     }
 
+    setQuestion('');
     setIsLoading(true);
     setError('');
     setAnswer('');
