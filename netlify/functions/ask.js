@@ -12,8 +12,8 @@ const CHAT_CHUNK_TARGET_CHARS = 1600;
 const REQUEST_TIMEOUT_MS = 8000;
 const RETRIABLE_STATUS = new Set([429, 500, 503, 504]);
 const STOPWORDS = new Set([
-  'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'în', 'este', 'sunt', 'o', 'un', 'una',
-  'ce', 'cine', 'cand', 'când', 'cum', 'care', 'cat', 'cât', 'cata', 'câte', 'cati', 'cate', 'despre',
+  'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'este', 'sunt', 'o', 'un', 'una',
+  'ce', 'cine', 'cand', 'cum', 'care', 'cat', 'cata', 'cati', 'cate', 'despre',
   'zic', 'zice', 'zici', 'zis', 'spun', 'spune', 'spui', 'spus',
   'the', 'a', 'an', 'and', 'or', 'but', 'to', 'of', 'for', 'on', 'in', 'is', 'are', 'was', 'were', 'it', 'this',
   'http', 'https', 'www', 'com', 'ro',

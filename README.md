@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# Chat Analyzer Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Dashboard + Q&A (Gemini) peste:
+- un rezumat static: `public/knowledge.md`
+- o arhiva conversationala WhatsApp: `netlify/data/chat.txt`
 
-## Available Scripts
+Q&A ruleaza printr-o functie Netlify (`netlify/functions/ask.js`) care selecteaza fragmente relevante din continut si le trimite ca `CONTEXT` catre Gemini.
 
-In the project directory, you can run:
+## Setup
 
-### `npm start`
+Recomandat: Node 20 (vezi `.nvmrc`).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Instalare dependinte:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+nvm use
+npm install
+```
 
-### `npm test`
+Variabile de mediu:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `GEMINI_API_KEY` (obligatoriu pentru Q&A)
+- optional `GEMINI_MODELS` (ex: `gemini-2.5-flash,gemini-2.5-flash-lite`)
+- optional `CHAT_ARCHIVE_PATH` (cale catre transcript; implicit foloseste `netlify/data/chat.txt`)
 
-### `npm run build`
+## Arhiva WhatsApp
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- transcriptul folosit de serverless: `netlify/data/chat.txt`
+- index prebuild (optional, recomandat): `netlify/data/chat.index.json`
+- generator index: `scripts/build-chat-index.js` (rulat automat la `npm run build`)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Nota: nu pune transcriptul in `public/` (ar deveni public).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Rulare local
 
-### `npm run eject`
+UI:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+UI + functii Netlify (recomandat, ca sa mearga `/.netlify/functions/ask`):
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+npx netlify dev
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Deploy (Netlify)
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`netlify.toml` include in bundle fisierele:
+- `public/knowledge.md`
+- `netlify/data/chat.txt`
+- `netlify/data/chat.index.json`
