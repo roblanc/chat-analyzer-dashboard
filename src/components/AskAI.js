@@ -130,7 +130,6 @@ const AskAI = () => {
     setError('');
     setAnswer('');
     setSources([]);
-    setModel('');
 
     try {
       const response = await fetch(endpoint, {
