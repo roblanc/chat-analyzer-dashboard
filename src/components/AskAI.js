@@ -57,7 +57,7 @@ const PROMPT_SUGGESTIONS = [
     label: 'Unde',
     description: 'Rol, stil, interese',
     prompt: 'Descrie profilul lui Unde (rol în grup, stil de comunicare, subiecte recurente) și dă 3 exemple cu timestamp.',
-    gradient: ['#6366F1', '#8B5CF6'],
+    avatar: '/avatars/unde.png',
   },
   {
     id: 'profile-marius',
@@ -65,7 +65,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Umor, povești, energie',
     prompt:
       'Ce poți deduce despre Marius Motoi (rol în grup, tip de umor, teme recurente)? Dă 3 exemple cu timestamp și o observație din statistici.',
-    gradient: ['#EC4899', '#6366F1'],
+    avatar: '/avatars/marius.png',
   },
   {
     id: 'profile-baldo',
@@ -73,7 +73,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Sarcasm, observații',
     prompt:
       'Ce poți spune despre Baldo (stil, replici memorabile, subiecte recurente)? Dă 3 exemple cu timestamp și explică ce nu se poate concluziona sigur.',
-    gradient: ['#8B5CF6', '#EC4899'],
+    avatar: '/avatars/baldo.png',
   },
   {
     id: 'profile-vasile',
@@ -81,7 +81,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Atitudine, preferințe',
     prompt:
       'Descrie profilul lui Vasile (rol, stil, ce îl preocupă/ce îl enervează în discuții) și dă 3 exemple cu timestamp. Include și o observație din statistici.',
-    gradient: ['#6366F1', '#EC4899'],
+    avatar: '/avatars/vasile.png',
   },
   {
     id: 'profile-r',
@@ -89,7 +89,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Tehnic, “vocea rațiunii”',
     prompt:
       'Ce poți deduce despre R/Robert (rol tehnic, tip de ajutor oferit, stil de comunicare)? Dă 3 exemple cu timestamp și menționează ce indică statisticile.',
-    gradient: ['#22C55E', '#8B5CF6'],
+    avatar: '/avatars/robert.png',
   }
 ];
 
@@ -168,18 +168,7 @@ const AskAI = () => {
   return (
     <div className="ask-ai-centered">
       
-      {/* Centered Hero Header */}
-      <div className="ask-hero-header">
-        <div className="ask-hero-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-          </svg>
-        </div>
-        <h2 className="ask-hero-title">Insight-uri din Chat</h2>
-        <p className="ask-hero-subtitle">
-          Pe baza istoricului de conversații, AI-ul nostru extrage statistici, momente amuzante și creează profile detaliate.
-        </p>
-      </div>
+
 
       {/* Pill Input */}
       <form className="ask-hero-form" onSubmit={handleSubmit}>
@@ -188,7 +177,7 @@ const AskAI = () => {
             type="text"
             value={question}
             onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Întreabă despre un membru, cine domină discuția sau trenduri..."
+            placeholder="Întreabă despre un membru sau trenduri..."
             disabled={isLoading}
           />
           <button type="submit" className="ask-submit-btn" disabled={isLoading}>
@@ -205,6 +194,13 @@ const AskAI = () => {
         {error && <div className="ask-error-inline">{error}</div>}
       </form>
 
+      {/* Suggested Quick Prompts */}
+      <div className="ask-quick-prompts">
+        <button type="button" onClick={() => { setQuestion("Cine e cel mai haios din grup?"); submitQuestion("Cine e cel mai haios din grup?"); }} disabled={isLoading}>Cine e cel mai haios? 😂</button>
+        <button type="button" onClick={() => { setQuestion("Rezumatul general al discuțiilor"); submitQuestion("Rezumatul general al discuțiilor"); }} disabled={isLoading}>Rezumat discuții 📝</button>
+        <button type="button" onClick={() => { setQuestion("Cine întârzie de obicei la poker?"); submitQuestion("Cine întârzie de obicei la poker?"); }} disabled={isLoading}>Cine întârzie la poker? 🃏</button>
+      </div>
+
       {/* Suggestions Grid */}
       <div className="ask-hero-suggestions">
         <div className="ask-suggestions-grid-centered">
@@ -219,15 +215,11 @@ const AskAI = () => {
                 submitQuestion(suggestion.prompt);
               }}
             >
-              <span
-                className="ask-suggestion-icon-circle"
-                style={{
-                  color: suggestion.gradient?.[0] || '#6366F1',
-                  background: `rgba(${parseInt(suggestion.gradient?.[0].slice(1,3), 16) || 99}, ${parseInt(suggestion.gradient?.[0].slice(3,5), 16) || 102}, ${parseInt(suggestion.gradient?.[0].slice(5,7), 16) || 241}, 0.15)`
-                }}
-              >
-                {suggestion.label.slice(0, 1)}
-              </span>
+              <img 
+                src={`${process.env.PUBLIC_URL || ''}${suggestion.avatar}`} 
+                alt={`${suggestion.label} avatar`} 
+                className="ask-suggestion-avatar" 
+              />
               <span className="ask-suggestion-text-single">
                 {suggestion.label} {suggestion.description ? `- ${suggestion.description}` : ''}
               </span>
@@ -240,7 +232,6 @@ const AskAI = () => {
         <div className="ask-answer-centered">
           <div className="ask-answer-header">
             <span className="ask-answer-label">Răspuns</span>
-            {model && <span className="ask-model-badge">{model.replace('gemini-', 'Gemini ')}</span>}
           </div>
           <div
             className="ask-answer-text"

@@ -124,10 +124,11 @@ body {
 /* HEADER                                                                     */
 /* -------------------------------------------------------------------------- */
 .header-section {
-  text-align: left;
+  text-align: center;
   padding: 16px 0 8px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
 }
 
@@ -821,15 +822,45 @@ body {
   cursor: not-allowed;
 }
 
-.ask-suggestion-icon-circle {
+.ask-quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.ask-quick-prompts button {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ask-quick-prompts button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.ask-quick-prompts button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ask-suggestion-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.9rem;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
 }
 
@@ -931,4 +962,68 @@ body {
     gap: 12px;
     align-items: flex-start;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* KNOWLEDGE BASE MARKDOWN STYLING                                            */
+/* -------------------------------------------------------------------------- */
+.knowledge-content {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.knowledge-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.knowledge-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: #e4e4e7;
+}
+
+.knowledge-content p {
+  margin-bottom: 1.25rem;
+  color: #a1a1aa; /* Zinc 400 for better readability */
+}
+
+.knowledge-content strong,
+.knowledge-content b {
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
+.knowledge-content ul {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+  color: #a1a1aa;
+}
+
+.knowledge-content li {
+  margin-bottom: 0.5rem;
+}
+
+.knowledge-content li strong {
+  color: #EC4899; /* Use theme accent color for list headers */
+}
+
+.fluid-knowledge-section {
+  background: var(--bg-card); /* Add a very subtle card background to separate it */
+  border-radius: 16px;
+  padding: 40px;
+  margin-top: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
