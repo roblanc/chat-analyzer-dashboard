@@ -14,6 +14,7 @@ const RETRIABLE_STATUS = new Set([429, 500, 503, 504]);
 const STOPWORDS = new Set([
   'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'este', 'sunt', 'o', 'un', 'una',
   'ce', 'cine', 'cand', 'cum', 'care', 'cat', 'cata', 'cati', 'cate', 'despre',
+  'stiu', 'stie', 'stii', 'stim', 'stiti',
   'zic', 'zice', 'zici', 'zis', 'spun', 'spune', 'spui', 'spus',
   'the', 'a', 'an', 'and', 'or', 'but', 'to', 'of', 'for', 'on', 'in', 'is', 'are', 'was', 'were', 'it', 'this',
   'http', 'https', 'www', 'com', 'ro',
@@ -43,6 +44,8 @@ const uniq = (items) => Array.from(new Set(items.filter(Boolean)));
 
 const QUESTION_INTENT = {
   analysis: /(\bcel\s+mai\b|\bcea\s+mai\b|\btop\b|\branking\b|\bcompar|\bpare\b|\bwho\b|\bwhich\b|\bbest\b|\bmost\b)/i,
+  profile:
+    /(\bce\s+stii\s+despre\b|\bce\s+stie\s+despre\b|\bspune-mi\s+despre\b|\bspune\s+despre\b|\bce\s+poti\s+spune\s+despre\b|\bdescrie\b|\bprofil\b|\bcaracterizeaza\b|\bcine\s+e\b)/i,
   smartness: /(destept|inteligent|smart|geniu|creier|brain)/i,
 };
 
@@ -70,11 +73,17 @@ const HINT_TOKENS_SMARTNESS = [
   'tehnologie',
 ];
 
-const detectIntent = (question) => {
+const detectIntent = (question, options = {}) => {
   const normalized = normalizeText(question || '');
+  const focusAuthor = options.focusAuthor || null;
+  const normalizedFocus = focusAuthor ? normalizeText(focusAuthor) : '';
+  const wordCount = normalized.split(/[^a-z0-9]+/).filter(Boolean).length;
+  const hasFocus = normalizedFocus ? normalized.includes(normalizedFocus) : false;
+  const isProfile = QUESTION_INTENT.profile.test(normalized) || (hasFocus && wordCount <= 3);
   return {
-    isAnalysis: QUESTION_INTENT.analysis.test(normalized),
+    isAnalysis: QUESTION_INTENT.analysis.test(normalized) || isProfile,
     isSmartness: QUESTION_INTENT.smartness.test(normalized),
+    isProfile,
   };
 };
 
@@ -267,11 +276,32 @@ const scoreChunk = (chunk, tokens, options = {}) => {
   return score;
 };
 
-const summarizeDoc = (doc) => {
+const summarizeDoc = (doc, options = {}) => {
   const lines = String(doc?.text || '')
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
+
+  const focusAuthor = options.focusAuthor || null;
+  if (doc?.kind === 'chat' && focusAuthor) {
+    const aliases = getChatAuthorAliases(focusAuthor);
+    const markers = aliases.map((alias) => `] ${alias}:`).filter(Boolean);
+    const focusLine = markers.length ? lines.find((line) => markers.some((marker) => line.includes(marker))) : null;
+    if (focusLine) {
+      return focusLine.length > 180 ? `${focusLine.slice(0, 180)}…` : focusLine;
+    }
+  }
+
+  const focusTokens = Array.isArray(options.focusTokens) ? options.focusTokens : [];
+  if (doc?.kind === 'chat' && focusTokens.length) {
+    const focusLine = lines.find((line) => {
+      const normalized = normalizeText(line);
+      return focusTokens.some((token) => normalized.includes(token));
+    });
+    if (focusLine) {
+      return focusLine.length > 180 ? `${focusLine.slice(0, 180)}…` : focusLine;
+    }
+  }
 
   const heading = doc?.kind === 'knowledge' ? lines.find((line) => line.startsWith('##')) : null;
   const firstLine = lines[0] || '';
@@ -344,17 +374,105 @@ const loadDashboardStats = () => {
   return cachedDashboardStats;
 };
 
-const renderStatsContext = (stats) => {
+const getKnownAuthors = (stats) => {
+  const authors = stats?.labels?.authors;
+  if (Array.isArray(authors) && authors.length) {
+    return authors.filter(Boolean);
+  }
+
+  return ['Unde', 'Marius Motoi', 'Baldo', 'Vasile', 'R'];
+};
+
+const extractFocusAuthor = (question, stats) => {
+  const normalizedQuestion = normalizeText(question || '');
+  const candidates = getKnownAuthors(stats);
+
+  if (normalizedQuestion.includes('robert') && candidates.includes('R')) {
+    return 'R';
+  }
+
+  for (let index = 0; index < candidates.length; index += 1) {
+    const candidate = candidates[index];
+    if (!candidate) {
+      continue;
+    }
+    if (candidate.length === 1) {
+      continue;
+    }
+    if (normalizedQuestion.includes(normalizeText(candidate))) {
+      return candidate;
+    }
+  }
+
+  if (candidates.includes('R') && /\br\b/.test(normalizedQuestion)) {
+    return 'R';
+  }
+
+  return null;
+};
+
+const getChatAuthorAliases = (focusAuthor) => {
+  if (!focusAuthor) {
+    return [];
+  }
+
+  if (focusAuthor === 'R') {
+    return ['Robert', 'R'];
+  }
+
+  return [focusAuthor];
+};
+
+const renderStatsContext = (stats, options = {}) => {
   if (!stats || typeof stats !== 'object') {
     return '';
   }
 
   const combined = stats.combined || {};
   const incremental = stats.incremental || {};
+  const legacy = stats.legacy || {};
+  const focusAuthor = options.focusAuthor || null;
 
-  const authors = combined.authors && typeof combined.authors === 'object' ? combined.authors : null;
-  const authorLines = authors
-    ? Object.entries(authors)
+  const combinedAuthors =
+    combined.authors && typeof combined.authors === 'object' ? combined.authors : null;
+  const incrementalAuthors =
+    incremental.authors && typeof incremental.authors === 'object' ? incremental.authors : null;
+  const legacyAuthors = legacy.authors && typeof legacy.authors === 'object' ? legacy.authors : null;
+
+  if (focusAuthor && combinedAuthors && Object.prototype.hasOwnProperty.call(combinedAuthors, focusAuthor)) {
+    const totalForAuthor = Number(combinedAuthors[focusAuthor] || 0);
+    const legacyForAuthor = legacyAuthors ? Number(legacyAuthors[focusAuthor] || 0) : null;
+    const incrementalForAuthor = incrementalAuthors ? Number(incrementalAuthors[focusAuthor] || 0) : null;
+
+    const ranked = Object.entries(combinedAuthors)
+      .map(([name, count]) => [name, Number(count || 0)])
+      .sort((a, b) => b[1] - a[1]);
+    const rankIndex = ranked.findIndex(([name]) => name === focusAuthor);
+    const rankLabel = rankIndex === -1 ? null : `${rankIndex + 1}/${ranked.length}`;
+
+    const totalMessages = Number(combined.totalMessages || 0);
+    const share = totalMessages ? totalForAuthor / totalMessages : null;
+
+    const lines = [
+      `STATISTICI (Dashboard) - focus: ${focusAuthor}`,
+      totalForAuthor ? `- Mesaje (total): ${totalForAuthor.toLocaleString('ro-RO')}` : null,
+      legacyForAuthor != null ? `- Mesaje legacy: ${legacyForAuthor.toLocaleString('ro-RO')}` : null,
+      incrementalForAuthor != null
+        ? `- Mesaje noi (${incremental?.period?.start || 'n/a'} – ${incremental?.period?.end || 'n/a'}): ${incrementalForAuthor.toLocaleString(
+            'ro-RO'
+          )}`
+        : null,
+      rankLabel ? `- Rank după volum: ${rankLabel}` : null,
+      share != null ? `- Pondere din total: ${(share * 100).toFixed(1)}%` : null,
+    ]
+      .filter(Boolean)
+      .join('\n');
+
+    return lines.trim();
+  }
+
+  const authorLines = combinedAuthors
+    ? Object.entries(combinedAuthors)
         .sort((a, b) => (b[1] || 0) - (a[1] || 0))
         .map(([name, count]) => `- ${name}: ${Number(count || 0).toLocaleString('ro-RO')} mesaje`)
         .join('\n')
@@ -488,7 +606,109 @@ const loadChatChunks = () => {
   return cachedChatChunks;
 };
 
-const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) => {
+const AUTHOR_EXAMPLE_MAX_LINES = 24;
+const AUTHOR_EXAMPLE_MAX_CHARS = 3400;
+const AUTHOR_EXAMPLE_MIN_BODY_CHARS = 12;
+
+const truncateSnippet = (value, limit) => {
+  const text = String(value || '').trim();
+  if (text.length <= limit) {
+    return text;
+  }
+  return `${text.slice(0, limit - 1)}…`;
+};
+
+const buildAuthorExamplesDoc = (chatChunks, focusAuthor) => {
+  if (!focusAuthor || !Array.isArray(chatChunks) || chatChunks.length === 0) {
+    return null;
+  }
+
+  const aliases = getChatAuthorAliases(focusAuthor);
+  const markers = aliases.map((alias) => `] ${alias}:`).filter(Boolean);
+  if (markers.length === 0) {
+    return null;
+  }
+
+  const lines = [];
+  const seen = new Set();
+  let usedChars = 0;
+
+  const considerLine = (rawLine) => {
+    if (!rawLine) {
+      return;
+    }
+    const line = stripLeadingMarks(rawLine).trim();
+    const marker = markers.find((candidate) => line.includes(candidate));
+    if (!marker) {
+      return;
+    }
+    const bodyIndex = line.indexOf(marker);
+    const body = line.slice(bodyIndex + marker.length).trim();
+    if (body.length < AUTHOR_EXAMPLE_MIN_BODY_CHARS) {
+      return;
+    }
+    if (/^[^a-z0-9]+$/i.test(body)) {
+      return;
+    }
+
+    const trimmed = truncateSnippet(line, 240);
+    if (seen.has(trimmed)) {
+      return;
+    }
+
+    if (lines.length >= AUTHOR_EXAMPLE_MAX_LINES) {
+      return;
+    }
+
+    if (usedChars + trimmed.length + 1 > AUTHOR_EXAMPLE_MAX_CHARS) {
+      return;
+    }
+
+    seen.add(trimmed);
+    lines.push(trimmed);
+    usedChars += trimmed.length + 1;
+  };
+
+  // Prefer recent examples first.
+  for (let chunkIndex = chatChunks.length - 1; chunkIndex >= 0; chunkIndex -= 1) {
+    const chunk = chatChunks[chunkIndex];
+    if (!chunk || typeof chunk.text !== 'string') {
+      continue;
+    }
+    const chunkLines = chunk.text.split('\n');
+    chunkLines.forEach(considerLine);
+    if (lines.length >= AUTHOR_EXAMPLE_MAX_LINES) {
+      break;
+    }
+  }
+
+  // If still missing, scan forward for older examples.
+  if (lines.length < Math.max(8, Math.floor(AUTHOR_EXAMPLE_MAX_LINES / 2))) {
+    for (let chunkIndex = 0; chunkIndex < chatChunks.length; chunkIndex += 1) {
+      const chunk = chatChunks[chunkIndex];
+      if (!chunk || typeof chunk.text !== 'string') {
+        continue;
+      }
+      const chunkLines = chunk.text.split('\n');
+      chunkLines.forEach(considerLine);
+      if (lines.length >= AUTHOR_EXAMPLE_MAX_LINES) {
+        break;
+      }
+    }
+  }
+
+  if (lines.length === 0) {
+    return null;
+  }
+
+  return {
+    kind: 'examples',
+    id: focusAuthor,
+    text: [`EXEMPLE: ${focusAuthor} (mesaje din chat)`, ...lines].join('\n'),
+  };
+};
+
+const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, focusAuthor) => {
   const knowledgeChunks = splitIntoChunks(knowledge || '').map((text, index) => ({
     kind: 'knowledge',
     id: index,
@@ -498,7 +718,7 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) =
   const rawTokens = tokenize(question);
   const tokens = expandTokens(question, rawTokens, intent);
   const importantTokens = tokens.filter((token) => token.length >= 4);
-  const statsText = renderStatsContext(dashboardStats);
+  const statsText = renderStatsContext(dashboardStats, focusAuthor ? { focusAuthor } : {});
   const statsDoc = statsText
     ? {
         kind: 'stats',
@@ -507,18 +727,58 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) =
       }
     : null;
 
-  const documents = [...knowledgeChunks, ...(statsDoc ? [statsDoc] : []), ...(chatChunks || [])];
-  const scored = documents.map((doc) => ({
-    doc,
-    score:
+  const examplesDoc = intent?.isProfile && focusAuthor ? buildAuthorExamplesDoc(chatChunks, focusAuthor) : null;
+
+  const documents = [
+    ...knowledgeChunks,
+    ...(statsDoc ? [statsDoc] : []),
+    ...(examplesDoc ? [examplesDoc] : []),
+    ...(chatChunks || []),
+  ];
+
+  const focusChatAliases = focusAuthor ? getChatAuthorAliases(focusAuthor) : [];
+  const focusNormalized = focusAuthor && focusAuthor.length > 1 ? normalizeText(focusAuthor) : '';
+
+  const scored = documents.map((doc) => {
+    const baseScore =
       doc.kind === 'chat'
         ? scoreChunk(doc.text, tokens, { df: cachedChatDf, docCount: cachedChatDocCount })
-        : scoreChunk(doc.text, tokens),
-    hitsImportant:
+        : scoreChunk(doc.text, tokens);
+
+    let score = baseScore;
+
+    if (focusAuthor) {
+      if (doc.kind === 'examples') {
+        score += 8;
+      } else if (doc.kind === 'stats') {
+        score += 5;
+      } else if (doc.kind === 'knowledge') {
+        if (focusNormalized && normalizeText(doc.text).includes(focusNormalized)) {
+          score += 4;
+        }
+      } else if (doc.kind === 'chat') {
+        const authors = Array.isArray(doc.authors) ? doc.authors : [];
+        const matchesAuthor = focusChatAliases.some((alias) => authors.includes(alias));
+        if (matchesAuthor) {
+          score += 6;
+        } else if (focusNormalized && normalizeText(doc.text).includes(focusNormalized)) {
+          score += 2;
+        }
+      }
+    }
+
+    const normalizedDocText = normalizeText(doc.text);
+    const hitsImportant =
       importantTokens.length === 0
         ? true
-        : importantTokens.some((token) => normalizeText(doc.text).includes(token)),
-  }));
+        : importantTokens.some((token) => normalizedDocText.includes(token));
+
+    return {
+      doc,
+      score,
+      hitsImportant,
+    };
+  });
 
   const forcedKnowledge = [];
   if (intent?.isAnalysis) {
@@ -530,11 +790,20 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) =
       }
     });
   }
+  if (intent?.isProfile && focusNormalized) {
+    knowledgeChunks.forEach((chunk) => {
+      const normalized = normalizeText(chunk.text);
+      if (normalized.includes(focusNormalized)) {
+        forcedKnowledge.push(chunk);
+      }
+    });
+  }
 
   const candidates = scored.filter((item) => item.score > 0);
   const gatedCandidates = importantTokens.length ? candidates.filter((item) => item.hitsImportant) : [];
   const pool = gatedCandidates.length ? gatedCandidates : candidates;
-  const sorted = pool.sort((a, b) => b.score - a.score).slice(0, 6);
+  const maxDocs = intent?.isProfile ? 10 : intent?.isAnalysis ? 8 : 6;
+  const sorted = pool.sort((a, b) => b.score - a.score).slice(0, maxDocs);
 
   const selectedDocs = [];
   const selectedKeys = new Set();
@@ -550,12 +819,29 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) =
     selectedDocs.push(doc);
   };
 
-  forcedKnowledge.slice(0, 2).forEach(pushDoc);
-  sorted.forEach(({ doc }) => pushDoc(doc));
+  const forcedLimit = intent?.isProfile ? 6 : 2;
+  const forcedUnique = [];
+  const forcedSeen = new Set();
+  forcedKnowledge.forEach((chunk) => {
+    if (!chunk) {
+      return;
+    }
+    const key = `${chunk.kind}:${chunk.id}`;
+    if (forcedSeen.has(key)) {
+      return;
+    }
+    forcedSeen.add(key);
+    forcedUnique.push(chunk);
+  });
 
+  forcedUnique.slice(0, forcedLimit).forEach(pushDoc);
+  if (examplesDoc) {
+    pushDoc(examplesDoc);
+  }
   if (statsDoc) {
     pushDoc(statsDoc);
   }
+  sorted.forEach(({ doc }) => pushDoc(doc));
 
   if (!selectedDocs.length) {
     const fallback = [];
@@ -581,6 +867,8 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) =
         ? `SURSA: CHAT (${doc.start || 'n/a'}${doc.end && doc.end !== doc.start ? ` - ${doc.end}` : ''})`
         : doc.kind === 'stats'
           ? 'SURSA: STATISTICI'
+          : doc.kind === 'examples'
+            ? 'SURSA: EXEMPLE'
           : 'SURSA: REZUMAT';
 
     const block = `${header}\n${doc.text}`.trim();
@@ -592,7 +880,7 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats) =
     sources.push({
       kind: doc.kind,
       id: doc.id,
-      snippet: summarizeDoc(doc),
+      snippet: summarizeDoc(doc, { focusAuthor, focusTokens: importantTokens }),
       ...(doc.kind === 'chat'
         ? { start: doc.start || null, end: doc.end || null, authors: doc.authors || [] }
         : null),
@@ -721,16 +1009,18 @@ exports.handler = async (event) => {
     };
   }
 
-  const intent = detectIntent(question);
   const knowledge = loadKnowledge();
   const dashboardStats = loadDashboardStats();
+  const focusAuthor = extractFocusAuthor(question, dashboardStats);
+  const intent = detectIntent(question, { focusAuthor });
   const chatChunks = loadChatChunks();
-  const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats);
+  const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats, focusAuthor);
 
   const prompt = `Ești un asistent care răspunde folosind DOAR CONTEXT (fragmente din arhiva conversațiilor + rezumat + statistici).
 Nu inventa nume, citate sau fapte care nu apar în CONTEXT.
 
-Tip întrebare (detectat): ${intent.isAnalysis ? 'ANALIZĂ/OPINIE' : 'FAPT'}
+Tip întrebare (detectat): ${intent.isProfile ? 'PROFIL (ANALIZĂ)' : intent.isAnalysis ? 'ANALIZĂ/OPINIE' : 'FAPT'}
+Subiect (dacă există): ${focusAuthor || 'n/a'}
 
 Reguli:
 1) Pentru întrebări factuale (date/numere/citate): dacă răspunsul nu e în CONTEXT, răspunde exact: "Nu știu din conținutul disponibil.".
@@ -738,8 +1028,15 @@ Reguli:
    - spune clar că e o interpretare ("Din fragmente, pare că..."),
    - dă 2-4 dovezi scurte din CONTEXT (autor + timestamp sau secțiune din rezumat/statistici),
    - evită etichete jignitoare; dacă e prea subiectiv, oferă 2-3 opțiuni și explică criteriul.
-3) Răspunde în aceeași limbă ca întrebarea.
-4) Nu folosi markdown (fără **bold**, fără titluri). Folosește text simplu cu linii noi.
+3) Pentru întrebări de tip PROFIL despre o persoană: răspunde mai amplu (minim 6 puncte) și acoperă:
+   - rol / atitudine în grup,
+   - subiecte / interese recurente,
+   - stil de comunicare,
+   - exemple concrete (minim 3) cu timestamp din chat,
+   - o observație din statistici (dacă există),
+   - ce nu se poate concluziona sigur din fragmente.
+4) Răspunde în aceeași limbă ca întrebarea.
+5) Format: text simplu. Folosește bullets cu \"- \" (minus + spațiu). Fără markdown (fără **bold**, fără titluri).
 
 CONTEXT:
 ${context}
