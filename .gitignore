@@ -18,6 +18,9 @@
 .env.test.local
 .env.production.local
 
+# local exports (keep chat archive out of git)
+WhatsApp Chat - ChatGPT (1)/
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

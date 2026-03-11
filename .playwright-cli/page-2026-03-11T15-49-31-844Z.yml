@@ -1,0 +1,46 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - heading "Întreabă AI-ul" [level=2] [ref=e6]
+    - generic [ref=e7]:
+      - paragraph [ref=e8]: "Preseturi rapide:"
+      - generic [ref=e9]:
+        - button "Rezumat Unde" [ref=e10] [cursor=pointer]
+        - button "Rezumat Marius" [ref=e11] [cursor=pointer]
+        - button "Rezumat Baldo" [ref=e12] [cursor=pointer]
+        - button "Rezumat Vasile" [ref=e13] [cursor=pointer]
+        - button "Rezumat R" [ref=e14] [cursor=pointer]
+        - button "Glume interne" [ref=e15] [cursor=pointer]
+        - button "Teme generale" [ref=e16] [cursor=pointer]
+    - generic [ref=e17]:
+      - textbox "Scrie întrebarea aici..." [ref=e18]
+      - generic [ref=e19]:
+        - button "Întreabă" [ref=e20] [cursor=pointer]
+        - button "Curăță" [ref=e21] [cursor=pointer]
+  - generic [ref=e22]:
+    - generic [ref=e23]:
+      - generic [ref=e24]: "7553"
+      - generic [ref=e25]: Total mesaje
+    - generic [ref=e26]:
+      - generic [ref=e27]: "141"
+      - generic [ref=e28]: Zile analizate
+    - generic [ref=e29]:
+      - generic [ref=e30]: 20:00 - 21:00
+      - generic [ref=e31]: Vârf orar
+    - generic [ref=e32]:
+      - generic [ref=e33]: Duminică
+      - generic [ref=e34]: Zi de vârf
+  - generic [ref=e35]:
+    - generic [ref=e36]: Unde
+    - generic [ref=e37]: Marius Motoi
+    - generic [ref=e38]: Baldo
+    - generic [ref=e39]: Vasile
+    - generic [ref=e40]: R
+    - generic [ref=e41]: Poker
+    - generic [ref=e42]: Glume interne
+    - generic [ref=e43]: Planuri
+    - generic [ref=e44]: Tehnologie
+  - generic [ref=e45]:
+    - img [ref=e47]
+    - img [ref=e49]
+    - img [ref=e51]
+  - generic [ref=e52]: _

@@ -1,0 +1,374 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - heading "Întreabă AI-ul" [level=2] [ref=e6]
+    - generic [ref=e7]:
+      - textbox "Scrie întrebarea aici..." [ref=e8]: Cine are cele mai multe mesaje?
+      - generic [ref=e9]:
+        - button "Întreabă" [ref=e10] [cursor=pointer]
+        - button "Curăță" [ref=e11] [cursor=pointer]
+    - paragraph [ref=e245]: AI request failed
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: "7553"
+      - generic [ref=e15]: Total mesaje
+    - generic [ref=e16]:
+      - generic [ref=e17]: "141"
+      - generic [ref=e18]: Zile analizate
+    - generic [ref=e19]:
+      - generic [ref=e20]: 20:00 - 21:00
+      - generic [ref=e21]: Vârf orar
+    - generic [ref=e22]:
+      - generic [ref=e23]: Duminică
+      - generic [ref=e24]: Zi de vârf
+  - generic [ref=e25]:
+    - generic [ref=e26]: Unde
+    - generic [ref=e27]: Marius Motoi
+    - generic [ref=e28]: Baldo
+    - generic [ref=e29]: Vasile
+    - generic [ref=e30]: R
+    - generic [ref=e31]: Poker
+    - generic [ref=e32]: Glume interne
+    - generic [ref=e33]: Planuri
+    - generic [ref=e34]: Tehnologie
+  - generic [ref=e43]:
+    - paragraph [ref=e44]:
+      - text: ░█████████ ░██ ░██ ░██░██ ░██ ░██ ░██
+      - text: ░██ ░██ ░██░████ ░██ ░███████ ░████████ ░███████ ░████████ ░██░██ ░█████████ ░███ ░██░██ ░██ ░██ ░██ ░██ ░██ ░██ ░██░██ ░██ ░██ ░██░█████████ ░██ ░█████████ ░██ ░██ ░██░██ ░██ ░██ ░██░██ ░██ ░██ ░██ ░██ ░██ ░██░██ ░██ ░██ ░██ ░███████ ░████ ░███████ ░██ ░██ ░██░██
+    - heading "Perioada de Chat" [level=2] [ref=e45]
+    - paragraph [ref=e46]:
+      - text: Istoricul chat-ului este din
+      - strong [ref=e47]: 11 iunie 2025
+      - text: până în
+      - strong [ref=e48]: 29 octombrie 2025
+      - text: .
+    - heading "Număr de Mesaje per Persoană" [level=2] [ref=e49]
+    - list [ref=e50]:
+      - listitem [ref=e51]:
+        - text: ">"
+        - strong [ref=e52]: Unde
+        - text: ": 2961 mesaje"
+      - listitem [ref=e53]:
+        - text: ">"
+        - strong [ref=e54]: Marius Motoi
+        - text: ": 2429 mesaje"
+      - listitem [ref=e55]:
+        - text: ">"
+        - strong [ref=e56]: Baldo
+        - text: ": 1164 mesaje"
+      - listitem [ref=e57]:
+        - text: ">"
+        - strong [ref=e58]: Vasile
+        - text: ": 705 mesaje"
+      - listitem [ref=e59]:
+        - text: ">"
+        - strong [ref=e60]: R
+        - text: ": 294 mesaje"
+    - heading "Medie Mesaje pe Zi" [level=2] [ref=e61]
+    - paragraph [ref=e62]:
+      - text: Chat-ul se întinde pe o perioadă de
+      - strong [ref=e63]: 141 de zile
+      - text: "(din 11 iunie 2025 până în 29 octombrie 2025). Pe baza acestui fapt, iată numărul mediu aproximativ de mesaje pe zi pentru fiecare persoană:"
+    - list [ref=e64]:
+      - listitem [ref=e65]:
+        - text: ">"
+        - strong [ref=e66]: Unde
+        - text: ": 21.0 mesaje/zi"
+      - listitem [ref=e67]:
+        - text: ">"
+        - strong [ref=e68]: Marius Motoi
+        - text: ": 17.2 mesaje/zi"
+      - listitem [ref=e69]:
+        - text: ">"
+        - strong [ref=e70]: Baldo
+        - text: ": 8.3 mesaje/zi"
+      - listitem [ref=e71]:
+        - text: ">"
+        - strong [ref=e72]: Vasile
+        - text: ": 5.0 mesaje/zi"
+      - listitem [ref=e73]:
+        - text: ">"
+        - strong [ref=e74]: R
+        - text: ": 2.1 mesaje/zi"
+    - heading "Activitate de Vârf" [level=2] [ref=e75]
+    - heading "Cele Mai Active Ore ale Zilei" [level=3] [ref=e76]
+    - paragraph [ref=e77]:
+      - text: Grupul este cel mai activ seara și târziu în noapte, cu un vârf semnificativ între orele
+      - strong [ref=e78]: 20:00 - 21:00
+      - text: (704 mesaje).
+    - heading "Cele Mai Active Zile ale Săptămânii" [level=3] [ref=e79]
+    - paragraph [ref=e80]:
+      - text: Grupul este cel mai activ în weekend,
+      - strong [ref=e81]: Duminica
+      - text: fiind cea mai activă zi (1283 mesaje).
+    - paragraph [ref=e82]:
+      - strong [ref=e83]: "Activitate pe zilele săptămânii:"
+    - list [ref=e84]:
+      - listitem [ref=e85]: "> Luni: 1085 mesaje"
+      - listitem [ref=e86]: "> Marți: 1072 mesaje"
+      - listitem [ref=e87]: "> Miercuri: 909 mesaje"
+      - listitem [ref=e88]: "> Joi: 1164 mesaje"
+      - listitem [ref=e89]: "> Vineri: 910 mesaje"
+      - listitem [ref=e90]: "> Sâmbătă: 1138 mesaje"
+      - listitem [ref=e91]: "> Duminică: 1283 mesaje"
+    - heading "Subiecte Favorite per Conversator" [level=2] [ref=e92]
+    - list [ref=e93]:
+      - listitem [ref=e94]:
+        - text: ">"
+        - strong [ref=e95]: Baldo
+        - text: ": 'asa' (28), 'daca' (28), 'aia' (25), 'bine' (25), 'marius' (22)"
+      - listitem [ref=e96]:
+        - text: ">"
+        - strong [ref=e97]: Marius Motoi
+        - text: ": 'mama' (77), 'asa' (70), 'bine' (47), 'dar' (46), 'hai' (45)"
+      - listitem [ref=e98]:
+        - text: ">"
+        - strong [ref=e99]: Vasile
+        - text: ": 'bine' (23), 'dar' (21), 'asa' (18), 'poker' (16), 'pai' (16)"
+      - listitem [ref=e100]:
+        - text: ">"
+        - strong [ref=e101]: Unde
+        - text: ": 'dar' (96), 'https' (90), 'com' (70), 'asa' (69), 'pai' (62)"
+      - listitem [ref=e102]:
+        - text: ">"
+        - strong [ref=e103]: R
+        - text: ": 'https' (21), 'dar' (16), 'vasile' (14), 'aia' (13), 'com' (12)"
+    - heading "Cele Mai Multe Link-uri Distribuite (Top 5)" [level=2] [ref=e104]
+    - list [ref=e105]:
+      - listitem [ref=e106]:
+        - text: ">"
+        - strong [ref=e107]: Unde
+        - text: ": 89 link-uri"
+      - listitem [ref=e108]:
+        - text: ">"
+        - strong [ref=e109]: Marius Motoi
+        - text: ": 27 link-uri"
+      - listitem [ref=e110]:
+        - text: ">"
+        - strong [ref=e111]: Baldo
+        - text: ": 22 link-uri"
+      - listitem [ref=e112]:
+        - text: ">"
+        - strong [ref=e113]: R
+        - text: ": 21 link-uri"
+      - listitem [ref=e114]:
+        - text: ">"
+        - strong [ref=e115]: Vasile
+        - text: ": 5 link-uri"
+    - heading "Subiecte Generale de Conversație" [level=2] [ref=e116]
+    - paragraph [ref=e117]: "Pe baza istoricului chat-ului, conversația este foarte informală și acoperă o gamă largă de subiecte tipice unui grup de prieteni apropiați. Iată un rezumat al ceea ce discută în general:"
+    - list [ref=e118]:
+      - listitem [ref=e119]:
+        - text: ">"
+        - paragraph [ref=e120]:
+          - strong [ref=e121]: "Socializare și Planuri:"
+          - text: O mare parte a conversației se învârte în jurul planificării întâlnirilor, deciziei unde să iasă și coordonării activităților precum jocul de poker sau mersul la petreceri. Se pare că folosesc frecvent Discord pentru aceste aranjamente.
+      - listitem [ref=e122]:
+        - text: ">"
+        - paragraph [ref=e123]:
+          - strong [ref=e124]: "Jocuri de Noroc, în special Poker:"
+          - text: Pokerul este o temă recurentă și centrală. Discută despre jocurile lor, câștiguri și pierderi, și împărtășesc povești despre experiențele lor la sălile de poker și online.
+      - listitem [ref=e125]:
+        - text: ">"
+        - paragraph [ref=e126]:
+          - strong [ref=e127]: "Glume, Tachinări și Meme-uri:"
+          - text: Chat-ul este plin de tachinări amicale, glume interne și partajarea de meme-uri, videoclipuri amuzante și link-uri. Tonul este foarte casual și plin de umor.
+      - listitem [ref=e128]:
+        - text: ">"
+        - paragraph [ref=e129]:
+          - strong [ref=e130]: "Mâncare și Băutură:"
+          - text: Există discuții frecvente despre mâncare, inclusiv preferințe pentru pizza și shaorma, și discuții despre diverse băuturi alcoolice și non-alcoolice.
+      - listitem [ref=e131]:
+        - text: ">"
+        - paragraph [ref=e132]:
+          - strong [ref=e133]: "Viața Cotidiană și Muncă:"
+          - text: Împărtășesc anecdote din viața lor de zi cu zi, vorbesc despre muncă și discută proiecte personale, cum ar fi crearea unui joc video.
+      - listitem [ref=e134]:
+        - text: ">"
+        - paragraph [ref=e135]:
+          - strong [ref=e136]: "Tehnologie și Cultură Pop:"
+          - text: Grupul discută diverse subiecte legate de tehnologie, inclusiv software precum CapCut și Canva, probleme de calculator și jocuri video. De asemenea, împărtășesc și comentează muzică și alt conținut de cultură pop.
+      - listitem [ref=e137]:
+        - text: ">"
+        - paragraph [ref=e138]:
+          - strong [ref=e139]: "Relații și Chestiuni Personale:"
+          - text: Deși adesea discutate într-o manieră glumeață, există mențiuni despre relații, prietene și alte aspecte personale ale vieții lor.
+    - paragraph [ref=e140]: Limbajul este un amestec de română și engleză, cu o utilizare intensă a argoului și a colocvialismelor, reflectând natura apropiată și informală a grupului.
+    - heading "Deductii Amuzante" [level=2] [ref=e141]
+    - heading "Glume Interne și Teme Recurente" [level=3] [ref=e142]
+    - paragraph [ref=e143]: "Mai multe glume interne și teme recurente apar pe parcursul conversației, conturând o imagine a umorului unic împărtășit al grupului:"
+    - list [ref=e144]:
+      - listitem [ref=e145]:
+        - text: ">"
+        - strong [ref=e146]: "Pokerul ca Metaforă pentru Viață:"
+        - text: Prietenii folosesc frecvent terminologia și analogiile din poker pentru a descrie situații cotidiene, de la relații personale la provocări profesionale. Câștigul sau pierderea la poker este un subiect comun și pare a fi o activitate centrală de legătură.
+      - listitem [ref=e147]:
+        - text: ">"
+        - strong [ref=e148]: "\"Romanian Soul Bites\":"
+        - text: Această expresie apare de mai multe ori, adesea într-un context umoristic sau ironic. Pare a fi o expresie cheie pentru un anumit tip de experiență sau sentiment pe care grupul îl înțelege.
+      - listitem [ref=e149]:
+        - text: ">"
+        - strong [ref=e150]: "Arhetipuri de Caractere:"
+        - text: Prietenii au creat arhetipuri și glume recurente despre personalitățile celorlalți. De exemplu, glumesc despre "R" ca fiind un guru al tehnologiei care poate repara orice și "Marius Motoi" ca fiind un povestitor expresiv și uneori dramatic.
+      - listitem [ref=e151]:
+        - text: ">"
+        - strong [ref=e152]: "Suport Tehnic și Neplăceri:"
+        - text: Există o temă recurentă a problemelor legate de tehnologie, în special cu un membru, "Robert", căruia i se interzice în glumă să folosească dispozitivele altor persoane din cauza haosului care urmează.
+    - heading "Dinamica și Rolurile Grupului" [level=3] [ref=e153]
+    - list [ref=e154]:
+      - listitem [ref=e155]:
+        - text: ">"
+        - strong [ref=e156]: "Planificatorul:"
+        - strong [ref=e157]: Unde
+        - text: preia adesea inițiativa în organizarea întâlnirilor și activităților, în special a serilor de poker. El este frecvent cel care inițiază planuri și verifică disponibilitatea grupului.
+      - listitem [ref=e158]:
+        - text: ">"
+        - strong [ref=e159]: "Animatorul:"
+        - strong [ref=e160]: Marius Motoi
+        - text: pare a fi principalul animator al grupului, împărtășind frecvent povești amuzante, făcând glume autoironice și menținând o atmosferă veselă.
+      - listitem [ref=e161]:
+        - text: ">"
+        - strong [ref=e162]: "Vocea Rațiunii (și Suport Tehnic):"
+        - strong [ref=e163]: R
+        - text: intervine adesea cu sfaturi practice, în special în chestiuni tehnice. El este persoana de referință pentru explicarea subiectelor complexe, de la licențierea software la remedierea problemelor de calculator.
+    - heading "3. Stil de Viață și Obiceiuri" [level=3] [ref=e164]
+    - list [ref=e165]:
+      - listitem [ref=e166]:
+        - text: ">"
+        - strong [ref=e167]: "Păsări de Noapte:"
+        - text: Istoricul chat-ului arată o cantitate semnificativă de activitate târziu în noapte și chiar în primele ore ale dimineții, sugerând că membrii grupului stau adesea treji până târziu, mai ales când joacă poker sau socializează.
+      - listitem [ref=e168]:
+        - text: ">"
+        - strong [ref=e169]: "Întâlniri Spontane:"
+        - text: Deși planifică unele evenimente, multe dintre interacțiunile lor sociale par a fi spontane, membrii verificând frecvent cine este disponibil pentru a ieși în scurt timp.
+      - listitem [ref=e170]:
+        - text: ">"
+        - strong [ref=e171]: "Un Amestec de Interacțiune Digitală și Față în Față:"
+        - text: Grupul se mișcă fără probleme între lumile online și offline. Ei folosesc chat-ul pentru a planifica întâlniri în persoană și apoi raportează adesea grupului povești și actualizări de la acele evenimente.
+    - heading "Analiză Cuprinzătoare" [level=2] [ref=e172]
+    - heading "Analiza Activității de Vârf" [level=3] [ref=e173]
+    - list [ref=e174]:
+      - listitem [ref=e175]:
+        - text: ">"
+        - strong [ref=e176]: "Cele Mai Active Ore ale Zilei:"
+        - text: Grupul este cel mai activ seara și târziu în noapte, cu un vârf semnificativ între orele
+        - strong [ref=e177]: 20:00 - 21:00
+        - text: (704 mesaje).
+      - listitem [ref=e178]:
+        - text: ">"
+        - strong [ref=e179]: "Cele Mai Active Zile ale Săptămânii:"
+        - text: Grupul este cel mai activ în weekend,
+        - strong [ref=e180]: Duminica
+        - text: fiind cea mai activă zi (1283 mesaje).
+    - paragraph [ref=e181]:
+      - strong [ref=e182]: "Activitate pe zilele săptămânii:"
+    - list [ref=e183]:
+      - listitem [ref=e184]: "> Luni: 1085 mesaje"
+      - listitem [ref=e185]: "> Marți: 1072 mesaje"
+      - listitem [ref=e186]: "> Miercuri: 909 mesaje"
+      - listitem [ref=e187]: "> Joi: 1164 mesaje"
+      - listitem [ref=e188]: "> Vineri: 910 mesaje"
+      - listitem [ref=e189]: "> Sâmbătă: 1138 mesaje"
+      - listitem [ref=e190]: "> Duminică: 1283 mesaje"
+    - heading "\"Dicționar\" de Glume Interne și Argou" [level=3] [ref=e191]
+    - list [ref=e192]:
+      - listitem [ref=e193]:
+        - text: ">"
+        - strong [ref=e194]: "\"Disconcea?\" / \"Discsos\" / \"Doxxco\":"
+        - text: Un set jucăuș și în continuă schimbare de argou pentru "Discord."
+      - listitem [ref=e195]:
+        - text: ">"
+        - strong [ref=e196]: "\"Romanian Soul Bites\":"
+        - text: O expresie cheie pentru orice este stereotipic românesc.
+      - listitem [ref=e197]:
+        - text: ">"
+        - strong [ref=e198]: "\"Saga lui Robert\":"
+        - text: O glumă recurentă despre un prieten pe nume Robert care este comic de slab la tehnologie.
+      - listitem [ref=e199]:
+        - text: ">"
+        - strong [ref=e200]: "\"Context Francez\":"
+        - text: O glumă internă care nu este niciodată explicată celor din afară.
+      - listitem [ref=e201]:
+        - text: ">"
+        - strong [ref=e202]: "\"Cucamonu\":"
+        - text: Un termen de argou pentru "cu camionul".
+      - listitem [ref=e203]:
+        - text: ">"
+        - strong [ref=e204]: "\"Jizzy Boy Lemuriano\" / \"Masilur\":"
+        - text: Porecle afectuoase și amuzante pentru membrii grupului.
+      - listitem [ref=e205]:
+        - text: ">"
+        - strong [ref=e206]: "\"Simeticoane\":"
+        - text: Un cuvânt inventat folosit într-o varietate de contexte absurde, dar amuzante.
+    - heading "Harta Interacțiunii Sociale" [level=3] [ref=e207]
+    - list [ref=e208]:
+      - listitem [ref=e209]:
+        - text: ">"
+        - strong [ref=e210]: "Noduri Principale:"
+        - strong [ref=e211]: Unde
+        - text: și
+        - strong [ref=e212]: Marius Motoi
+        - text: sunt nodurile principale ale conversației.
+      - listitem [ref=e213]:
+        - text: ">"
+        - strong [ref=e214]: "Perechi Cheie:"
+        - text: Cele mai frecvente perechi conversaționale sunt între
+        - strong [ref=e215]: Unde
+        - text: ","
+        - strong [ref=e216]: Marius Motoi
+        - text: și
+        - strong [ref=e217]: Baldo
+        - text: .
+      - listitem [ref=e218]:
+        - text: ">"
+        - strong [ref=e219]: "Rolul Celorlalți:"
+        - strong [ref=e220]: Vasile
+        - text: și
+        - strong [ref=e221]: R
+        - text: sunt participanți activi,
+        - strong [ref=e222]: R
+        - text: acționând adesea ca o sursă de informații tehnice.
+    - heading "Analiza Frecvenței Subiectelor" [level=3] [ref=e223]
+    - list [ref=e224]:
+      - listitem [ref=e225]:
+        - text: ">"
+        - strong [ref=e226]: "Socializare și Tachinare:"
+        - text: Cea mai dominantă categorie.
+      - listitem [ref=e227]:
+        - text: ">"
+        - strong [ref=e228]: "Poker și Jocuri de Noroc:"
+        - text: Un subiect central și recurent.
+      - listitem [ref=e229]:
+        - text: ">"
+        - strong [ref=e230]: "Mâncare și Băutură:"
+        - text: Discuții frecvente despre mese și băuturi.
+      - listitem [ref=e231]:
+        - text: ">"
+        - strong [ref=e232]: "Muncă și Tehnologie:"
+        - text: Comune, dar mai puțin frecvente decât subiectele sociale.
+    - heading "Amprente Lingvistice" [level=3] [ref=e233]
+    - list [ref=e234]:
+      - listitem [ref=e235]:
+        - text: ">"
+        - strong [ref=e236]: "Unde:"
+        - text: Concis, argou inventiv și umor sec.
+      - listitem [ref=e237]:
+        - text: ">"
+        - strong [ref=e238]: "Marius Motoi:"
+        - text: Expresiv, emoțional și folosește umor autoironic.
+      - listitem [ref=e239]:
+        - text: ">"
+        - strong [ref=e240]: "Baldo:"
+        - text: Spiritual, observator și sarcastic.
+      - listitem [ref=e241]:
+        - text: ">"
+        - strong [ref=e242]: "R:"
+        - text: Formal, tehnic și are un simț al umorului sec.
+      - listitem [ref=e243]:
+        - text: ">"
+        - strong [ref=e244]: "Vasile:"
+        - text: Direct, la obiect și entuziast.
+  - generic [ref=e35]:
+    - img [ref=e37]
+    - img [ref=e39]
+    - img [ref=e41]
+  - generic [ref=e42]: _

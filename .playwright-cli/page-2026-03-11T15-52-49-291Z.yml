@@ -1,0 +1,36 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - heading "Întreabă AI-ul" [level=2] [ref=e6]
+    - generic [ref=e7]:
+      - textbox "Scrie întrebarea aici..." [ref=e8]
+      - generic [ref=e9]:
+        - button "Întreabă" [ref=e10] [cursor=pointer]
+        - button "Curăță" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: "7553"
+      - generic [ref=e15]: Total mesaje
+    - generic [ref=e16]:
+      - generic [ref=e17]: "141"
+      - generic [ref=e18]: Zile analizate
+    - generic [ref=e19]:
+      - generic [ref=e20]: 20:00 - 21:00
+      - generic [ref=e21]: Vârf orar
+    - generic [ref=e22]:
+      - generic [ref=e23]: Duminică
+      - generic [ref=e24]: Zi de vârf
+  - generic [ref=e25]:
+    - generic [ref=e26]: Unde
+    - generic [ref=e27]: Marius Motoi
+    - generic [ref=e28]: Baldo
+    - generic [ref=e29]: Vasile
+    - generic [ref=e30]: R
+    - generic [ref=e31]: Poker
+    - generic [ref=e32]: Glume interne
+    - generic [ref=e33]: Planuri
+    - generic [ref=e34]: Tehnologie
+  - generic [ref=e35]:
+    - img [ref=e37]
+    - img [ref=e39]
+    - img [ref=e41]
+  - generic [ref=e42]: _

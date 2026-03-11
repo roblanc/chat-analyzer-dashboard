@@ -57,21 +57,28 @@ const AskAI = () => {
 
   return (
     <div className="ask-ai">
-      <h2>Întreabă AI-ul</h2>
+      <div className="ask-header">
+        <div className="ask-ai-icon" title="AI Assistant">
+          <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ padding: '4px' }}>
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+        </div>
+        <h2 style={{ margin: 0 }}>Asistent AI</h2>
+      </div>
       <form className="ask-ai-form" onSubmit={handleSubmit}>
         <textarea
           value={question}
           onChange={(event) => setQuestion(event.target.value)}
-          placeholder="Scrie întrebarea aici..."
+          placeholder="Pune o întrebare despre aceste conversații..."
           rows={4}
         />
         <div className="ask-ai-actions">
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? 'Se gândește...' : 'Întreabă'}
+          <button type="submit" className="btn-primary" disabled={isLoading}>
+            {isLoading ? 'Analizează...' : 'Întreabă'}
           </button>
           <button
             type="button"
-            className="ask-ai-clear"
+            className="btn-secondary ask-ai-clear"
             onClick={() => {
               setQuestion('');
               setAnswer('');

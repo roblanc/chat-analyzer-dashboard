@@ -11,44 +11,40 @@ const DailyActivityChart = () => {
       {
         label: 'Mesaje',
         data: [1215, 1258, 1051, 1377, 1107, 1331, 1467],
-        backgroundColor: '#E0FFFF', // Light Cyan
-        borderColor: '#FFFFFF', // White
+        backgroundColor: 'rgba(139, 92, 246, 0.85)', // Violet
+        borderColor: '#8B5CF6',
         borderWidth: 1,
+        borderRadius: 4,
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
         labels: {
-          color: '#FFFFFF', // White legend text
+          color: '#F8FAFC',
+          font: { family: 'Inter', size: 13 }
         },
       },
       title: {
         display: true,
         text: 'Activitate Zilnică',
-        color: '#E0FFFF', // Light Cyan title
+        color: '#F8FAFC',
+        font: { family: 'Inter', size: 16, weight: '600' }
       },
     },
     scales: {
       x: {
-        ticks: {
-          color: '#FFFFFF', // White x-axis labels
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)', // Light grid lines
-        },
+        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
       },
       y: {
-        ticks: {
-          color: '#FFFFFF', // White y-axis labels
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)', // Light grid lines
-        },
+        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
       },
     },
   };

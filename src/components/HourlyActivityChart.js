@@ -11,44 +11,40 @@ const HourlyActivityChart = () => {
       {
         label: 'Mesaje',
         data: [221, 75, 26, 4, 0, 0, 14, 23, 93, 419, 569, 451, 369, 602, 651, 647, 747, 0, 487, 458, 795, 776, 541, 297],
-        backgroundColor: '#B0E0E6', // Powder Blue
-        borderColor: '#FFFFFF', // White
+        backgroundColor: 'rgba(236, 72, 153, 0.85)', // Pink
+        borderColor: '#EC4899',
         borderWidth: 1,
+        borderRadius: 4,
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
         labels: {
-          color: '#FFFFFF', // White legend text
+          color: '#F8FAFC',
+          font: { family: 'Inter', size: 13 }
         },
       },
       title: {
         display: true,
         text: 'Activitate Orară',
-        color: '#B0E0E6', // Powder Blue title
+        color: '#F8FAFC',
+        font: { family: 'Inter', size: 16, weight: '600' }
       },
     },
     scales: {
       x: {
-        ticks: {
-          color: '#FFFFFF', // White x-axis labels
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)', // Light grid lines
-        },
+        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
       },
       y: {
-        ticks: {
-          color: '#FFFFFF', // White y-axis labels
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)', // Light grid lines
-        },
+        ticks: { color: '#94A3B8', font: { family: 'Inter' } },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
       },
     },
   };
