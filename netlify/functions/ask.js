@@ -1129,7 +1129,7 @@ Reguli:
    - o observație din statistici (dacă există),
    - ce nu se poate concluziona sigur din fragmente.
 4) Răspunde în aceeași limbă ca întrebarea.
-5) Format: text simplu. Folosește bullets cu \"- \" (minus + spațiu). Fără markdown (fără **bold**, fără titluri).
+5) Format: Folosește Markdown pentru a structura răspunsul (titluri, **bold**, liste, blockquotes etc.). Fii clar, estetic și bine organizat în explicații!
 
 CONTEXT:
 ${context}
