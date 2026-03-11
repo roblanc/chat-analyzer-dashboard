@@ -221,48 +221,6 @@ body {
   color: var(--title-2);
 }
 
-.ask-presets {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.ask-presets-label {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.ask-presets-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.ask-preset {
-  background-color: var(--pill-bg);
-  color: var(--text-muted);
-  border: 1px solid var(--pill-border);
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: border-color 160ms ease, color 160ms ease, transform 120ms ease;
-}
-
-.ask-preset:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-1px);
-}
-
-.ask-preset:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-}
-
 .ask-ai-form {
   display: flex;
   flex-direction: column;

@@ -1,15 +1,5 @@
 import React, { useMemo, useState } from 'react';
 
-const PRESETS = [
-  { id: 'rezumat-unde', label: 'Rezumat Unde', prompt: 'Fă un rezumat despre Unde (rol, stil de comunicare, teme recurente). Răspunde doar din conținut.' },
-  { id: 'rezumat-marius', label: 'Rezumat Marius', prompt: 'Fă un rezumat despre Marius Motoi (rol, stil de comunicare, teme recurente). Răspunde doar din conținut.' },
-  { id: 'rezumat-baldo', label: 'Rezumat Baldo', prompt: 'Fă un rezumat despre Baldo (rol, stil de comunicare, teme recurente). Răspunde doar din conținut.' },
-  { id: 'rezumat-vasile', label: 'Rezumat Vasile', prompt: 'Fă un rezumat despre Vasile (rol, stil de comunicare, teme recurente). Răspunde doar din conținut.' },
-  { id: 'rezumat-r', label: 'Rezumat R', prompt: 'Fă un rezumat despre R (rol, stil de comunicare, teme recurente). Răspunde doar din conținut.' },
-  { id: 'glume-interne', label: 'Glume interne', prompt: 'Listează glumele interne și argoul explicate în conținut, cu scurtă descriere pentru fiecare.' },
-  { id: 'teme-generale', label: 'Teme generale', prompt: 'Rezumatul subiectelor generale de conversație din conținut, pe scurt.' },
-];
-
 const AskAI = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -64,30 +54,10 @@ const AskAI = () => {
     await submitQuestion(question);
   };
 
-  const handlePreset = async (prompt) => {
-    setQuestion(prompt);
-    await submitQuestion(prompt);
-  };
 
   return (
     <div className="ask-ai">
       <h2>Întreabă AI-ul</h2>
-      <div className="ask-presets">
-        <p className="ask-presets-label">Preseturi rapide:</p>
-        <div className="ask-presets-list">
-          {PRESETS.map((preset) => (
-            <button
-              key={preset.id}
-              type="button"
-              className="ask-preset"
-              onClick={() => handlePreset(preset.prompt)}
-              disabled={isLoading}
-            >
-              {preset.label}
-            </button>
-          ))}
-        </div>
-      </div>
       <form className="ask-ai-form" onSubmit={handleSubmit}>
         <textarea
           value={question}
