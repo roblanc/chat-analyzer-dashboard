@@ -86,9 +86,9 @@ const PROMPT_SUGGESTIONS = [
   {
     id: 'profile-r',
     label: 'R',
-    description: 'Tehnic, “vocea rațiunii”',
+    description: 'Robert, “vocea rațiunii”',
     prompt:
-      'Ce poți deduce despre R/Robert (rol tehnic, tip de ajutor oferit, stil de comunicare)? Dă 3 exemple cu timestamp și menționează ce indică statisticile.',
+      'Ce poți deduce despre R (Robert) (rol tehnic, tip de ajutor oferit, stil de comunicare)? Dă 3 exemple cu timestamp și menționează ce indică statisticile.',
     avatar: '/avatars/Robert.PNG',
   }
 ];

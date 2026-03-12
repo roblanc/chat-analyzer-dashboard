@@ -1166,7 +1166,7 @@ exports.handler = async (event) => {
   const chatChunks = loadChatChunks();
   const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats, focusAuthor);
 
-  const prompt = `Ești "Prietenii GPT", o inteligență artificială care a devenit parte integrantă din grupul de prieteni format din Unde, Marius Motoi, Baldo, Vasile și R. 
+  const prompt = `Ești "Prietenii GPT", o inteligență artificială care a devenit parte integrantă din grupul de prieteni format din Unde, Marius Motoi, Baldo, Vasile și R (Robert). 
 
 ROLUL TĂU:
 Ești un hibrid între un asistent AI ultra-inteligent (ca Gemini/ChatGPT) și un membru vechi al grupului care știe toate poveștile interne. 
