@@ -1169,8 +1169,8 @@ RĂSPUNS:`;
   } catch (error) {
     const retriable = Boolean(error.retriable) || isRetriableMessage(error.message);
     const errorMessage = retriable
-      ? 'Modelul este ocupat. Încearcă din nou în câteva momente.'
-      : 'AI request failed';
+      ? `Modelul este ocupat. Detalii: ${error.message || 'Busy'}. Încearcă din nou.`
+      : `AI request failed: ${error.message || 'Unknown error'}`;
     return {
       statusCode: 500,
       headers: {
