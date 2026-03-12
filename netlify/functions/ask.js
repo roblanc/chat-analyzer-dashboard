@@ -8,6 +8,7 @@ const DEFAULT_MODELS = [
   'gemini-1.5-pro-latest',
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
+const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MAX_CONTEXT_CHARS = 10000;
 const MAX_CONTEXT_CHARS_PROFILE = 18000;
 const CHAT_CHUNK_TARGET_CHARS = 1600;
@@ -1004,6 +1005,45 @@ const createError = (message, options = {}) => {
   return error;
 };
 
+const callOpenRouter = async (model, prompt, options = {}) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const maxOutputTokens = options.maxOutputTokens || 1024;
+
+  try {
+    const response = await fetch(OPENROUTER_BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'HTTP-Referer': 'https://prieteniigpt.netlify.app',
+        'X-Title': 'Prietenii GPT',
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3,
+        max_tokens: maxOutputTokens,
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => ({}));
+      const details = errorPayload.error?.message || response.statusText;
+      throw createError(details || 'OpenRouter API error', { status: response.status });
+    }
+
+    const data = await response.json();
+    const answerText = data?.choices?.[0]?.message?.content?.trim() || '';
+    return { answerText, model };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
+
 const isRetriableMessage = (message = '') =>
   /high demand|resource_exhausted|quota|rate|temporar|overload|busy/i.test(message);
 
@@ -1138,14 +1178,37 @@ RĂSPUNS:`;
     let result = null;
     let lastError = null;
 
-    for (let index = 0; index < models.length; index += 1) {
-      const model = models[index];
+    // Determine Provider & Strategy
+    const hasOpenRouter = Boolean(process.env.OPENROUTER_API_KEY);
+    const hasGemini = Boolean(process.env.GEMINI_API_KEY);
+
+    // If models are provided via env, use them. Otherwise, decide based on keys.
+    let modelsToTry = models;
+    if (hasOpenRouter && !process.env.GEMINI_MODELS) {
+      // Priority OpenRouter models (free/stable ones)
+      modelsToTry = Array.from(new Set([
+        'google/gemini-flash-1.5',
+        'meta-llama/llama-3.1-70b-instruct',
+        ...models
+      ]));
+    }
+
+    for (let index = 0; index < modelsToTry.length; index += 1) {
+      const model = modelsToTry[index];
       try {
-        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 1536 : 1024 });
+        const isOpenRouterModel = model.includes('/') || hasOpenRouter;
+        
+        if (hasGemini && !model.includes('/')) {
+           result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 1536 : 1024 });
+        } else if (hasOpenRouter) {
+           result = await callOpenRouter(model, prompt, { maxOutputTokens: intent.isProfile ? 1536 : 1024 });
+        } else {
+           throw new Error('No valid API keys configured');
+        }
         break;
       } catch (error) {
         lastError = error;
-        if (index < models.length - 1) {
+        if (index < modelsToTry.length - 1) {
           await delay(250);
           continue;
         }
@@ -1154,7 +1217,7 @@ RĂSPUNS:`;
     }
 
     if (!result) {
-      throw lastError || new Error('Gemini API error');
+      throw lastError || new Error('All AI providers failed');
     }
 
     const answer = result.answerText || 'Nu știu din conținutul disponibil.';
