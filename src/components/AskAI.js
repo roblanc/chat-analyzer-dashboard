@@ -199,7 +199,7 @@ const AskAI = () => {
             type="text"
             value={question}
             onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Întreabă despre un membru sau trenduri..."
+            placeholder=""
             disabled={isLoading}
           />
           <button type="submit" className="ask-submit-btn" disabled={isLoading}>
