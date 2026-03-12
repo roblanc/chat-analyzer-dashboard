@@ -56,16 +56,13 @@
 }
 
 html {
-  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
 body {
-  overflow-x: hidden;
   width: 100%;
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
-  position: static; /* sticky works best with static/relative body but static is safer */
 }
 
 body {
@@ -107,6 +104,7 @@ body {
 .App {
   min-height: 100vh;
   padding: 0 clamp(16px, 4vw, 48px) 80px; 
+  overflow-x: hidden; /* Prevent horizontal scroll here instead of body */
 }
 
 /* -------------------------------------------------------------------------- */
@@ -191,7 +189,7 @@ body {
 /* -------------------------------------------------------------------------- */
 .header-section {
   text-align: center;
-  padding: clamp(20px, 6vw, 40px) 16px 16px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -199,13 +197,15 @@ body {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 1000;
-  background: var(--bg-transparent);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  margin-left: -32px;
-  margin-right: -32px;
-  width: calc(100% + 64px);
+  z-index: 2000; /* Higher z-index */
+  background: var(--bg); /* Solid background for more reliable sticky feel */
+  background-color: var(--bg-transparent); /* Fallback to glass */
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  margin-left: calc(max(16px, 4vw) * -1);
+  margin-right: calc(max(16px, 4vw) * -1);
+  width: 100vw;
+  box-shadow: 0 1px 0 var(--card-border);
 }
 
 /* Subtle border that appears when scrolling (simulated via margin/bg transition) */
