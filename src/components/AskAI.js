@@ -115,6 +115,7 @@ const AskAI = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
+  const [isCopied, setIsCopied] = useState(false);
 
   const normalizedSources = useMemo(() => normalizeSources(sources), [sources]);
 
@@ -193,6 +194,36 @@ const AskAI = () => {
     }
   };
 
+  const handleCopy = async () => {
+    const textToCopy = `Întrebare: ${askedQuestion}\n\nPrietenii GPT: ${answer}`;
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Prietenii GPT - Conversație',
+      text: `Vezi ce am vorbit cu Prietenii GPT!\n\nÎntrebare: ${askedQuestion}\n\nRezumat: ${answer.slice(0, 100)}...`,
+      url: window.location.href
+    };
+    
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await handleCopy();
+        alert('Link-ul și textul au fost copiate în clipboard!');
+      }
+    } catch (err) {
+      console.error('Share failed:', err);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     await submitQuestion(question);
@@ -261,6 +292,42 @@ const AskAI = () => {
             className="ask-answer-text"
             dangerouslySetInnerHTML={{ __html: answerHtml }}
           />
+
+          {/* Action Buttons */}
+          <div className="ask-actions-bar">
+            <button 
+              type="button" 
+              className={`ask-action-btn ${isCopied ? 'copied' : ''}`}
+              onClick={handleCopy}
+            >
+              {isCopied ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Copiat!
+                </>
+              ) : (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </>
+              )}
+            </button>
+            <button type="button" className="ask-action-btn" onClick={handleShare}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+              Share
+            </button>
+          </div>
           {normalizedSources.length > 0 && (
             <div className="ask-sources">
               <span className="ask-sources-label">Surse</span>

@@ -741,6 +741,50 @@ body {
   font-size: 0.95rem;
 }
 
+/* Actions Bar (Copy/Share) */
+.ask-actions-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--card-border);
+  justify-content: flex-end;
+}
+
+.ask-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ask-action-btn:hover {
+  background: var(--card-bg);
+  border-color: var(--accent-1);
+  transform: translateY(-1px);
+}
+
+.ask-action-btn:active {
+  transform: translateY(0);
+}
+
+.ask-action-btn svg {
+  opacity: 0.7;
+}
+
+.ask-action-btn.copied {
+  color: #10b981;
+  border-color: #10b981;
+}
+
 .ask-answer-text p { margin-bottom: 14px; }
 .ask-answer-text p:last-child { margin-bottom: 0; }
 .ask-answer-text h1, .ask-answer-text h2, .ask-answer-text h3 { 
