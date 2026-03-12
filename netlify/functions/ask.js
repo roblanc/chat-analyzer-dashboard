@@ -3,8 +3,8 @@ const path = require('node:path');
 
 const DEFAULT_MODELS = [
   'gemini-1.5-flash',
-  'gemini-1.5-flash-002',
-  'gemini-1.5-flash-8b',
+  'gemini-1.5-flash-latest',
+  'gemini-1.5-pro',
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const MAX_CONTEXT_CHARS = 10000;
@@ -1145,7 +1145,7 @@ RĂSPUNS:`;
         break;
       } catch (error) {
         lastError = error;
-        if (error.retriable && index < models.length - 1) {
+        if (index < models.length - 1) {
           await delay(250);
           continue;
         }
