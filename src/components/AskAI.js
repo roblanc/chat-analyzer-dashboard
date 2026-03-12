@@ -206,7 +206,7 @@ const AskAI = () => {
 
       {/* Pill Input */}
       <form className="ask-hero-form" onSubmit={handleSubmit}>
-        <div className="ask-input-pill">
+        <div className="ask-input-pill" data-empty={!question}>
           <input
             type="text"
             value={question}
