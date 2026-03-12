@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -93,14 +93,37 @@ const PROMPT_SUGGESTIONS = [
   }
 ];
 
+const FUNNY_LOADING_MESSAGES = [
+  { emoji: '🐹', text: 'Consultăm hamsterii de serviciu...' },
+  { emoji: '🔮', text: 'Căutăm răspunsul în cristale magice...' },
+  { emoji: '☕', text: 'AI-ul nostru bea cafea, stați puțin...' },
+  { emoji: '🤔', text: 'Analizăm cu pixuri colorate pe hârtie...' },
+  { emoji: '📡', text: 'Trimitem semnale în cosmos...' },
+  { emoji: '🧙', text: 'Vrăjitorul calculează răspunsul...' },
+  { emoji: '🦆', text: 'Explicăm problema la o rățuscă de cauciuc...' },
+  { emoji: '📚', text: 'Citim toate mesajele de la cap la coadă...' },
+  { emoji: '🎲', text: 'Aruncăm zarurile pentru inspirație...' },
+  { emoji: '🐌', text: 'Răspunsul vine... încet dar sigur...' },
+];
+
 const AskAI = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [sources, setSources] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
 
   const normalizedSources = useMemo(() => normalizeSources(sources), [sources]);
+
+  useEffect(() => {
+    if (!isLoading) return;
+    setLoadingMsgIdx(0);
+    const interval = setInterval(() => {
+      setLoadingMsgIdx((prev) => (prev + 1) % FUNNY_LOADING_MESSAGES.length);
+    }, 1800);
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   const answerHtml = useMemo(() => {
     if (!answer) {
@@ -192,6 +215,56 @@ const AskAI = () => {
         {error && <div className="ask-error-inline">{error}</div>}
       </form>
 
+      {/* Funny Loading Animation */}
+      {isLoading && (
+        <div className="ask-funny-loading">
+          <div className="ask-funny-emoji" key={`emoji-${loadingMsgIdx}`}>
+            {FUNNY_LOADING_MESSAGES[loadingMsgIdx].emoji}
+          </div>
+          <div className="ask-funny-text" key={`text-${loadingMsgIdx}`}>
+            {FUNNY_LOADING_MESSAGES[loadingMsgIdx].text}
+          </div>
+          <div className="ask-funny-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      )}
+
+      {/* Suggested Quick Prompts */}
+      <div className="ask-quick-prompts">
+        <button type="button" onClick={() => { setQuestion("Cine e cel mai haios din grup?"); submitQuestion("Cine e cel mai haios din grup?"); }} disabled={isLoading}>Cine e cel mai haios? 😂</button>
+        <button type="button" onClick={() => { setQuestion("Rezumatul general al discuțiilor"); submitQuestion("Rezumatul general al discuțiilor"); }} disabled={isLoading}>Rezumat discuții 📝</button>
+        <button type="button" onClick={() => { setQuestion("Cine întârzie de obicei la poker?"); submitQuestion("Cine întârzie de obicei la poker?"); }} disabled={isLoading}>Cine întârzie la poker? 🃏</button>
+      </div>
+
+      {/* Suggestions Grid */}
+      <div className="ask-hero-suggestions">
+        <div className="ask-suggestions-grid-centered">
+          {PROMPT_SUGGESTIONS.map((suggestion) => (
+            <button
+              key={suggestion.id}
+              type="button"
+              className="ask-suggestion-card-pill"
+              disabled={isLoading}
+              onClick={() => {
+                setQuestion(suggestion.prompt);
+                submitQuestion(suggestion.prompt);
+              }}
+            >
+              <img 
+                src={`${process.env.PUBLIC_URL || ''}${suggestion.avatar}`} 
+                alt={`${suggestion.label} avatar`} 
+                className="ask-suggestion-avatar" 
+              />
+              <span className="ask-suggestion-text-single">
+                {suggestion.label} {suggestion.description ? `- ${suggestion.description}` : ''}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
       {answer && (
         <div className="ask-answer-centered">
           <div className="ask-answer-header">
