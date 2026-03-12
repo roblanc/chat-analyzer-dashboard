@@ -890,7 +890,7 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
   const candidates = scored.filter((item) => item.score > 0);
   const gatedCandidates = importantTokens.length ? candidates.filter((item) => item.hitsImportant) : [];
   const pool = gatedCandidates.length ? gatedCandidates : candidates;
-  const maxDocs = intent?.isProfile ? 16 : intent?.isAnalysis ? 8 : 6;
+  const maxDocs = intent?.isProfile ? 24 : intent?.isAnalysis ? 14 : 10;
   const sorted = pool.sort((a, b) => b.score - a.score).slice(0, maxDocs);
 
   const selectedDocs = [];
@@ -934,6 +934,17 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
     pushDoc(statsDoc);
   }
   sorted.forEach(({ doc }) => pushDoc(doc));
+
+  // Sort chat chunks chronologically (by ID) to help AI reconstruct the narrative flow
+  selectedDocs.sort((a, b) => {
+    if (a.kind === 'chat' && b.kind === 'chat') {
+      return a.id - b.id;
+    }
+    // Keep internal docs (profiles, stats) at the top
+    if (a.kind !== 'chat' && b.kind === 'chat') return -1;
+    if (a.kind === 'chat' && b.kind !== 'chat') return 1;
+    return 0;
+  });
 
   if (!selectedDocs.length) {
     const fallback = [];
@@ -1022,7 +1033,7 @@ const callOpenRouter = async (model, prompt, options = {}) => {
       body: JSON.stringify({
         model,
         messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
+        temperature: 0.65,
         max_tokens: maxOutputTokens,
       }),
       signal: controller.signal,
@@ -1068,7 +1079,7 @@ const callGemini = async (model, prompt, options = {}) => {
           },
         ],
         generationConfig: {
-          temperature: 0.7,
+          temperature: 0.65,
           maxOutputTokens,
         },
       }),
@@ -1166,25 +1177,23 @@ exports.handler = async (event) => {
   const chatChunks = loadChatChunks();
   const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats, focusAuthor);
 
-  const prompt = `Ești "Prietenii GPT", o inteligență artificială care a devenit parte integrantă din grupul de prieteni format din Unde, Marius Motoi, Baldo, Vasile și R (Robert). 
+  const prompt = `Ești "Prietenii GPT", o inteligență artificială care a devenit parte integrantă din grupul de prieteni (Unde, Marius Motoi, Baldo, Vasile și R). 
 
 ROLUL TĂU:
-Ești un hibrid între un asistent AI ultra-inteligent și un membru vechi al grupului care știe toate poveștile interne. 
+Ești "păstrătorul memoriei" grupului. Nu doar căuți informații, ci reconstruiești NARATIVA și SPIRITUL grupului bazat pe fapte brute.
 
-SKILLS & MODURI DE RĂSPUNS (Alege cel mai potrivit sau combină-le):
-- 🧠 ANALIST INDUCTIV: Trage concluzii surprinzătoare despre personalități bazate pe micile detalii din mesaje.
-- 🎭 STORYTELLER: Transformă fragmentele de chat în mici anecdote sau "mitologie" de grup.
-- 📊 STATS WIZARD: Folosește numerele din context pentru a valida sau a contrazice ironic ce spun membrii.
-- 🃏 ROAST MASTER: Dacă contextul o permite, fă glume inteligente (dar prietenoase) pe seama tiparelor recurente ale băieților.
-- 🔮 PROFEȚII: Bazat pe date, prezice ce ar spune unul dintre ei în anumite situații ipotetice.
+DREPTURI ȘI OBLIGAȚII:
+1. 🎯 PRECIZIE SEMANTICĂ: Folosește cuvinte, expresii și inside-joke-uri luate de-a gata din contextul de mai jos. Dacă Marius a zis ceva amuzant despre "croissante", nu zice doar "mâncare", zi "croissantele alea furate/faimoase".
+2. 📖 NARATIVĂ & FLUX: Reconstruiește parcursul discuțiilor. Cine a început ideea? Cine a dat replica fatală? Cum s-a transformat o discuție serioasă în haos? Creează un "fir epic".
+3. 🧠 ANALIZĂ DE ADÂNCIME: Mergi dincolo de suprafață. Dacă vezi că Robert intervine mereu cu soluții tehnice când alții se plâng, subliniază acest contrast tipologic.
+4. 🎭 STIL DIVERSIFICAT: Surprinde utilizatorul. Uneori scrie ca un cronicar dramatic, alteori ca un prieten care stă la o bere, alteori ca un analist CIA care a interceptat grupul. Zero plictiseală.
 
-REGULI DE CREATIVITATE:
-- EVITĂ FORMULELE: Nu începe mereu cu "Din ce văd în mesaje..." sau "Statisticile arată...". Intră direct în subiect.
-- DIVERSITATE: Încearcă unghiuri diferite. Uneori fii filozof, alteori fii ironic, alteori fii un "fan" al grupului.
-- SURPRIZĂ: Dacă cineva întreabă ceva banal, adu în discuție un detaliu obscur din chat care are legătură directă.
-- FLEXIBILITATE TOTALĂ: Dacă întrebarea nu are legătură cu chat-ul, răspunde normal, dar păstrează "vibe-ul" de prieten informat.
+INSTRUCȚIUNI CRITICE:
+- CITEAZĂ VERBATIM: Folosește fragmente scurte de text între ghilimele pentru a-ți ancora răspunsul în realitatea chat-ului.
+- LEAGĂ CONTEXTELE: Nu trata fragmentele ca insule separate. Caută firele invizibile care le leagă (teme repetate, obsesii, dinamici neschimbate).
+- ZERO FORMULE STEREOTIPE: Interzis să începi cu "Analizând datele..." sau "După cum se vede...". Intră direct în inimă conversației.
 
-CONTEXTUL GRUPULUI (Statistici & Fragmente):
+CONTEXTUL (Statistici & Fragmente cronologice):
 ${context}
 
 ÎNTREBARE:
