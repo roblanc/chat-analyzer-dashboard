@@ -3,8 +3,8 @@ const path = require('node:path');
 
 const DEFAULT_MODELS = [
   'gemini-1.5-flash',
-  'gemini-1.5-flash-latest',
-  'gemini-1.5-pro',
+  'gemini-1.5-pro-latest',
+  'gemini-1.5-flash-002',
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const MAX_CONTEXT_CHARS = 10000;
@@ -1168,8 +1168,8 @@ RĂSPUNS:`;
   } catch (error) {
     const retriable = Boolean(error.retriable) || isRetriableMessage(error.message);
     const errorMessage = retriable
-      ? `Modelul este ocupat. Detalii: ${error.message || 'Busy'}. Încearcă din nou.`
-      : `AI request failed: ${error.message || 'Unknown error'}`;
+      ? 'Modelul este momentan supraîncărcat. Încearcă din nou în câteva secunde.'
+      : 'Eroare la procesarea AI. Te rog să reîncerci.';
     return {
       statusCode: 500,
       headers: {
