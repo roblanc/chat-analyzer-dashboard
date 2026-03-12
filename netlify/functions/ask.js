@@ -3,8 +3,9 @@ const path = require('node:path');
 
 const DEFAULT_MODELS = [
   'gemini-1.5-flash',
-  'gemini-1.5-pro-latest',
+  'gemini-1.5-flash-8b',
   'gemini-1.5-flash-002',
+  'gemini-1.5-pro-latest',
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const MAX_CONTEXT_CHARS = 10000;
