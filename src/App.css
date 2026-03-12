@@ -946,41 +946,18 @@ body {
   animation: input-idle-pulse 3s infinite ease-in-out;
 }
 
+/* Pulsing effect for the idle input */
 @keyframes input-idle-pulse {
   0%   { border-color: rgba(255, 255, 255, 0.1);  box-shadow: 0 4px 32px -4px rgba(0, 0, 0, 0.4); }
-  50%  { border-color: rgba(139, 92, 246, 0.3); box-shadow: 0 4px 32px -4px rgba(139, 92, 246, 0.1); }
+  50%  { border-color: var(--accent-2); box-shadow: 0 0 15px -2px rgba(139, 92, 246, 0.3); }
   100% { border-color: rgba(255, 255, 255, 0.1);  box-shadow: 0 4px 32px -4px rgba(0, 0, 0, 0.4); }
 }
 
 .ask-input-pill:focus-within {
-  animation: none;
-  border-color: rgba(139, 92, 246, 0.5);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12), 0 4px 32px -4px rgba(0,0,0,0.4);
-}
-
-/* Simulated Blinking Cursor */
-.ask-input-pill::before {
-  content: '';
-  position: absolute;
-  left: 22px;
-  width: 2px;
-  height: 1.2em;
-  background: var(--accent-2);
-  border-radius: 1px;
-  animation: cursor-blink 1s infinite step-end;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.ask-input-pill:not(:focus-within)[data-empty="true"]::before {
-  opacity: 0.6;
-}
-
-@keyframes cursor-blink {
-  from, to { opacity: 0; }
-  50% { opacity: 1; }
+  animation: none !important;
+  border-color: var(--accent-1);
+  background: var(--bg);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1), 0 4px 32px -4px rgba(0,0,0,0.2);
 }
 
 .ask-input-pill input {
@@ -991,6 +968,8 @@ body {
   font-family: inherit;
   font-size: 1rem;
   outline: none;
+  position: relative;
+  z-index: 2;
 }
 
 .ask-input-pill input::placeholder {
