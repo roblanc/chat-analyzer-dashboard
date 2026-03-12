@@ -103,8 +103,16 @@ body {
 
 .App {
   min-height: 100vh;
-  padding: 0 clamp(16px, 4vw, 48px) 80px; 
-  overflow-x: hidden; /* Prevent horizontal scroll here instead of body */
+  padding: 0 0 80px 0; /* Vertical padding only */
+  overflow-x: hidden;
+}
+
+.header-content-wrapper,
+.ai-chat-layout {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+  width: 100%;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -188,24 +196,24 @@ body {
 /* HEADER                                                                     */
 /* -------------------------------------------------------------------------- */
 .header-section {
-  text-align: center;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 2000; /* Higher z-index */
-  background: var(--bg); /* Solid background for more reliable sticky feel */
-  background-color: var(--bg-transparent); /* Fallback to glass */
+  width: 100%;
+  z-index: 2000;
+  background: var(--bg);
+  background-color: var(--bg-transparent);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
-  margin-left: calc(max(16px, 4vw) * -1);
-  margin-right: calc(max(16px, 4vw) * -1);
-  width: 100vw;
-  box-shadow: 0 1px 0 var(--card-border);
+  border-bottom: 1px solid var(--card-border);
+  padding: 12px 0;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 /* Subtle border that appears when scrolling (simulated via margin/bg transition) */
@@ -1260,11 +1268,8 @@ body {
 .ai-chat-layout {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 16px;
   gap: 24px;
+  margin-top: 24px;
 }
 
 .ai-chat-hero {

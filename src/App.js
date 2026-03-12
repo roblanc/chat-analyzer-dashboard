@@ -106,10 +106,9 @@ function App() {
 
   return (
     <div className="App">
-      <div className="ai-chat-layout">
-        
-        {/* Header Section */}
-        <div className="bento-header header-section">
+      {/* Header Section - Moved outside centered layout for robust sticky/full-width */}
+      <div className="bento-header header-section">
+        <div className="header-content-wrapper">
           <div className="header-top-row">
             <h1
               className="title title-home-link"
@@ -138,10 +137,11 @@ function App() {
               )}
             </button>
           </div>
-
-
           {statsError && <p className="meta meta-error">Stats indisponibile: {statsError}</p>}
         </div>
+      </div>
+
+      <div className="ai-chat-layout">
 
         {/* Filters Strip (Removed as decided in plan to rely on suggestions directly) */}
 
