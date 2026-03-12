@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './App.css';
-import { marked } from 'marked';
 
 import MessageCountChart from './components/MessageCountChart';
 import HourlyActivityChart from './components/HourlyActivityChart';
 import DailyActivityChart from './components/DailyActivityChart';
 import AskAI from './components/AskAI';
+import KnowledgeBase from './components/KnowledgeBase';
 
 const KNOWLEDGE_PATH = `${process.env.PUBLIC_URL || ''}/knowledge.md`;
 const DASHBOARD_STATS_PATH = `${process.env.PUBLIC_URL || ''}/dashboard-stats.json`;
@@ -74,11 +74,6 @@ function App() {
     };
   }, []);
 
-  const htmlContent = useMemo(
-    () => marked.parse(markdownContent || ''), 
-    [markdownContent]
-  );
-
   const statsCards = useMemo(() => {
     const combined = dashboardStats?.combined;
     const incremental = dashboardStats?.incremental;
@@ -106,7 +101,12 @@ function App() {
         
         {/* Header Section */}
         <div className="bento-header header-section">
-          <h1 className="title">Prietenii <span className="title-highlight">GPT</span></h1>
+          <h1
+            className="title title-home-link"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            Prietenii <span className="title-highlight">GPT</span>
+          </h1>
 
 
           {statsError && <p className="meta meta-error">Stats indisponibile: {statsError}</p>}
@@ -144,13 +144,13 @@ function App() {
 
         {/* Knowledge Base Section */}
         <div className="fluid-knowledge-section">
-          <h2 style={{marginTop: 0, marginBottom: '24px', color: 'var(--text)'}}>Bază de Cunoștințe</h2>
+          <div className="kb-section-header">
+            <span className="kb-section-title">Bază de Cunoștințe</span>
+          </div>
           {loadError ? (
-            <p className="load-error">
-              Nu am putut încărca conținutul: {loadError}
-            </p>
+            <p className="load-error">Nu am putut încărca conținutul: {loadError}</p>
           ) : (
-            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+            <KnowledgeBase markdown={markdownContent} />
           )}
         </div>
 

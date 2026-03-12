@@ -143,6 +143,14 @@ body {
   color: transparent;
 }
 
+.title-home-link {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.title-home-link:hover {
+  opacity: 0.8;
+}
+
 .title-highlight {
   background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
   -webkit-background-clip: text;
@@ -937,6 +945,92 @@ body {
   flex-shrink: 0;
 }
 
+/* -------------------------------------------------------------------------- */
+/* MEMBER CARDS (always-visible suggestion grid)                              */
+/* -------------------------------------------------------------------------- */
+.ask-member-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ask-member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px 20px 14px;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 110px;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.ask-member-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(236, 72, 153, 0.06));
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  border-radius: inherit;
+}
+
+.ask-member-card:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.ask-member-card:hover:not(:disabled) {
+  border-color: rgba(139, 92, 246, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px -6px rgba(139, 92, 246, 0.25);
+}
+
+.ask-member-card:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ask-member-card:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ask-member-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.ask-member-card:hover:not(:disabled) .ask-member-avatar {
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.ask-member-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.ask-member-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+  text-align: center;
+  max-width: 90px;
+}
+
 .ask-suggestion-text-single {
   color: var(--text);
   font-size: 0.9rem;
@@ -1094,9 +1188,175 @@ body {
 }
 
 .fluid-knowledge-section {
-  background: var(--bg-card); /* Add a very subtle card background to separate it */
-  border-radius: 16px;
-  padding: 40px;
-  margin-top: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding-bottom: 64px;
+  border-bottom: none;
+}
+
+.kb-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.kb-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.kb-section-toggle-all {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.2s ease;
+}
+
+.kb-section-toggle-all:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.04);
+}
+
+/* -------------------------------------------------------------------------- */
+/* KNOWLEDGE BASE ACCORDION                                                   */
+/* -------------------------------------------------------------------------- */
+.kb-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kb-item {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.kb-item--open {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.4);
+}
+
+.kb-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+  font-family: inherit;
+}
+
+.kb-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.kb-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.kb-title {
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.kb-chevron {
+  color: var(--text-muted);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.kb-chevron--open {
+  transform: rotate(180deg);
+}
+
+.kb-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kb-body--open {
+  max-height: 2000px;
+}
+
+.kb-content {
+  padding: 4px 20px 24px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Knowledge content typography inside accordion */
+.kb-content.knowledge-content {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #a1a1aa;
+  max-width: 100%;
+  margin: 0;
+}
+
+.kb-content.knowledge-content h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e4e4e7;
+  margin-top: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.kb-content.knowledge-content p {
+  margin-bottom: 0.9rem;
+  color: #a1a1aa;
+}
+
+.kb-content.knowledge-content ul {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.kb-content.knowledge-content li {
+  margin-bottom: 0.35rem;
+  color: #a1a1aa;
+}
+
+.kb-content.knowledge-content li strong {
+  color: #EC4899;
+}
+
+.kb-content.knowledge-content strong {
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
+.kb-content.knowledge-content ol {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.kb-content.knowledge-content ol li {
+  margin-bottom: 0.35rem;
 }

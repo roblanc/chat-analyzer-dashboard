@@ -94,16 +94,17 @@ const PROMPT_SUGGESTIONS = [
 ];
 
 const FUNNY_LOADING_MESSAGES = [
-  { emoji: '🐹', text: 'Consultăm hamsterii de serviciu...' },
-  { emoji: '🔮', text: 'Căutăm răspunsul în cristale magice...' },
-  { emoji: '☕', text: 'AI-ul nostru bea cafea, stați puțin...' },
-  { emoji: '🤔', text: 'Analizăm cu pixuri colorate pe hârtie...' },
-  { emoji: '📡', text: 'Trimitem semnale în cosmos...' },
-  { emoji: '🧙', text: 'Vrăjitorul calculează răspunsul...' },
-  { emoji: '🦆', text: 'Explicăm problema la o rățuscă de cauciuc...' },
-  { emoji: '📚', text: 'Citim toate mesajele de la cap la coadă...' },
-  { emoji: '🎲', text: 'Aruncăm zarurile pentru inspirație...' },
-  { emoji: '🐌', text: 'Răspunsul vine... încet dar sigur...' },
+  { emoji: '🚿', text: 'Vasile se spală pe cap, revenim imediat...' },
+  { emoji: '💩', text: 'Unde e la baie, așteptăm și noi...' },
+  { emoji: '🔧', text: 'R repară calculatorul cuiva (din nou)...' },
+  { emoji: '🍕', text: 'Baldo comandă pizza și uită să răspundă...' },
+  { emoji: '💤', text: 'Vasile a adormit pe tastatură, îl trezim...' },
+  { emoji: '📱', text: 'Unde trimite 47 de linkuri simultan...' },
+  { emoji: '🎭', text: 'Marius exagerează dramatic răspunsul...' },
+  { emoji: '🐌', text: 'R explică tehnic de ce durează atât...' },
+  { emoji: '🫠', text: 'Baldo e sarcastic și nu ajută deloc...' },
+  { emoji: '🎰', text: 'Consultăm oracolul de poker pentru inspirație...' },
+  { emoji: '🌙', text: 'Toți sunt pe Discord la 2 noaptea, nu răspund...' },
 ];
 
 const AskAI = () => {
@@ -279,48 +280,45 @@ const AskAI = () => {
                 setError('');
               }}
             >
-              Închide și curăță
+              Întrebare nouă
           </button>
         </div>
       )}
 
-      {!answer && (
-        <>
-          {/* Suggested Quick Prompts */}
-          <div className="ask-quick-prompts">
-            <button type="button" onClick={() => { setQuestion("Cine e cel mai haios din grup?"); submitQuestion("Cine e cel mai haios din grup?"); }} disabled={isLoading}>Cine e cel mai haios? 😂</button>
-            <button type="button" onClick={() => { setQuestion("Rezumatul general al discuțiilor"); submitQuestion("Rezumatul general al discuțiilor"); }} disabled={isLoading}>Rezumat discuții 📝</button>
-            <button type="button" onClick={() => { setQuestion("Cine întârzie de obicei la poker?"); submitQuestion("Cine întârzie de obicei la poker?"); }} disabled={isLoading}>Cine întârzie la poker? 🃏</button>
-          </div>
+      {/* Suggested Quick Prompts — always visible */}
+      <div className="ask-quick-prompts">
+        <button type="button" onClick={() => { setQuestion("Cine e cel mai haios din grup?"); submitQuestion("Cine e cel mai haios din grup?"); }} disabled={isLoading}>Cine e cel mai haios? 😂</button>
+        <button type="button" onClick={() => { setQuestion("Rezumatul general al discuțiilor"); submitQuestion("Rezumatul general al discuțiilor"); }} disabled={isLoading}>Rezumat discuții 📝</button>
+        <button type="button" onClick={() => { setQuestion("Cine întârzie de obicei la poker?"); submitQuestion("Cine întârzie de obicei la poker?"); }} disabled={isLoading}>Cine întârzie la poker? 🃏</button>
+      </div>
 
-          {/* Suggestions Grid */}
-          <div className="ask-hero-suggestions">
-            <div className="ask-suggestions-grid-centered">
-              {PROMPT_SUGGESTIONS.map((suggestion) => (
-                <button
-                  key={suggestion.id}
-                  type="button"
-                  className="ask-suggestion-card-pill"
-                  disabled={isLoading}
-                  onClick={() => {
-                    setQuestion(suggestion.prompt);
-                    submitQuestion(suggestion.prompt);
-                  }}
-                >
-                  <img
-                    src={`${process.env.PUBLIC_URL || ''}${suggestion.avatar}`}
-                    alt={`${suggestion.label} avatar`}
-                    className="ask-suggestion-avatar"
-                  />
-                  <span className="ask-suggestion-text-single">
-                    {suggestion.label} {suggestion.description ? `- ${suggestion.description}` : ''}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
+      {/* Member Cards — always visible */}
+      <div className="ask-hero-suggestions">
+        <div className="ask-member-grid">
+          {PROMPT_SUGGESTIONS.map((suggestion) => (
+            <button
+              key={suggestion.id}
+              type="button"
+              className="ask-member-card"
+              disabled={isLoading}
+              onClick={() => {
+                setQuestion(suggestion.prompt);
+                submitQuestion(suggestion.prompt);
+              }}
+            >
+              <img
+                src={`${process.env.PUBLIC_URL || ''}${suggestion.avatar}`}
+                alt={`${suggestion.label} avatar`}
+                className="ask-member-avatar"
+              />
+              <span className="ask-member-name">{suggestion.label}</span>
+              {suggestion.description && (
+                <span className="ask-member-desc">{suggestion.description}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
