@@ -107,7 +107,7 @@ function App() {
         {/* Header Section */}
         <div className="bento-header header-section">
           <h1 className="title">Prietenii <span className="title-highlight">GPT</span></h1>
-          <p className="title-subtitle">Pune întrebări despre conversațiile grupului — cine a zis ce, cine e cel mai haios, ce subiecte revin. AI-ul analizează istoricul și îți răspunde cu exemple reale.</p>
+
 
           {statsError && <p className="meta meta-error">Stats indisponibile: {statsError}</p>}
         </div>
