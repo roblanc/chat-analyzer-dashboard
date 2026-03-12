@@ -109,6 +109,7 @@ const FUNNY_LOADING_MESSAGES = [
 
 const AskAI = () => {
   const [question, setQuestion] = useState('');
+  const [askedQuestion, setAskedQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [sources, setSources] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -151,6 +152,7 @@ const AskAI = () => {
     }
 
     setQuestion('');
+    setAskedQuestion(trimmed);
     setIsLoading(true);
     setError('');
     setAnswer('');
@@ -236,6 +238,12 @@ const AskAI = () => {
 
       {answer && (
         <div className="ask-answer-centered">
+          {askedQuestion && (
+            <div className="ask-question-context">
+              <span className="ask-question-label">Întrebarea ta</span>
+              <p className="ask-question-text">{askedQuestion}</p>
+            </div>
+          )}
           <div className="ask-answer-header">
             <span className="ask-answer-label">Răspuns</span>
           </div>
@@ -275,6 +283,7 @@ const AskAI = () => {
               style={{ marginTop: '20px', display: 'block', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}
               onClick={() => {
                 setQuestion('');
+                setAskedQuestion('');
                 setAnswer('');
                 setSources([]);
                 setError('');
