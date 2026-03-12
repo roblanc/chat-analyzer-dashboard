@@ -43,8 +43,11 @@
     <div id="root"></div>
 
     <!-- Hidden form for Netlify Form Discovery to collect AI questions -->
-    <form name="ai-questions" data-netlify="true" hidden>
+    <form name="ai-questions" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="ai-questions" />
+      <input type="hidden" name="bot-field" />
       <input type="text" name="question" />
+      <button type="submit">Send</button>
     </form>
     <!--
       This HTML file is a template.
