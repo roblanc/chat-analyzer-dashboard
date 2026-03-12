@@ -2,10 +2,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const DEFAULT_MODELS = [
+  'gemini-2.0-flash',
+  'gemini-2.0-flash-lite',
   'gemini-1.5-flash',
   'gemini-1.5-flash-8b',
-  'gemini-1.5-flash-002',
-  'gemini-1.5-pro-latest',
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -1188,8 +1188,11 @@ RĂSPUNS:`;
       // Priority OpenRouter models (specifically the FREE ones)
       modelsToTry = Array.from(new Set([
         'google/gemini-2.0-flash-exp:free',
+        'google/gemini-2.0-flash-lite-001',
+        'meta-llama/llama-3.3-70b-instruct:free',
         'meta-llama/llama-3.1-8b-instruct:free',
         'mistralai/mistral-7b-instruct:free',
+        'deepseek/deepseek-r1-distill-llama-70b:free',
         'google/gemini-flash-1.5',
         'meta-llama/llama-3.1-70b-instruct',
         ...models
@@ -1212,7 +1215,7 @@ RĂSPUNS:`;
       } catch (error) {
         lastError = error;
         if (index < modelsToTry.length - 1) {
-          await delay(250);
+          await delay(500 * (index + 1));
           continue;
         }
         throw error;
