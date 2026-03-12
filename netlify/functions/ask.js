@@ -1143,6 +1143,22 @@ exports.handler = async (event) => {
     };
   }
 
+  // --- LOGGING & MONITORING ---
+  console.log(`[AUDIT] Question: "${question}"`);
+
+  if (process.env.QUESTION_WEBHOOK_URL) {
+    // We wrap it to not block the response if the webhook is slow
+    fetch(process.env.QUESTION_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: "Prietenii GPT - Radar",
+        content: `❓ **Nouă întrebare pe site:**\n> ${question}`
+      })
+    }).catch(e => console.error('[WEBHOOK_ERROR]', e.message));
+  }
+  // ----------------------------
+
   const knowledge = loadKnowledge();
   const dashboardStats = loadDashboardStats();
   const focusAuthor = extractFocusAuthor(question, dashboardStats);
