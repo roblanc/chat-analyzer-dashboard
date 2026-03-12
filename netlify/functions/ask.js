@@ -1185,8 +1185,11 @@ RĂSPUNS:`;
     // If models are provided via env, use them. Otherwise, decide based on keys.
     let modelsToTry = models;
     if (hasOpenRouter && !process.env.GEMINI_MODELS) {
-      // Priority OpenRouter models (free/stable ones)
+      // Priority OpenRouter models (specifically the FREE ones)
       modelsToTry = Array.from(new Set([
+        'google/gemini-2.0-flash-exp:free',
+        'meta-llama/llama-3.1-8b-instruct:free',
+        'mistralai/mistral-7b-instruct:free',
         'google/gemini-flash-1.5',
         'meta-llama/llama-3.1-70b-instruct',
         ...models
