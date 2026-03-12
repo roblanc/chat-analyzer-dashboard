@@ -75,15 +75,16 @@ const DailyActivityChart = ({ stats }) => {
     afterDatasetsDraw(chart) {
       const { ctx, data } = chart;
       ctx.save();
-      ctx.font = 'bold 9px Inter';
-      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#ffffff';
+      ctx.font = '600 10px Inter';
+      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+      ctx.fillStyle = textColor || '#1d1d1f';
       ctx.textAlign = 'center';
 
       data.datasets.forEach((dataset, i) => {
         chart.getDatasetMeta(i).data.forEach((bar, index) => {
           const val = dataset.data[index];
           if (val > 0) {
-            ctx.fillText(val.toLocaleString('ro-RO'), bar.x, bar.y - 8);
+            ctx.fillText(val.toLocaleString('ro-RO'), bar.x, bar.y - 10);
           }
         });
       });
