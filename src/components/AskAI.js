@@ -96,7 +96,6 @@ const PROMPT_SUGGESTIONS = [
 const FUNNY_LOADING_MESSAGES = [
   { emoji: '🚿', text: 'Vasile se spală pe cap, revenim imediat...' },
   { emoji: '💩', text: 'Unde e la baie, așteptăm și noi...' },
-  { emoji: '🃏', text: 'Marius povestește o mână de poker din 2019...' },
   { emoji: '🔧', text: 'R repară calculatorul cuiva (din nou)...' },
   { emoji: '🍕', text: 'Baldo comandă pizza și uită să răspundă...' },
   { emoji: '💤', text: 'Vasile a adormit pe tastatură, îl trezim...' },
