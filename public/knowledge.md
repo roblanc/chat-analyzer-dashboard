@@ -1,44 +1,48 @@
 
 ## Perioada de Chat
 
-Istoricul chat-ului acoperă perioada **11 iunie 2025 – 29 octombrie 2025** (date din arhivă). Statisticile de după 29 octombrie 2025 sunt disponibile în secțiunea live a dashboard-ului.
+Istoricul chat-ului acoperă perioada **11 iunie 2025 – 11 martie 2026** (274 de zile).
 
 ## Număr de Mesaje per Persoană
 
-*   **Unde**: 2.961 mesaje
-*   **Marius Motoi**: 2.429 mesaje
-*   **Baldo**: 1.164 mesaje
-*   **Vasile**: 705 mesaje
-*   **R**: 294 mesaje
+Date pentru întreaga perioadă (iun 2025 – mar 2026):
 
-**Total arhivă:** 7.553 mesaje în 141 de zile.
+*   **Unde**: 6.564 mesaje
+*   **Marius Motoi**: 5.803 mesaje
+*   **Baldo**: 2.550 mesaje
+*   **Vasile**: 1.678 mesaje
+*   **R**: 850 mesaje
+
+**Total:** 17.445 mesaje în 274 de zile.
 
 ## Medie Mesaje pe Zi
 
-*   **Unde**: 21,0 mesaje/zi
-*   **Marius Motoi**: 17,2 mesaje/zi
-*   **Baldo**: 8,3 mesaje/zi
-*   **Vasile**: 5,0 mesaje/zi
-*   **R**: 2,1 mesaje/zi
+*   **Unde**: 24,0 mesaje/zi
+*   **Marius Motoi**: 21,2 mesaje/zi
+*   **Baldo**: 9,3 mesaje/zi
+*   **Vasile**: 6,1 mesaje/zi
+*   **R**: 3,1 mesaje/zi
 
 ## Activitate de Vârf
 
 ### Cele Mai Active Ore ale Zilei
-Grupul este cel mai activ seara, cu un vârf semnificativ între orele **20:00 – 21:00** (704 mesaje).
+Grupul este cel mai activ seara, cu un vârf semnificativ între orele **21:00 – 22:00** (1.002 mesaje în perioada recentă).
 
 ### Cele Mai Active Zile ale Săptămânii
-**Duminica** este cea mai activă zi (1.283 mesaje), urmată de Joi și Luni.
+**Duminica** este cea mai activă zi (2.918 mesaje), urmată de Joi și Luni.
 
-**Activitate pe zilele săptămânii:**
-*   Luni: 1.085 mesaje
-*   Marți: 1.072 mesaje
-*   Miercuri: 909 mesaje
-*   Joi: 1.164 mesaje
-*   Vineri: 910 mesaje
-*   Sâmbătă: 1.138 mesaje
-*   Duminică: 1.283 mesaje
+**Activitate pe zilele săptămânii (total arhivă):**
+*   Luni: 2.470 mesaje
+*   Marți: 2.366 mesaje
+*   Miercuri: 2.336 mesaje
+*   Joi: 2.749 mesaje
+*   Vineri: 2.395 mesaje
+*   Sâmbătă: 2.219 mesaje
+*   Duminică: 2.918 mesaje
 
 ## Subiecte Favorite per Conversator
+
+Date din perioada iun–oct 2025 (arhivă inițială):
 
 *   **Baldo**: „asa" (28), „daca" (28), „aia" (25), „bine" (25), „marius" (22)
 *   **Marius Motoi**: „mama" (77), „asa" (70), „bine" (47), „dar" (46), „hai" (45)
@@ -47,6 +51,8 @@ Grupul este cel mai activ seara, cu un vârf semnificativ între orele **20:00 �
 *   **R**: „https" (21), „dar" (16), „vasile" (14), „aia" (13), „com" (12)
 
 ## Cele Mai Multe Link-uri Distribuite
+
+Date din perioada iun–oct 2025:
 
 *   **Unde**: 89 link-uri
 *   **Marius Motoi**: 27 link-uri
