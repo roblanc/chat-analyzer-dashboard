@@ -59,13 +59,22 @@ const DailyActivityChart = ({ stats }) => {
     },
     scales: {
       x: {
-        ticks: { color: 'var(--text-muted)', font: { family: 'Inter', size: 11 } },
+        ticks: { color: '#86868b', font: { family: 'Inter', size: 10 } },
         grid: { display: false },
+        border: { display: false }
       },
       y: {
         beginAtZero: true,
-        ticks: { color: 'var(--text-muted)', font: { family: 'Inter', size: 11 } },
-        grid: { color: 'var(--card-border)' },
+        ticks: { 
+          color: '#86868b', 
+          font: { family: 'Inter', size: 10 },
+          maxTicksLimit: 6
+        },
+        grid: { 
+          color: 'rgba(0, 0, 0, 0.04)',
+          drawTicks: false
+        },
+        border: { display: false }
       },
     },
   };
@@ -76,8 +85,8 @@ const DailyActivityChart = ({ stats }) => {
       const { ctx, data } = chart;
       ctx.save();
       ctx.font = '600 10px Inter';
-      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
-      ctx.fillStyle = textColor || '#1d1d1f';
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      ctx.fillStyle = isDark ? '#f5f5f7' : '#1d1d1f';
       ctx.textAlign = 'center';
 
       data.datasets.forEach((dataset, i) => {
