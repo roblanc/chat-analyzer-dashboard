@@ -89,9 +89,15 @@ const HourlyActivityChart = ({ stats }) => {
       ctx.textAlign = 'center';
 
       data.datasets.forEach((dataset, i) => {
-        chart.getDatasetMeta(i).data.forEach((bar, index) => {
+        const meta = chart.getDatasetMeta(i);
+        const maxVal = Math.max(...dataset.data);
+        
+        meta.data.forEach((bar, index) => {
           const val = dataset.data[index];
-          if (val > 0) {
+          // Logic: Show if it's the peak OR every 3rd hour to avoid crowding
+          const shouldShow = val === maxVal || (index % 3 === 0);
+          
+          if (val > 0 && shouldShow) {
             ctx.fillText(val.toLocaleString('ro-RO'), bar.x, bar.y - 10);
           }
         });
