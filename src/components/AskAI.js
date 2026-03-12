@@ -57,7 +57,7 @@ const PROMPT_SUGGESTIONS = [
     label: 'Unde',
     description: 'Rol, stil, interese',
     prompt: 'Descrie profilul lui Unde (rol în grup, stil de comunicare, subiecte recurente) și dă 3 exemple cu timestamp.',
-    avatar: '/avatars/unde.png',
+    avatar: '/avatars/Unde.PNG',
   },
   {
     id: 'profile-marius',
@@ -65,7 +65,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Umor, povești, energie',
     prompt:
       'Ce poți deduce despre Marius Motoi (rol în grup, tip de umor, teme recurente)? Dă 3 exemple cu timestamp și o observație din statistici.',
-    avatar: '/avatars/marius.png',
+    avatar: '/avatars/Marius Motoi.PNG',
   },
   {
     id: 'profile-baldo',
@@ -73,7 +73,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Sarcasm, observații',
     prompt:
       'Ce poți spune despre Baldo (stil, replici memorabile, subiecte recurente)? Dă 3 exemple cu timestamp și explică ce nu se poate concluziona sigur.',
-    avatar: '/avatars/baldo.png',
+    avatar: '/avatars/Baldo.PNG',
   },
   {
     id: 'profile-vasile',
@@ -81,7 +81,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Atitudine, preferințe',
     prompt:
       'Descrie profilul lui Vasile (rol, stil, ce îl preocupă/ce îl enervează în discuții) și dă 3 exemple cu timestamp. Include și o observație din statistici.',
-    avatar: '/avatars/vasile.png',
+    avatar: '/avatars/Vasile.PNG',
   },
   {
     id: 'profile-r',
@@ -89,7 +89,7 @@ const PROMPT_SUGGESTIONS = [
     description: 'Tehnic, “vocea rațiunii”',
     prompt:
       'Ce poți deduce despre R/Robert (rol tehnic, tip de ajutor oferit, stil de comunicare)? Dă 3 exemple cu timestamp și menționează ce indică statisticile.',
-    avatar: '/avatars/robert.png',
+    avatar: '/avatars/Robert.PNG',
   }
 ];
 
