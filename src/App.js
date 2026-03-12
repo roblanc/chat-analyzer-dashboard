@@ -94,6 +94,8 @@ function App() {
   }, [dashboardStats]);
 
 
+  const [theme, setTheme] = useState('light');
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
