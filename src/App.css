@@ -125,15 +125,15 @@ body {
 /* -------------------------------------------------------------------------- */
 .header-section {
   text-align: center;
-  padding: 16px 0 8px;
+  padding: 12px 0 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .header-section .title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -154,6 +154,17 @@ body {
   font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 400;
   max-width: 600px;
+}
+
+.title-subtitle {
+  color: var(--text-muted);
+  font-size: clamp(0.8rem, 1.6vw, 0.92rem);
+  font-weight: 400;
+  max-width: 480px;
+  margin: 2px auto 0;
+  line-height: 1.5;
+  text-align: center;
+  opacity: 0.65;
 }
 
 .header-section .meta {
@@ -671,8 +682,8 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 32px;
-  padding: 40px 20px;
+  gap: 14px;
+  padding: 8px 20px 24px;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -719,17 +730,18 @@ body {
 .ask-input-pill {
   display: flex;
   align-items: center;
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
-  padding: 8px 8px 8px 24px;
-  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 6px 6px 6px 22px;
+  box-shadow: 0 4px 32px -4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .ask-input-pill:focus-within {
-  border-color: var(--accent-2);
-  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12), 0 4px 32px -4px rgba(0,0,0,0.4);
 }
 
 .ask-input-pill input {
@@ -743,27 +755,29 @@ body {
 }
 
 .ask-input-pill input::placeholder {
-  color: rgba(161, 161, 170, 0.6);
+  color: rgba(161, 161, 170, 0.45);
 }
 
 .ask-submit-btn {
-  background: rgba(139, 92, 246, 0.2);
-  color: var(--accent-2);
+  background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+  color: #fff;
   border: none;
   border-radius: 50%;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  box-shadow: 0 2px 12px rgba(139, 92, 246, 0.4);
 }
 
 .ask-submit-btn:hover:not(:disabled) {
-  background: rgba(139, 92, 246, 0.3);
+  opacity: 0.9;
   transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.55);
 }
 
 .ask-submit-btn:active:not(:disabled) {
@@ -771,7 +785,7 @@ body {
 }
 
 .ask-submit-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
@@ -855,7 +869,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
 }
 
 .ask-suggestion-card-pill {
@@ -884,9 +898,9 @@ body {
 .ask-quick-prompts {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
-  margin-top: 16px;
+  margin-top: 4px;
   width: 100%;
 }
 
@@ -959,11 +973,11 @@ body {
   max-width: 900px;
   margin: 0 auto;
   padding: 0 16px;
-  gap: 40px;
+  gap: 24px;
 }
 
 .ai-chat-hero {
-  margin-top: 24px;
+  margin-top: 4px;
   width: 100%;
 }
 
