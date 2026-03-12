@@ -2,9 +2,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const DEFAULT_MODELS = [
-  'gemini-2.0-flash',
   'gemini-1.5-flash',
   'gemini-1.5-flash-002',
+  'gemini-1.5-flash-8b',
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const MAX_CONTEXT_CHARS = 10000;
@@ -1141,7 +1141,7 @@ RĂSPUNS:`;
     for (let index = 0; index < models.length; index += 1) {
       const model = models[index];
       try {
-        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 2048 : 1536 });
+        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 1536 : 1024 });
         break;
       } catch (error) {
         lastError = error;
