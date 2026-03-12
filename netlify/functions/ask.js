@@ -2,15 +2,15 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const DEFAULT_MODELS = [
-  'gemini-3-flash-preview',
-  'gemini-2.5-flash',
-  'gemini-2.5-flash-lite',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-002',
 ];
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 const MAX_CONTEXT_CHARS = 10000;
 const MAX_CONTEXT_CHARS_PROFILE = 18000;
 const CHAT_CHUNK_TARGET_CHARS = 1600;
-const REQUEST_TIMEOUT_MS = 8000;
+const REQUEST_TIMEOUT_MS = 25000;
 const RETRIABLE_STATUS = new Set([429, 500, 503, 504]);
 const STOPWORDS = new Set([
   'si', 'sau', 'iar', 'dar', 'de', 'din', 'la', 'cu', 'pe', 'in', 'este', 'sunt', 'o', 'un', 'una',
@@ -1141,7 +1141,7 @@ RĂSPUNS:`;
     for (let index = 0; index < models.length; index += 1) {
       const model = models[index];
       try {
-        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 1024 : 512 });
+        result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 2048 : 1536 });
         break;
       } catch (error) {
         lastError = error;
