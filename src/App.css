@@ -549,9 +549,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 16px;
 }
 
 .ask-answer-label {
@@ -946,13 +944,13 @@ body {
 }
 
 /* -------------------------------------------------------------------------- */
-/* MEMBER CARDS (always-visible suggestion grid)                              */
+/* MEMBER AVATARS (borderless, floating)                                     */
 /* -------------------------------------------------------------------------- */
 .ask-member-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 20px 12px;
 }
 
 .ask-member-card {
@@ -960,36 +958,16 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 16px 20px 14px;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  min-width: 110px;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
   font-family: inherit;
-  position: relative;
-  overflow: hidden;
-}
-
-.ask-member-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(236, 72, 153, 0.06));
-  opacity: 0;
-  transition: opacity 0.22s ease;
-  border-radius: inherit;
-}
-
-.ask-member-card:hover:not(:disabled)::before {
-  opacity: 1;
 }
 
 .ask-member-card:hover:not(:disabled) {
-  border-color: rgba(139, 92, 246, 0.45);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px -6px rgba(139, 92, 246, 0.25);
+  transform: translateY(-4px);
 }
 
 .ask-member-card:active:not(:disabled) {
@@ -997,38 +975,43 @@ body {
 }
 
 .ask-member-card:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .ask-member-avatar {
-  width: 56px;
-  height: 56px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
-  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
 .ask-member-card:hover:not(:disabled) .ask-member-avatar {
-  border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 4px 20px -4px rgba(139, 92, 246, 0.35);
 }
 
 .ask-member-name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
   letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.ask-member-card:hover:not(:disabled) .ask-member-name {
+  color: var(--text);
 }
 
 .ask-member-desc {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+  font-size: 0.68rem;
+  color: rgba(161, 161, 170, 0.5);
   line-height: 1.3;
   text-align: center;
-  max-width: 90px;
+  max-width: 80px;
 }
 
 .ask-suggestion-text-single {
@@ -1039,15 +1022,14 @@ body {
 }
 
 .ask-answer-centered {
-  background: var(--bg);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 24px;
-  padding: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 16px 0;
   width: 100%;
   text-align: left;
   animation: fade-in 0.4s ease-out;
   position: relative;
-  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.5);
 }
 
 .ask-error-inline {
@@ -1081,10 +1063,8 @@ body {
   justify-content: center;
   align-items: center;
   gap: 24px;
-  padding: 16px 24px;
-  margin: -16px auto 32px auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 24px;
+  margin: -8px auto 24px auto;
   width: 100%;
   max-width: 800px;
 }
@@ -1115,7 +1095,6 @@ body {
 .fluid-knowledge-section {
   width: 100%;
   padding: 24px 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
 }
 
 .fluid-knowledge-section {
