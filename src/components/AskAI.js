@@ -158,6 +158,16 @@ const AskAI = () => {
     setAnswer('');
     setSources([]);
 
+    // Save to Netlify Forms for private auditing
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        "form-name": "ai-questions",
+        "question": trimmed
+      }).toString()
+    }).catch(e => console.error('[FORM_ERROR]', e.message));
+
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
