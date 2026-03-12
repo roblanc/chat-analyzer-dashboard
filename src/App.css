@@ -102,7 +102,7 @@ body {
 
 .App {
   min-height: 100vh;
-  padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 48px) 80px;
+  padding: clamp(48px, 8vw, 80px) clamp(16px, 4vw, 48px) 80px; /* Pushed header down */
 }
 
 /* -------------------------------------------------------------------------- */
@@ -684,14 +684,41 @@ body {
 
 .ask-answer-text p { margin-bottom: 14px; }
 .ask-answer-text p:last-child { margin-bottom: 0; }
-.ask-answer-text h1, .ask-answer-text h2, .ask-answer-text h3 { margin-top: 1.5em; margin-bottom: 0.8em; font-weight: 600; }
+.ask-answer-text h1, .ask-answer-text h2, .ask-answer-text h3 { 
+  margin-top: 1.5em; 
+  margin-bottom: 0.8em; 
+  font-weight: 700; 
+  color: var(--text);
+}
 .ask-answer-text ul, .ask-answer-text ol { padding-left: 1.5em; margin-bottom: 14px; }
 .ask-answer-text li { margin-bottom: 8px; }
 .ask-answer-text li::marker { color: var(--accent-1); }
-.ask-answer-text strong { font-weight: 600; color: #fff; }
-.ask-answer-text code { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.85em; }
-.ask-answer-text pre { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 16px; border-radius: 12px; overflow-x: auto; margin-bottom: 14px; }
-.ask-answer-text blockquote { border-left: 3px solid var(--accent-1); padding-left: 16px; color: var(--text-muted); margin-bottom: 14px; font-style: italic; }
+.ask-answer-text strong { font-weight: 700; color: var(--text); }
+
+.ask-answer-text code { 
+  background: var(--bg); 
+  border: 1px solid var(--card-border); 
+  padding: 0.2em 0.4em; 
+  border-radius: 4px; 
+  font-size: 0.85em; 
+}
+
+.ask-answer-text pre { 
+  background: var(--bg); 
+  border: 1px solid var(--card-border); 
+  padding: 16px; 
+  border-radius: 12px; 
+  overflow-x: auto; 
+  margin-bottom: 14px; 
+}
+
+.ask-answer-text blockquote { 
+  border-left: 4px solid var(--accent-1); 
+  padding-left: 16px; 
+  color: var(--text-muted); 
+  margin-bottom: 14px; 
+  font-style: italic; 
+}
 
 /* Sources Pills */
 .ask-sources {
@@ -701,7 +728,7 @@ body {
   gap: 12px;
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--card-border);
 }
 
 .ask-sources-label {
@@ -723,8 +750,8 @@ body {
   font-weight: 500;
   padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg);
+  border: 1px solid var(--card-border);
   color: var(--text-muted);
   white-space: nowrap;
 }
@@ -781,12 +808,17 @@ body {
   }
 
   .ask-suggestion-card-pill {
-    width: 100%;
-    margin-bottom: 8px;
+    width: auto; /* Not full width anymore */
+    margin-bottom: 4px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
   }
 
   .ask-suggestions-grid-centered {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
   }
 }
 
@@ -1008,8 +1040,8 @@ body {
 }
 
 .ask-suggestion-card-pill:hover:not(:disabled) {
-  border-color: rgba(139, 92, 246, 0.4);
-  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--accent-2);
+  background: var(--bg);
   transform: translateY(-2px);
 }
 
@@ -1040,9 +1072,9 @@ body {
 }
 
 .ask-quick-prompts button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--bg);
+  color: var(--text);
+  border-color: var(--accent-1);
   transform: translateY(-1px);
 }
 
@@ -1152,10 +1184,11 @@ body {
 }
 
 .ask-error-inline {
-  color: #fca5a5;
+  color: var(--danger);
   font-size: 0.85rem;
   margin-top: 12px;
   text-align: center;
+  font-weight: 500;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1312,16 +1345,16 @@ body {
   font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid var(--card-border);
   transition: all 0.2s ease;
 }
 
 .kb-section-toggle-all:hover {
   color: var(--text);
-  border-color: rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.04);
+  border-color: var(--accent-1);
+  background: var(--bg);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1362,7 +1395,7 @@ body {
 }
 
 .kb-header:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg);
 }
 
 .kb-icon {
