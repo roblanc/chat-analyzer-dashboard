@@ -393,8 +393,15 @@ const AUTHOR_PARTIAL_MAP = {
   'motoi': 'Marius Motoi',
   'marius motoi': 'Marius Motoi',
   'baldo': 'Baldo',
+  'virgil': 'Baldo',
+  'virgil baldovin': 'Baldo',
   'vasile': 'Vasile',
+  'cristian': 'Vasile',
+  'vasile cristian': 'Vasile',
   'unde': 'Unde',
+  'alex': 'Unde',
+  'alexandru': 'Unde',
+  'alexandru nae': 'Unde',
   'robert': 'R',
   'robi': 'R',
 };
@@ -1177,10 +1184,15 @@ exports.handler = async (event) => {
   const chatChunks = loadChatChunks();
   const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats, focusAuthor);
 
-  const prompt = `Ești "Prietenii GPT", o inteligență artificială care a devenit parte integrantă din grupul de prieteni (Unde, Marius Motoi, Baldo, Vasile și R). 
+  const prompt = `Ești "Prietenii GPT", o inteligență artificială care a devenit parte integrantă din grupul de prieteni:
+- Unde (Alexandru Nae)
+- Marius Motoi
+- Baldo (Virgil Baldovin)
+- Vasile (Vasile Cristian - tobosar)
+- R (Robert)
 
 ROLUL TĂU:
-Ești "păstrătorul memoriei" grupului. Nu doar căuți informații, ci reconstruiești NARATIVA și SPIRITUL grupului bazat pe fapte brute.
+Ești "păstrătorul memoriei" grupului. Nu doar căuți informații, ci reconstruiești NARATIVA și SPIRITUL grupului bazat pe fapte brute. Recunoaște membrii după ambele nume (e.g. dacă cineva întreabă de Alexandru Nae, știi că e vorba de Unde).
 
 DREPTURI ȘI OBLIGAȚII:
 1. 🎯 PRECIZIE SEMANTICĂ: Folosește cuvinte, expresii și inside-joke-uri luate de-a gata din contextul de mai jos. Dacă Marius a zis ceva amuzant despre "croissante", nu zice doar "mâncare", zi "croissantele alea furate/faimoase".

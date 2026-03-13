@@ -55,14 +55,14 @@ const PROMPT_SUGGESTIONS = [
   {
     id: 'profile-unde',
     label: 'Unde',
-    description: 'Rol, stil, interese',
-    prompt: 'Descrie profilul lui Unde (rol în grup, stil de comunicare, subiecte recurente) și dă 3 exemple cu timestamp.',
+    description: 'Alexandru Nae',
+    prompt: 'Descrie profilul lui Alexandru Nae (Unde) - rol în grup, stil de comunicare, subiecte recurente și dă 3 exemple cu timestamp.',
     avatar: '/avatars/Unde.PNG',
   },
   {
     id: 'profile-marius',
     label: 'Marius',
-    description: 'Umor, povești, energie',
+    description: 'Motoi',
     prompt:
       'Ce poți deduce despre Marius Motoi (rol în grup, tip de umor, teme recurente)? Dă 3 exemple cu timestamp și o observație din statistici.',
     avatar: '/avatars/Marius Motoi.PNG',
@@ -70,17 +70,17 @@ const PROMPT_SUGGESTIONS = [
   {
     id: 'profile-baldo',
     label: 'Baldo',
-    description: 'Sarcasm, observații',
+    description: 'Virgil Baldovin',
     prompt:
-      'Ce poți spune despre Baldo (stil, replici memorabile, subiecte recurente)? Dă 3 exemple cu timestamp și explică ce nu se poate concluziona sigur.',
+      'Ce poți spune despre Virgil Baldovin (Baldo) - stil, replici memorabile, subiecte recurente și dă 3 exemple cu timestamp.',
     avatar: '/avatars/Baldo.PNG',
   },
   {
     id: 'profile-vasile',
     label: 'Vasile',
-    description: 'Atitudine, preferințe',
+    description: 'Vasile Cristian (tobosar)',
     prompt:
-      'Descrie profilul lui Vasile (rol, stil, ce îl preocupă/ce îl enervează în discuții) și dă 3 exemple cu timestamp. Include și o observație din statistici.',
+      'Descrie profilul lui Vasile Cristian (tobosar) - rol, stil, ce îl preocupă în discuții și dă 3 exemple cu timestamp.',
     avatar: '/avatars/Vasile.PNG',
   },
   {
@@ -88,7 +88,7 @@ const PROMPT_SUGGESTIONS = [
     label: 'R',
     description: 'Robert, “vocea rațiunii”',
     prompt:
-      'Ce poți deduce despre R (Robert) (rol tehnic, tip de ajutor oferit, stil de comunicare)? Dă 3 exemple cu timestamp și menționează ce indică statisticile.',
+      'Ce poți deduce despre Robert (R) - rol tehnic, tip de ajutor oferit, stil de comunicare și dă 3 exemple cu timestamp.',
     avatar: '/avatars/Robert.PNG',
   }
 ];
