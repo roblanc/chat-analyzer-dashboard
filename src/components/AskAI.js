@@ -116,6 +116,8 @@ const AskAI = () => {
   const [error, setError] = useState('');
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
+  // Conversation history: max 3 turns kept in state, sent with each request
+  const [conversationHistory, setConversationHistory] = useState([]);
 
   const normalizedSources = useMemo(() => normalizeSources(sources), [sources]);
 
@@ -175,7 +177,7 @@ const AskAI = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ question: trimmed }),
+        body: JSON.stringify({ question: trimmed, history: conversationHistory }),
       });
 
       if (!response.ok) {
@@ -185,8 +187,15 @@ const AskAI = () => {
       }
 
       const payload = await response.json();
-      setAnswer(payload.answer || '');
+      const newAnswer = payload.answer || '';
+      setAnswer(newAnswer);
       setSources(Array.isArray(payload.sources) ? payload.sources : []);
+      // Append to history (keep last 3 turns)
+      if (newAnswer) {
+        setConversationHistory((prev) =>
+          [...prev, { q: trimmed, a: newAnswer }].slice(-3)
+        );
+      }
     } catch (err) {
       setError(err.message || 'A apărut o eroare.');
     } finally {
@@ -354,20 +363,29 @@ const AskAI = () => {
               </div>
             </div>
           )}
-          <button
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px', flexWrap: 'wrap' }}>
+            {conversationHistory.length > 0 && (
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-violet, #a78bfa)', display: 'flex', alignItems: 'center', gap: '4px', opacity: 0.8 }}>
+                <span>🔗</span>
+                <span>{conversationHistory.length} {conversationHistory.length === 1 ? 'schimb' : 'schimburi'} în conversație</span>
+              </div>
+            )}
+            <button
               type="button"
               className="btn-secondary"
-              style={{ marginTop: '20px', display: 'block', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}
+              style={{ display: 'block', width: 'fit-content' }}
               onClick={() => {
                 setQuestion('');
                 setAskedQuestion('');
                 setAnswer('');
                 setSources([]);
                 setError('');
+                setConversationHistory([]);
               }}
             >
-              Întrebare nouă
-          </button>
+              Conversație nouă
+            </button>
+          </div>
         </div>
       )}
 

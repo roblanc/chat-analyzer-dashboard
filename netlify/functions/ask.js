@@ -448,6 +448,57 @@ const extractFocusAuthor = (question, stats) => {
   return null;
 };
 
+// Returns up to 2 canonical authors (for comparison questions like "cine e mai X, A sau B?")
+const extractFocusAuthors = (question, stats) => {
+  const normalizedQuestion = normalizeText(question || '');
+  const candidates = getKnownAuthors(stats);
+  const found = [];
+  const seen = new Set();
+
+  const tryAdd = (canonical) => {
+    if (canonical && !seen.has(canonical)) {
+      seen.add(canonical);
+      found.push(canonical);
+    }
+  };
+
+  // Robert special case
+  if (normalizedQuestion.includes('robert') && candidates.includes('R')) {
+    tryAdd('R');
+  }
+
+  // Full name matches
+  for (const candidate of candidates) {
+    if (!candidate || candidate.length === 1) continue;
+    if (normalizedQuestion.includes(normalizeText(candidate))) {
+      tryAdd(candidate);
+      if (found.length >= 2) break;
+    }
+  }
+
+  // Partial map matches
+  if (found.length < 2) {
+    const partialKeys = Object.keys(AUTHOR_PARTIAL_MAP).sort((a, b) => b.length - a.length);
+    for (const key of partialKeys) {
+      if (found.length >= 2) break;
+      const regex = new RegExp(`\\b${key}\\b`);
+      if (regex.test(normalizedQuestion)) {
+        const mapped = AUTHOR_PARTIAL_MAP[key];
+        if (candidates.includes(mapped) || mapped === 'R') {
+          tryAdd(mapped);
+        }
+      }
+    }
+  }
+
+  // Single-letter R
+  if (found.length < 2 && candidates.includes('R') && /\br\b/.test(normalizedQuestion)) {
+    tryAdd('R');
+  }
+
+  return found.slice(0, 2);
+};
+
 const getChatAuthorAliases = (focusAuthor) => {
   if (!focusAuthor) {
     return [];
@@ -795,7 +846,7 @@ const buildAuthorExamplesDoc = (chatChunks, focusAuthor) => {
   };
 };
 
-const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, focusAuthor) => {
+const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, focusAuthor, secondaryAuthor) => {
   const contextLimit = intent?.isProfile ? MAX_CONTEXT_CHARS_PROFILE : MAX_CONTEXT_CHARS;
 
   const knowledgeChunks = splitIntoChunks(knowledge || '').map((text, index) => ({
@@ -833,6 +884,8 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
 
   const focusChatAliases = focusAuthor ? getChatAuthorAliases(focusAuthor) : [];
   const focusNormalized = focusAuthor && focusAuthor.length > 1 ? normalizeText(focusAuthor) : '';
+  const secondaryChatAliases = secondaryAuthor ? getChatAuthorAliases(secondaryAuthor) : [];
+  const secondaryNormalized = secondaryAuthor && secondaryAuthor.length > 1 ? normalizeText(secondaryAuthor) : '';
 
   const scored = documents.map((doc) => {
     const baseScore =
@@ -858,6 +911,15 @@ const buildContext = (question, knowledge, chatChunks, intent, dashboardStats, f
           score += 6;
         } else if (focusNormalized && normalizeText(doc.text).includes(focusNormalized)) {
           score += 2;
+        }
+        // Boost chunks containing secondary author (comparison questions)
+        if (secondaryAuthor) {
+          const matchesSecondary = secondaryChatAliases.some((alias) => authors.includes(alias));
+          if (matchesSecondary) {
+            score += 4;
+          } else if (secondaryNormalized && normalizeText(doc.text).includes(secondaryNormalized)) {
+            score += 1;
+          }
         }
       }
     }
@@ -1026,7 +1088,8 @@ const createError = (message, options = {}) => {
 const callOpenRouter = async (model, prompt, options = {}) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-  const maxOutputTokens = options.maxOutputTokens || 1024;
+  const maxOutputTokens = options.maxOutputTokens || 1536;
+  const temperature = options.temperature ?? 0.65;
 
   try {
     const response = await fetch(OPENROUTER_BASE_URL, {
@@ -1040,7 +1103,7 @@ const callOpenRouter = async (model, prompt, options = {}) => {
       body: JSON.stringify({
         model,
         messages: [{ role: 'user', content: prompt }],
-        temperature: 0.65,
+        temperature,
         max_tokens: maxOutputTokens,
       }),
       signal: controller.signal,
@@ -1070,7 +1133,8 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const callGemini = async (model, prompt, options = {}) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-  const maxOutputTokens = options.maxOutputTokens || 512;
+  const maxOutputTokens = options.maxOutputTokens || 2048;
+  const temperature = options.temperature ?? 0.65;
 
   try {
     const response = await fetch(`${GEMINI_BASE_URL}/${model}:generateContent`, {
@@ -1086,7 +1150,7 @@ const callGemini = async (model, prompt, options = {}) => {
           },
         ],
         generationConfig: {
-          temperature: 0.65,
+          temperature,
           maxOutputTokens,
         },
       }),
@@ -1177,12 +1241,33 @@ exports.handler = async (event) => {
   }
   // ----------------------------
 
+  // Conversation history: max 3 previous turns, each { q: string, a: string }
+  const rawHistory = Array.isArray(payload.history) ? payload.history : [];
+  const history = rawHistory
+    .filter((turn) => turn && typeof turn.q === 'string' && typeof turn.a === 'string')
+    .slice(-3);
+
   const knowledge = loadKnowledge();
   const dashboardStats = loadDashboardStats();
-  const focusAuthor = extractFocusAuthor(question, dashboardStats);
+  const focusAuthors = extractFocusAuthors(question, dashboardStats);
+  const focusAuthor = focusAuthors[0] || null;
+  const secondaryAuthor = focusAuthors[1] || null;
   const intent = detectIntent(question, { focusAuthor });
   const chatChunks = loadChatChunks();
-  const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats, focusAuthor);
+  const { context, sources } = buildContext(question, knowledge, chatChunks, intent, dashboardStats, focusAuthor, secondaryAuthor);
+
+  // Temperature strategy: factual/stats → low, profile/narrative → high, default → mid
+  const isFactual = !intent.isProfile && !intent.isAnalysis;
+  const temperature = intent.isProfile ? 0.78 : isFactual ? 0.3 : 0.65;
+  const maxTokens = intent.isProfile ? 3072 : 2048;
+
+  const historyBlock = history.length
+    ? `CONVERSAȚIE ANTERIOARĂ (context pentru continuare):\n${history.map((t, i) => `[${i + 1}] USER: ${t.q}\n[${i + 1}] GPT: ${t.a.slice(0, 400)}${t.a.length > 400 ? '…' : ''}`).join('\n\n')}\n\n`
+    : '';
+
+  const comparisonHint = secondaryAuthor
+    ? `\nACESTA ESTE UN RĂSPUNS COMPARATIV între ${focusAuthor} și ${secondaryAuthor}. Tratează ambii membri în mod egal, cu exemple concrete pentru fiecare.\n`
+    : '';
 
   const prompt = `Ești "Prietenii GPT", o inteligență artificială care a devenit parte integrantă din grupul de prieteni:
 - Unde (Alexandru Nae)
@@ -1192,7 +1277,7 @@ exports.handler = async (event) => {
 - R (Robert)
 
 ROLUL TĂU:
-Ești "păstrătorul memoriei" grupului. Nu doar căuți informații, ci reconstruiești NARATIVA și SPIRITUL grupului bazat pe fapte brute. Recunoaște membrii după ambele nume (e.g. dacă cineva întreabă de Alexandru Nae, știi că e vorba de Unde).
+Ești "păstrătorul memoriei" grupului. Nu doar căuți informații, ci reconstruiești NARATIVA și SPIRITUL grupului bazat pe fapte brute. Recunoaște membrii după ambele nume (e.g. dacă cineva întreabă de Alexandru Nae, știi că e vorba de Unde).${comparisonHint}
 
 DREPTURI ȘI OBLIGAȚII:
 1. 🎯 PRECIZIE SEMANTICĂ: Folosește cuvinte, expresii și inside-joke-uri luate de-a gata din contextul de mai jos. Dacă Marius a zis ceva amuzant despre "croissante", nu zice doar "mâncare", zi "croissantele alea furate/faimoase".
@@ -1204,8 +1289,10 @@ INSTRUCȚIUNI CRITICE:
 - CITEAZĂ VERBATIM: Folosește fragmente scurte de text între ghilimele pentru a-ți ancora răspunsul în realitatea chat-ului.
 - LEAGĂ CONTEXTELE: Nu trata fragmentele ca insule separate. Caută firele invizibile care le leagă (teme repetate, obsesii, dinamici neschimbate).
 - ZERO FORMULE STEREOTIPE: Interzis să începi cu "Analizând datele..." sau "După cum se vede...". Intră direct în inimă conversației.
+- DACĂ CONTEXTUL E INSUFICIENT: Nu inventa. Spune explicit ce poți confirma din date și ce rămâne neclar, dar fă asta cu stil — nu cu scuze plate.
+- LUNGIME: Răspunsurile pentru profiluri și analize trebuie să fie substanțiale (min. 200 cuvinte). Întrebările factuale simple pot fi scurte și precise.
 
-CONTEXTUL (Statistici & Fragmente cronologice):
+${historyBlock}CONTEXTUL (Statistici & Fragmente cronologice):
 ${context}
 
 ÎNTREBARE:
@@ -1245,9 +1332,9 @@ RĂSPUNS:`;
         const isOpenRouterModel = model.includes('/') || hasOpenRouter;
         
         if (hasGemini && !model.includes('/')) {
-           result = await callGemini(model, prompt, { maxOutputTokens: intent.isProfile ? 1536 : 1024 });
+           result = await callGemini(model, prompt, { maxOutputTokens: maxTokens, temperature });
         } else if (hasOpenRouter) {
-           result = await callOpenRouter(model, prompt, { maxOutputTokens: intent.isProfile ? 1536 : 1024 });
+           result = await callOpenRouter(model, prompt, { maxOutputTokens: maxTokens, temperature });
         } else {
            throw new Error('No valid API keys configured');
         }
